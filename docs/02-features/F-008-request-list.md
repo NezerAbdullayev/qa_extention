@@ -43,13 +43,20 @@ Tam rejim                                Kompakt rejim
 │ ▸ MY_TASKS_COLUMNS                  GET   200   45 ms [💾]│  ← bağlı qutu
 │ ▾ passports                         GET   200   85 ms [💾]│  ← açıq qutu
 │ ┌───────────────────────────────────────────────────────┐ │
-│ │ URL:     https://site.az/api/v1/passports             │ │  ▲
-│ │ Method:  GET          Status: 200                     │ │  │
-│ │ ── Request headers ──                                 │ │  │ hündürlük
-│ │ ── Payload ──                                         │ │  │ sabit 500px
-│ │ ── Response headers ──                                │ │  │ (daxildə scroll)
-│ │ ── Response body ──                                   │ │  │
-│ │ ── Timing ──                                          │ │  ▼
+│ │ https://site.az/api/v1/passports?page=1               │ │  ▲
+│ │ method: GET                                           │ │  │
+│ │                                                       │ │  │
+│ │ Headers                                               │ │  │ hündürlük
+│ │ {                                                     │ │  │ sabit 500px
+│ │   "Content-Type": "application/json",                 │ │  │ (daxildə scroll)
+│ │   "Authorization": "***"                              │ │  │
+│ │ }                                                     │ │  │
+│ │                                                       │ │  │
+│ │ Response                                              │ │  │
+│ │ {                                                     │ │  │
+│ │   "data": [ { "id": 42, "fin": "5ABC123" } ],         │ │  │
+│ │   "total": 1                                          │ │  │
+│ │ }                                                     │ │  ▼
 │ └───────────────────────────────────────────────────────┘ │
 │ ▸ passports                         GET   200   80 ms [💾]│
 │ ▸ tasks?sort=regNumber&taskSta…     GET   200  120 ms [💾]│
@@ -57,6 +64,19 @@ Tam rejim                                Kompakt rejim
 │ ▸ list?checkFin=true                GET   200   60 ms [💾]│
 └───────────────────────────────────────────────────────────┘
 ```
+
+### Açıq qutunun məzmunu — JSON formasında (Sessiya #2, Q5)
+Bölmələr **alt-alta**, bu sıra ilə:
+
+| # | Bölmə | Format |
+|---|---|---|
+| 1 | **API-nin tam ünvanı** | Tam URL (host + path + query), məs. `https://site.az/api/v1/passports?page=1` |
+| 2 | **method** | Tam ünvanın altında: `method: GET` |
+| 3 | **Headers** | JSON obyekt: `{ "Header-Adı": "dəyər", … }`. Həssas header-lər mask olunur (`"***"`, [F-005](F-005-masking.md)) |
+| 4 | **Response** | Response body **formatlanmış JSON** (pretty-print, 2 boşluq girinti) |
+
+- Response JSON deyilsə (HTML, mətn) → olduğu kimi mətn göstərilir.
+- Response boşdursa → `(boş)`.
 
 ### Bağlı sətirdə ad — DevTools "Name" sütunu ilə eyni (Sessiya #2, Q3)
 QA və developer DevTools → Network-da gördüyü adı burada da eyni görsün ki, qarışdırılmasın.
@@ -91,7 +111,7 @@ QA və developer DevTools → Network-da gördüyü adı burada da eyni görsün
 - [ ] Hover → tam URL
 - [ ] Sətirə klik → qutu aşağıya doğru açılır; təkrar klik → bağlanır
 - [ ] Hər açılan qutunun hündürlüyü **sabit 500px**; məzmun çox olarsa qutunun daxilində scroll (Sessiya #2, Q3)
-- [ ] Açıq qutuda: URL, method, status, request headers, payload, response headers, response body, timing
+- [ ] Açıq qutuda **JSON formasında**, alt-alta: 1) tam URL · 2) `method: …` · 3) Headers (JSON) · 4) Response (formatlanmış JSON) (Sessiya #2, Q5)
 - [ ] Hər sətirin **sağ tərəfində "Yadda saxla" düyməsi** (💾) — bax: [F-003](F-003-snapshots.md)
 - [ ] Mətnlər i18n ilə ([ADR-002](../03-architecture/decisions/ADR-002-i18n.md))
 - [ ] Həssas sahələr mask olunmuş göstərilir ([F-005](F-005-masking.md))

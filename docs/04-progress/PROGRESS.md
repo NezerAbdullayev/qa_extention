@@ -18,6 +18,7 @@
 - Sessiya #2, Q1: UI side panel-də (bağla, kiçilt, əl ilə en dəyişmə)
 - Sessiya #2, Q6: müqayisə yalnız response body üzrə
 - Sessiya #2, Q3: siyahıda ad DevTools "Name" ilə eyni + method, status, müddət; açılan qutu sabit 500px
+- Sessiya #2, Q5: açıq qutu JSON formasında — URL → method → Headers → Response
 - Git repo yaradıldı, commit qaydaları `CLAUDE.md`-də yazıldı
 - GitHub remote qoşuldu; GitLab → GitHub keçidi (PR şablonu `.github/`-da)
 

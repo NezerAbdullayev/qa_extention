@@ -1,7 +1,7 @@
 # Vizyon
 
 ## Bir cümlə ilə
-Müştəri və ya QA bir düymə ilə brauzerdə gedən bütün API trafikini yazıb developer-ə göndərə bilsin, QA isə eyni əməliyyatın müxtəlif cəhdlərini müqayisə edə bilsin — Inspect açmadan.
+Müştəri və ya QA bir düymə ilə brauzerdə gedən bütün API trafikini yazıb fayl kimi yükləsin və developer-ə özü göndərsin, QA isə eyni əməliyyatın müxtəlif cəhdlərini müqayisə edə bilsin — Inspect açmadan.
 
 ## Məqsədlər
 1. Müştəri dəstəyində "Inspect aç, Network-a bax" izahlarını aradan qaldırmaq.

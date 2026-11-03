@@ -24,4 +24,4 @@
 ## Mərhələ 3 — Yayım
 - [ ] Chrome Web Store (unlisted) və ya daxili paylama
 - [ ] Müştəri üçün qısa təlimat
-- [ ] F-007 Backend-ə göndərmə
+- [ ] F-007 Backend-ə göndərmə (⏸️ təxirə salınıb — hələlik manual göndərmə)

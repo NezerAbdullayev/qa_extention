@@ -11,6 +11,7 @@
 - F-001…F-005 spec qaralamaları
 - ADR-001: `chrome.debugger` seçimi
 - Sessiya #1, Q1: əsas istifadəçilər təyin olundu (developer FE+BE, QA, müştəri)
+- Sessiya #1, Q3: avtomatik göndərmə təxirə salındı — manual göndərmə
 - Git repo yaradıldı, commit qaydaları `CLAUDE.md`-də yazıldı
 - GitHub remote qoşuldu; GitLab → GitHub keçidi (PR şablonu `.github/`-da)
 

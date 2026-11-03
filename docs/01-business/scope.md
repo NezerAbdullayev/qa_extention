@@ -11,7 +11,7 @@
 - F-006 Domen filtri
 
 ## Sonra
-- F-007 Backend-ə göndərmə
+- F-007 Backend-ə göndərmə — hələlik lazım deyil (Sessiya #1, Q3). İstifadəçi HAR faylını yükləyib developer-ə özü göndərir
 - Yeni tab / popup-ların avtomatik izlənməsi
 - Screenshot / ekran videosu
 

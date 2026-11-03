@@ -15,6 +15,6 @@
 
 ## 3. Müştəri (son istifadəçi)
 - Texniki biliyi azdır.
-- Ehtiyacı: problemi göstərmək üçün ən az addım (Start → problemi təkrarla → Stop → göndər).
+- Ehtiyacı: problemi göstərmək üçün ən az addım (Start → problemi təkrarla → Stop → faylı yüklə). Faylı developer-ə özü manual göndərir (e-poçt, chat və s.).
 
 <!-- ❓ Açıq sual: başqa rol varmı? (məs. PM, dəstək operatoru) -->

@@ -40,21 +40,21 @@ Tam rejim                                Kompakt rejim
 ┌───────────────────────────────────────────────────────────┐
 │ ● REC  Qeyd: 14 request                    [Start] [Stop] │
 ├───────────────────────────────────────────────────────────┤
-│ ▸ MY_TASKS_COLUMNS                                 [💾]   │  ← bağlı qutu
-│ ▾ passports                                        [💾]   │  ← açıq qutu
+│ ▸ MY_TASKS_COLUMNS                  GET   200   45 ms [💾]│  ← bağlı qutu
+│ ▾ passports                         GET   200   85 ms [💾]│  ← açıq qutu
 │ ┌───────────────────────────────────────────────────────┐ │
-│ │ URL:     https://site.az/api/v1/passports             │ │
-│ │ Method:  GET          Status: 200                     │ │
-│ │ ── Request headers ──                                 │ │  max 500px
-│ │ ── Payload ──                                         │ │  (daxildə scroll)
-│ │ ── Response headers ──                                │ │
-│ │ ── Response body ──                                   │ │
-│ │ ── Timing ──                                          │ │
+│ │ URL:     https://site.az/api/v1/passports             │ │  ▲
+│ │ Method:  GET          Status: 200                     │ │  │
+│ │ ── Request headers ──                                 │ │  │ hündürlük
+│ │ ── Payload ──                                         │ │  │ sabit 500px
+│ │ ── Response headers ──                                │ │  │ (daxildə scroll)
+│ │ ── Response body ──                                   │ │  │
+│ │ ── Timing ──                                          │ │  ▼
 │ └───────────────────────────────────────────────────────┘ │
-│ ▸ passports                                        [💾]   │
-│ ▸ tasks?sort=regNumber&taskStatus=IN_WORK          [💾]   │
-│ ▸ find.batch                                       [💾]   │
-│ ▸ list?checkFin=true                               [💾]   │
+│ ▸ passports                         GET   200   80 ms [💾]│
+│ ▸ tasks?sort=regNumber&taskSta…     GET   200  120 ms [💾]│
+│ ▸ find.batch                        POST  500  310 ms [💾]│  ← xəta: qırmızı
+│ ▸ list?checkFin=true                GET   200   60 ms [💾]│
 └───────────────────────────────────────────────────────────┘
 ```
 
@@ -76,6 +76,10 @@ QA və developer DevTools → Network-da gördüyü adı burada da eyni görsün
 - Ad uzundursa sonu `…` ilə kəsilir; mouse üzərinə gələndə (hover) **tam URL** göstərilir.
 - URL-də kodlanmış simvollar (`%20` və s.) DevTools-dakı kimi decode olunmuş göstərilir.
 
+**Sətirin sütunları (soldan sağa):** `Ad` · `Method` · `Status` · `Müddət` · `[💾]`
+- Status rəngi: `2xx` — adi · `3xx` — boz · `4xx`/`5xx` və uğursuz (`net::ERR_*`, CORS) — **qırmızı**.
+- Uğursuz request-də status yerinə səbəb qısa yazılır (məs. `(failed)`, `CORS`) — DevTools kimi.
+
 ## Qəbul meyarları
 - [ ] Siyahı side panel-də göstərilir
 - [ ] Side panel **✕ düyməsi** ilə bağlanır; qeyd davam edirsə dayanmır
@@ -83,9 +87,10 @@ QA və developer DevTools → Network-da gördüyü adı burada da eyni görsün
 - [ ] Panelin eni **əl ilə dartılaraq** dəyişdirilir; en və rejim yadda qalır
 - [ ] Start → Stop arasındakı bütün API request-ləri ümumi siyahıda (box) göstərilir
 - [ ] Bağlı sətir API adını **DevTools Network "Name" sütunu ilə eyni** göstərir: son path seqmenti + query (məs. `tasks?sort=regNumber&taskStatus=IN_WORK`)
+- [ ] Addan sonra **method, status, müddət** göstərilir; xətalı status (4xx, 5xx, failed) qırmızı (Sessiya #2, Q3)
 - [ ] Hover → tam URL
 - [ ] Sətirə klik → qutu aşağıya doğru açılır; təkrar klik → bağlanır
-- [ ] Açılan qutunun hündürlüyü **maksimum 500px**; məzmun çox olarsa qutunun daxilində scroll
+- [ ] Hər açılan qutunun hündürlüyü **sabit 500px**; məzmun çox olarsa qutunun daxilində scroll (Sessiya #2, Q3)
 - [ ] Açıq qutuda: URL, method, status, request headers, payload, response headers, response body, timing
 - [ ] Hər sətirin **sağ tərəfində "Yadda saxla" düyməsi** (💾) — bax: [F-003](F-003-snapshots.md)
 - [ ] Mətnlər i18n ilə ([ADR-002](../03-architecture/decisions/ADR-002-i18n.md))

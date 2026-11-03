@@ -10,7 +10,7 @@
 | FR-05 | Qeyd HAR faylı kimi export olunur | F-002 | Must |
 | FR-06 | Authorization, Cookie, token, parol sahələri mask olunur | F-005 | Must |
 | FR-07 | Siyahıdakı istənilən API ad verilərək yadda saxlanılır; ad boşdursa təsadüfi 6 rəqəmli tam ədəd verilir | F-003 | Must |
-| FR-08 | İki saxlanmış API seçilib müqayisə olunur: key-lərə görə / dəyərlərə görə / key + dəyər | F-004 | Must |
+| FR-08 | İki saxlanmış API-nin **yalnız response body**-si müqayisə olunur: key-lərə görə / dəyərlərə görə / key + dəyər (Sessiya #2, Q6) | F-004 | Must |
 | FR-09 | Müqayisədə ignore ediləcək sahələr təyin olunur | F-004 | Should |
 | FR-10 | Saxlanmış API-lər JSON kimi export/import olunur | F-003 | Should |
 | FR-11 | Extension istənilən saytda işləyir (domen məhdudiyyəti yoxdur). İstifadəçi istəsə yalnız seçdiyi host-ları yazmaq üçün filtr qura bilir (Sessiya #1, Q4) | F-006 | Should |

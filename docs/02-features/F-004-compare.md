@@ -9,6 +9,8 @@ Eyni API-nin iki cəhdi arasında hansı key-lərin olmadığını, hansı dəy�
 > **QA** kimi, **iki saxlanmış API-ni seçib müqayisə etmək** istəyirəm ki, **key və dəyər fərqləri üzrə hesabat alım**.
 
 ## UI / Axın
+> **Nə müqayisə olunur (Sessiya #2, Q6):** **yalnız response body.** Payload, query, request/response headers, status kodu və müddət müqayisə olunmur.
+
 1. Saxlanmış API-lər siyahısından ([F-003](F-003-snapshots.md)) **iki** API seçilir: **A** (əsas / gözlənilən) və **B** (yoxlanılan).
 2. Müqayisə rejimi seçilir:
 
@@ -23,7 +25,7 @@ Eyni API-nin iki cəhdi arasında hansı key-lərin olmadığını, hansı dəy�
 ## Nümunə hesabat
 ```
 Müqayisə: "sifariş-uğurlu" (A)  ↔  "482915" (B)        Rejim: Key + dəyər
-POST /api/orders                     status: 200 → 400  ⚠️
+POST /api/orders                               (yalnız response body)
 
 Xülasə: 2 key yoxdur · 1 yeni key · 3 dəyər fərqli · 1 dəyər gəlmir · 1 tip dəyişib
 
@@ -41,10 +43,11 @@ Dəyərlər
 
 ## Qəbul meyarları
 - [ ] Saxlanmış API-lərdən ikisi seçilir (A və B)
+- [ ] Yalnız **response body** müqayisə olunur (payload, headers, status, müddət — yox)
 - [ ] 3 rejim: key-lərə görə · dəyərlərə görə · key + dəyər
 - [ ] İç-içə (nested) obyektlər tam yoxlanılır; yol nöqtə ilə göstərilir (`data.items[0].price`)
 - [ ] Hər rejim üçün hesabat: xülasə (saylar) + ətraflı siyahı
-- [ ] Status kodu fərqi hesabatın başında göstərilir
+- [ ] Response body JSON deyilsə (HTML, mətn, boş) → müqayisə olunmur, xəbərdarlıq göstərilir ❓
 - [ ] Ignore siyahısı (məs. `timestamp`, `createdAt`, `requestId`) — yadda qalır (Should)
 - [ ] Massivlər üçün "id-yə görə uyğunlaşdır" seçimi (Should)
 

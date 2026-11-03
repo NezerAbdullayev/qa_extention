@@ -2,7 +2,7 @@
 
 ```
 ┌─────────────┐  mesaj   ┌──────────────────────┐  CDP   ┌────────┐
-│ popup.html  │ ───────▶ │ background.js (SW)   │ ─────▶ │  Tab   │
+│ sidepanel   │ ───────▶ │ background.js (SW)   │ ─────▶ │  Tab   │
 │ Start/Stop  │          │ chrome.debugger      │ ◀───── │        │
 └─────────────┘          │ event-ləri birləşdir │ events └────────┘
                          └──────────┬───────────┘
@@ -19,9 +19,9 @@
 ## Komponentlər
 | Komponent | Vəzifə |
 |---|---|
-| `manifest.json` | İcazələr: `debugger`, `activeTab`, `storage`, `unlimitedStorage`, `downloads` |
+| `manifest.json` | İcazələr: `debugger`, `activeTab`, `storage`, `unlimitedStorage`, `downloads`, `sidePanel` |
 | `background.js` | Debugger attach/detach, event-ləri `requestId` üzrə birləşdirmək, body götürmək, yaddaşa yazmaq |
-| `popup` | Start/Stop, status, export, snapshot saxla |
+| `sidepanel` | Əsas UI (Sessiya #2, Q1): Start/Stop, request siyahısı (F-008), yadda saxla, export. Bağla · kiçilt (kompakt rejim) · əl ilə en dəyişmə |
 | `viewer` | Snapshot siyahısı və request detalları |
 | `compare` | İki snapshot-un diff-i |
 | `lib/` | `jsondiffpatch`, HAR builder, masking |

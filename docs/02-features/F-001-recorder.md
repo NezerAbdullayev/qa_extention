@@ -11,7 +11,7 @@ QA və developer Inspect açmadan problemin baş verdiyi andakı bütün API tra
 > **Developer** kimi, **öz mühitimdə request-ləri yazmaq** istəyirəm ki, **payload, response və xətaları rahat yoxlayım**.
 
 ## Qəbul meyarları
-- [ ] Popup-da Start / Stop düyməsi var
+- [ ] Side panel-də Start / Stop düyməsi var
 - [ ] Qeyd zamanı ikon/badge qeydin getdiyini göstərir (məs. qırmızı "REC")
 - [ ] Hər request üçün: URL, method, request headers, payload, status, response headers, response body, timing, initiator
 - [ ] Uğursuz request-lər səbəbi ilə yazılır (net::ERR_*, CORS, blocked, canceled)

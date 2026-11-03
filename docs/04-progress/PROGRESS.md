@@ -15,6 +15,7 @@
 - Sessiya #1, Q4: istənilən saytda işləyir; layihə daxilidir (yalnız öz şirkətimiz üçün)
 - Sessiya #1, Q5: interfeys dili — Azərbaycan dili, i18n ilə (ADR-002)
 - Yeni axın sənədləşdi: F-008 request siyahısı (500px açılan qutular), F-003 API yadda saxlama (6 rəqəmli avtomatik ad), F-004 müqayisə (key / dəyər / key+dəyər + hesabat)
+- Sessiya #2, Q1: UI side panel-də (bağla, kiçilt, əl ilə en dəyişmə)
 - Git repo yaradıldı, commit qaydaları `CLAUDE.md`-də yazıldı
 - GitHub remote qoşuldu; GitLab → GitHub keçidi (PR şablonu `.github/`-da)
 

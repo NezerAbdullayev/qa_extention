@@ -19,9 +19,10 @@
 ## Mərhələ 2 — QA alətləri (v0.2)
 - [ ] F-003 Snapshot yaddaşı
 - [ ] F-004 Müqayisə
-- [ ] F-006 Domen filtri
+- [ ] F-006 Domen filtri (opsional)
 
 ## Mərhələ 3 — Yayım
-- [ ] Chrome Web Store (unlisted) və ya daxili paylama
+- [ ] Chrome Web Store-da ictimai (public) yayım — hər kəs istifadə edə bilsin (Sessiya #1, Q4)
+- [ ] Privacy policy (Web Store `debugger` icazəsi üçün tələb olunur)
 - [ ] Müştəri üçün qısa təlimat
 - [ ] F-007 Backend-ə göndərmə (⏸️ təxirə salınıb — hələlik manual göndərmə)

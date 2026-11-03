@@ -13,13 +13,14 @@
 | FR-08 | İki snapshot seçilib müqayisə olunur (status, payload, response, struktur) | F-004 | Must |
 | FR-09 | Müqayisədə ignore ediləcək sahələr təyin olunur | F-004 | Should |
 | FR-10 | Snapshot-lar JSON kimi export/import olunur | F-003 | Should |
-| FR-11 | Domen filtri (yalnız seçilmiş host-lar yazılır) | F-006 | Should |
+| FR-11 | Extension istənilən saytda işləyir (domen məhdudiyyəti yoxdur). İstifadəçi istəsə yalnız seçdiyi host-ları yazmaq üçün filtr qura bilir (Sessiya #1, Q4) | F-006 | Should |
 | FR-12 | Qeyd birbaşa backend-ə göndərilir — **hələlik yox** (Sessiya #1, Q3): fayl yüklənir, istifadəçi özü manual göndərir | F-007 | Won't (indi) |
 
 ## Qeyri-funksional (NFR)
 | ID | Tələb |
 |---|---|
 | NFR-01 | Manifest V3, kənar serverdən kod yüklənmir |
+| NFR-06 | Hər kəs üçün açıq: xüsusi şirkət saytına bağlı deyil, ictimai paylanmaya uyğundur (privacy policy, minimum icazələr) |
 | NFR-02 | Data default olaraq yalnız lokal saxlanılır (IndexedDB) |
 | NFR-03 | Response body limiti (məs. 5 MB/request) — konfiqurasiya olunan |
 | NFR-04 | Müştəri üçün maksimum 3 addım (Start, Stop, Yüklə). Faylı developer-ə istifadəçi özü manual göndərir |

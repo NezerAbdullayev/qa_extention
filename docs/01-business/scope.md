@@ -8,7 +8,7 @@
 ## v0.2
 - F-003 Snapshot yaddaşı (IndexedDB)
 - F-004 Snapshot müqayisəsi
-- F-006 Domen filtri
+- F-006 Domen filtri (opsional — default olaraq bütün saytlar yazılır)
 
 ## Sonra
 - F-007 Backend-ə göndərmə — hələlik lazım deyil (Sessiya #1, Q3). İstifadəçi HAR faylını yükləyib developer-ə özü göndərir

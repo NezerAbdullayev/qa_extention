@@ -23,6 +23,7 @@
 - Sessiya #2, Q14: JSON olmayan response müqayisə olunmur, xəbərdarlıq göstərilir
 - Sessiya #2, Q15: açılan qutu məzmuna görə, maksimum 500px
 - Sessiya #2, Q12: yeni Start → siyahı silinir, saxlanmışlar qalır
+- Sessiya #2, Q13: axtarış / filtr yoxdur
 - Git repo yaradıldı, commit qaydaları `CLAUDE.md`-də yazıldı
 - GitHub remote qoşuldu; GitLab → GitHub keçidi (PR şablonu `.github/`-da)
 

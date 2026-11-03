@@ -45,6 +45,7 @@ Tam rejim                                Kompakt rejim
 │ ┌───────────────────────────────────────────────────────┐ │
 │ │ https://site.az/api/v1/passports?page=1               │ │  ▲
 │ │ method: GET                                           │ │  │
+│ │ status: 200                                           │ │  │
 │ │                                                       │ │  │
 │ │ Request headers  (göndərilən)                         │ │  │ hündürlük
 │ │ {                                                     │ │  │ max 500px
@@ -82,7 +83,7 @@ Bölmələr **alt-alta**, bu sıra ilə:
 | # | Bölmə | Format |
 |---|---|---|
 | 1 | **API-nin tam ünvanı** | Tam URL (host + path + query), məs. `https://site.az/api/v1/passports?page=1` |
-| 2 | **method** | Tam ünvanın altında: `method: GET` |
+| 2 | **method + status** | Tam ünvanın altında: `method: GET`, onun altında `status: 200` (uğursuz request-də səbəb, məs. `status: (failed) net::ERR_CONNECTION_REFUSED`) (Sessiya #2, Q5c) |
 | 3 | **Request headers** (göndərilən) | JSON obyekt: `{ "Header-Adı": "dəyər", … }` — brauzerin serverə göndərdiyi header-lər. Həssas header-lər mask olunur (`"***"`, [F-005](F-005-masking.md)) |
 | 4 | **Response headers** (qayıdan) | JSON obyekt — serverin qaytardığı header-lər (`Content-Type`, `Set-Cookie` → `"***"` və s.) |
 | 5 | **Payload** (göndərilən) | Request-in göndərdiyi data, **formatlanmış JSON**. DevTools "Payload" tab-ı kimi: POST/PUT/PATCH body + query string parametrləri (`?page=1` → `{ "page": "1" }`). Həssas sahələr mask olunur |
@@ -127,7 +128,7 @@ QA və developer DevTools → Network-da gördüyü adı burada da eyni görsün
 - [ ] Hover → tam URL
 - [ ] Sətirə klik → qutu aşağıya doğru açılır; təkrar klik → bağlanır
 - [ ] Açılan qutunun hündürlüyü **məzmuna görədir, maksimum 500px** (CSS `max-height: 500px`): qısa məzmunda qutu kiçik olur, 500px-dən çox olanda qutunun daxilində scroll (Sessiya #2, Q15)
-- [ ] Açıq qutuda **JSON formasında**, alt-alta: 1) tam URL · 2) `method: …` · 3) Request headers (JSON) · 4) Response headers (JSON) · 5) Payload — göndərilən (JSON) · 6) Response — qayıdan (formatlanmış JSON) (Sessiya #2, Q5, 5a, 5b)
+- [ ] Açıq qutuda **JSON formasında**, alt-alta: 1) tam URL · 2) `method: …` + `status: …` · 3) Request headers (JSON) · 4) Response headers (JSON) · 5) Payload — göndərilən (JSON) · 6) Response — qayıdan (formatlanmış JSON) (Sessiya #2, Q5, 5a, 5b)
 - [ ] Hər sətirin **sağ tərəfində "Yadda saxla" düyməsi** (💾) — bax: [F-003](F-003-snapshots.md)
 - [ ] Mətnlər i18n ilə ([ADR-002](../03-architecture/decisions/ADR-002-i18n.md))
 - [ ] Həssas sahələr mask olunmuş göstərilir ([F-005](F-005-masking.md))

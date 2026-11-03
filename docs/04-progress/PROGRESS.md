@@ -24,6 +24,7 @@
 - Sessiya #2, Q15: açılan qutu məzmuna görə, maksimum 500px
 - Sessiya #2, Q12: yeni Start → siyahı silinir, saxlanmışlar qalır
 - Sessiya #2, Q13: axtarış / filtr yoxdur
+- Sessiya #2, Q5c: açıq qutuda method altında status
 - Git repo yaradıldı, commit qaydaları `CLAUDE.md`-də yazıldı
 - GitHub remote qoşuldu; GitLab → GitHub keçidi (PR şablonu `.github/`-da)
 

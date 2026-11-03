@@ -105,7 +105,7 @@ QA və developer DevTools → Network-da gördüyü adı burada da eyni görsün
 - [ ] Side panel **✕ düyməsi** ilə bağlanır; qeyd davam edirsə dayanmır
 - [ ] **— Kiçilt / ▢ Böyüt** düyməsi: kompakt rejim (yalnız REC statusu, say, Start/Stop) ↔ tam rejim
 - [ ] Panelin eni **əl ilə dartılaraq** dəyişdirilir; en və rejim yadda qalır
-- [ ] Start → Stop arasındakı bütün API request-ləri ümumi siyahıda (box) göstərilir
+- [ ] Start → Stop arasındakı bütün API request-ləri (**yalnız XHR / Fetch**) ümumi siyahıda (box) göstərilir
 - [ ] Bağlı sətir API adını **DevTools Network "Name" sütunu ilə eyni** göstərir: son path seqmenti + query (məs. `tasks?sort=regNumber&taskStatus=IN_WORK`)
 - [ ] Addan sonra **method, status, müddət** göstərilir; xətalı status (4xx, 5xx, failed) qırmızı (Sessiya #2, Q3)
 - [ ] Hover → tam URL

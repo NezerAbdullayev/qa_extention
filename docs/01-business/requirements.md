@@ -4,7 +4,7 @@
 | ID | Tələb | Feature | Prioritet |
 |---|---|---|---|
 | FR-01 | İstifadəçi aktiv tab üçün qeydi başlada və dayandıra bilir | F-001 | Must |
-| FR-02 | Hər request üçün URL, method, headers, payload, status, response headers, body, timing, initiator yazılır | F-001 | Must |
+| FR-02 | Yalnız **XHR / Fetch** request-ləri yazılır (statik resurslar yox — Sessiya #2, Q11); hər biri üçün URL, method, headers, payload, status, response headers, body, timing, initiator | F-001 | Must |
 | FR-03 | Uğursuz request-lər (net::ERR, CORS, blocked, canceled) yazılır | F-001 | Must |
 | FR-04 | Console error və JS exception-lar yazılır | F-001 | Should |
 | FR-05 | Qeyd HAR faylı kimi export olunur | F-002 | Must |

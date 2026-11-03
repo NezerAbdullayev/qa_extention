@@ -13,6 +13,7 @@ QA və developer Inspect açmadan problemin baş verdiyi andakı bütün API tra
 ## Qəbul meyarları
 - [ ] Side panel-də Start / Stop düyməsi var
 - [ ] Qeyd zamanı ikon/badge qeydin getdiyini göstərir (məs. qırmızı "REC")
+- [ ] Yalnız **XHR / Fetch** tipli request-lər yazılır (CDP `Network.requestWillBeSent` → `type` = `XHR` və ya `Fetch`); şəkil, CSS, JS, font, HTML sənəd yazılmır (Sessiya #2, Q11)
 - [ ] Hər request üçün: URL, method, request headers, payload, status, response headers, response body, timing, initiator
 - [ ] Uğursuz request-lər səbəbi ilə yazılır (net::ERR_*, CORS, blocked, canceled)
 - [ ] Redirect zənciri saxlanılır
@@ -33,4 +34,4 @@ QA və developer Inspect açmadan problemin baş verdiyi andakı bütün API tra
 - Brauzerdə "debugging this browser" zolağı görünür
 
 ## Açıq suallar
-- ❓ Statik resurslar (şəkil, CSS, font) default olaraq yazılsın, yoxsa yalnız XHR/Fetch?
+- ✅ Yalnız **XHR / Fetch** request-ləri yazılır (Sessiya #2, Q11). Statik resurslar (Document, Script, Stylesheet, Image, Font, Media) yazılmır.

@@ -25,6 +25,7 @@
 | `viewer` | Snapshot siyahısı və request detalları |
 | `compare` | İki snapshot-un diff-i |
 | `lib/` | `jsondiffpatch`, HAR builder, masking |
+| `_locales/` | i18n tərcümələri: `az/messages.json` (default), gələcəkdə `en/`, `ru/` və s. Bax: [ADR-002](decisions/ADR-002-i18n.md) |
 
 ## Qərarlar
 Bax: [decisions/](decisions/)

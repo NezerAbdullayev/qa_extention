@@ -3,6 +3,7 @@
 ## Mərhələ 0 — Biznes və planlama 🔵 Davam edir
 - [x] Layihə strukturu qurulub
 - [x] ADR-001: chrome.debugger seçildi
+- [x] ADR-002: i18n (default dil AZ)
 - [ ] Vizyon və uğur meyarları təsdiqləndi
 - [ ] İstifadəçilər və tələblər təsdiqləndi
 - [ ] MVP scope təsdiqləndi

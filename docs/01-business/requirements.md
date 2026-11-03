@@ -23,7 +23,7 @@
 | NFR-02 | Data default olaraq yalnız lokal saxlanılır (IndexedDB) |
 | NFR-03 | Response body limiti (məs. 5 MB/request) — konfiqurasiya olunan |
 | NFR-04 | Qeyd üçün maksimum 3 addım (Start, Stop, Yüklə). Faylı developer-ə istifadəçi özü manual göndərir |
-| NFR-05 | İnterfeys dili: ❓ (AZ / EN / hər ikisi) |
+| NFR-05 | İnterfeys dili: **Azərbaycan dili** (default). Çoxdilli ola bilsin deyə **i18n** istifadə olunur — kodda hardcoded mətn yoxdur, bütün mətnlər `_locales/az/messages.json`-dadır ([ADR-002](../03-architecture/decisions/ADR-002-i18n.md)). Texniki terminlər (request, response, header, payload, status) tərcümə olunmur (Sessiya #1, Q5) |
 | NFR-06 | Daxili alət: yalnız öz şirkətimiz üçün, ictimai yayım yoxdur (Sessiya #1, Q4) |
 
 Prioritet: Must · Should · Could · Won't (MoSCoW)

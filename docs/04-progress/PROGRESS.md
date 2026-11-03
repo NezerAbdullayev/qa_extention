@@ -13,6 +13,7 @@
 - Sessiya #1, Q1: əsas istifadəçilər təyin olundu (developer FE+BE, QA); müştərilər hələlik yox
 - Sessiya #1, Q3: avtomatik göndərmə təxirə salındı — manual göndərmə
 - Sessiya #1, Q4: istənilən saytda işləyir; layihə daxilidir (yalnız öz şirkətimiz üçün)
+- Sessiya #1, Q5: interfeys dili — Azərbaycan dili, i18n ilə (ADR-002)
 - Git repo yaradıldı, commit qaydaları `CLAUDE.md`-də yazıldı
 - GitHub remote qoşuldu; GitLab → GitHub keçidi (PR şablonu `.github/`-da)
 

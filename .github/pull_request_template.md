@@ -17,4 +17,5 @@ F-XXX — [spec](docs/02-features/)
 - [ ] `PROGRESS.md` yeniləndi
 - [ ] `CHANGELOG.md` yeniləndi (lazım olsa)
 - [ ] Həssas data (token, cookie) mask olunur
+- [ ] UI-da hardcoded mətn yoxdur — hamısı `_locales/az/messages.json`-da (ADR-002)
 - [ ] Extension "Load unpacked" ilə yoxlanıldı

@@ -22,7 +22,6 @@
 - [ ] F-006 Domen filtri (opsional)
 
 ## Mərhələ 3 — Yayım
-- [ ] Chrome Web Store-da ictimai (public) yayım — hər kəs istifadə edə bilsin (Sessiya #1, Q4)
-- [ ] Privacy policy (Web Store `debugger` icazəsi üçün tələb olunur)
-- [ ] Müştəri üçün qısa təlimat
+- [ ] Daxili paylama — yalnız şirkət developer və QA-ları üçün (Sessiya #1, Q4). Üsul: Load unpacked və ya şirkət Chrome siyasəti ❓
+- [ ] Developer və QA üçün qısa təlimat
 - [ ] F-007 Backend-ə göndərmə (⏸️ təxirə salınıb — hələlik manual göndərmə)

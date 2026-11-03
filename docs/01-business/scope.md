@@ -14,6 +14,7 @@
 - F-007 Backend-ə göndərmə — hələlik lazım deyil (Sessiya #1, Q3). İstifadəçi HAR faylını yükləyib developer-ə özü göndərir
 - Yeni tab / popup-ların avtomatik izlənməsi
 - Screenshot / ekran videosu
+- Müştərilər üçün versiya (paylama, sadə UI, təlimat) — hələlik nəzərdə tutulmur (Sessiya #1)
 
 ## Scope-dan kənar
 - Firefox / Safari dəstəyi

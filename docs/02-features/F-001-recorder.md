@@ -3,10 +3,12 @@
 **Status:** 📝 Spec · **Mərhələ:** MVP · **Tələblər:** FR-01, FR-02, FR-03, FR-04
 
 ## Niyə
-Müştəri Inspect açmadan problemin baş verdiyi andakı bütün API trafikini yazsın.
+QA və developer Inspect açmadan problemin baş verdiyi andakı bütün API trafikini yazsın.
 
 ## İstifadəçi hekayəsi
-> **Müştəri** kimi, **bir düymə ilə qeydi başladıb dayandırmaq** istəyirəm ki, **developer-ə problemi göstərə bilim**.
+> **QA** kimi, **bir düymə ilə qeydi başladıb dayandırmaq** istəyirəm ki, **developer-ə problemi tam data ilə göstərə bilim**.
+
+> **Developer** kimi, **öz mühitimdə request-ləri yazmaq** istəyirəm ki, **payload, response və xətaları rahat yoxlayım**.
 
 ## Qəbul meyarları
 - [ ] Popup-da Start / Stop düyməsi var

@@ -3,7 +3,7 @@
 **Status:** 📝 Spec · **Mərhələ:** MVP · **Tələblər:** FR-06
 
 ## Niyə
-Müştərinin token, cookie, parol kimi dataları göndərilən faylda açıq qalmasın.
+İstifadəçinin token, cookie, parol kimi dataları göndərilən faylda (chat, e-poçt) açıq qalmasın.
 
 ## Qəbul meyarları
 - [ ] Default mask olunan header-lər: `Authorization`, `Cookie`, `Set-Cookie`, `X-API-Key`

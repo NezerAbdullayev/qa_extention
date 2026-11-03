@@ -4,7 +4,10 @@
 - Müştəri zəng edir: "Filan düyməni basıram, xəta çıxır."
 - Developer müştəriyə Inspect → Network açmağı, request-i tapmağı, payload/response-u kopyalamağı izah etməli olur.
 - Müştəri texniki deyil → vaxt itir, data natamam gəlir, bəzən heç gəlmir.
+- QA bug tapanda developer-ə request/response-u əl ilə kopyalayıb göndərir — çox vaxt natamam.
 - QA eyni əməliyyatı fərqli dəyərlərlə təkrarlayanda response-ları əl ilə müqayisə edir.
+
+> **Qeyd (Sessiya #1):** Müştəri problemi hələlik birbaşa həll olunmur — müştəri şikayətini QA/developer daxildə təkrarlayıb extension ilə yazır.
 
 ## Nəticələri
 - Dəstək vaxtı uzanır.

@@ -46,10 +46,16 @@ Tam rejim                                Kompakt rejim
 │ │ https://site.az/api/v1/passports?page=1               │ │  ▲
 │ │ method: GET                                           │ │  │
 │ │                                                       │ │  │
-│ │ Headers                                               │ │  │ hündürlük
+│ │ Request headers  (göndərilən)                         │ │  │ hündürlük
 │ │ {                                                     │ │  │ sabit 500px
-│ │   "Content-Type": "application/json",                 │ │  │ (daxildə scroll)
+│ │   "Accept": "application/json",                       │ │  │ (daxildə scroll)
 │ │   "Authorization": "***"                              │ │  │
+│ │ }                                                     │ │  │
+│ │                                                       │ │  │
+│ │ Response headers  (qayıdan)                           │ │  │
+│ │ {                                                     │ │  │
+│ │   "Content-Type": "application/json",                 │ │  │
+│ │   "Set-Cookie": "***"                                 │ │  │
 │ │ }                                                     │ │  │
 │ │                                                       │ │  │
 │ │ Payload  (göndərilən)                                 │ │  │
@@ -77,9 +83,10 @@ Bölmələr **alt-alta**, bu sıra ilə:
 |---|---|---|
 | 1 | **API-nin tam ünvanı** | Tam URL (host + path + query), məs. `https://site.az/api/v1/passports?page=1` |
 | 2 | **method** | Tam ünvanın altında: `method: GET` |
-| 3 | **Headers** | JSON obyekt: `{ "Header-Adı": "dəyər", … }`. Həssas header-lər mask olunur (`"***"`, [F-005](F-005-masking.md)) |
-| 4 | **Payload** (göndərilən) | Request-in göndərdiyi data, **formatlanmış JSON**. DevTools "Payload" tab-ı kimi: POST/PUT/PATCH body + query string parametrləri (`?page=1` → `{ "page": "1" }`). Həssas sahələr mask olunur |
-| 5 | **Response** (qayıdan) | Response body **formatlanmış JSON** (pretty-print, 2 boşluq girinti) |
+| 3 | **Request headers** (göndərilən) | JSON obyekt: `{ "Header-Adı": "dəyər", … }` — brauzerin serverə göndərdiyi header-lər. Həssas header-lər mask olunur (`"***"`, [F-005](F-005-masking.md)) |
+| 4 | **Response headers** (qayıdan) | JSON obyekt — serverin qaytardığı header-lər (`Content-Type`, `Set-Cookie` → `"***"` və s.) |
+| 5 | **Payload** (göndərilən) | Request-in göndərdiyi data, **formatlanmış JSON**. DevTools "Payload" tab-ı kimi: POST/PUT/PATCH body + query string parametrləri (`?page=1` → `{ "page": "1" }`). Həssas sahələr mask olunur |
+| 6 | **Response** (qayıdan) | Response body **formatlanmış JSON** (pretty-print, 2 boşluq girinti) |
 
 - Payload yoxdursa (məs. query-siz GET) → Payload bölməsi göstərilmir.
 - Payload və ya Response JSON deyilsə (form-data, HTML, mətn) → olduğu kimi mətn göstərilir.
@@ -118,7 +125,7 @@ QA və developer DevTools → Network-da gördüyü adı burada da eyni görsün
 - [ ] Hover → tam URL
 - [ ] Sətirə klik → qutu aşağıya doğru açılır; təkrar klik → bağlanır
 - [ ] Hər açılan qutunun hündürlüyü **sabit 500px**; məzmun çox olarsa qutunun daxilində scroll (Sessiya #2, Q3)
-- [ ] Açıq qutuda **JSON formasında**, alt-alta: 1) tam URL · 2) `method: …` · 3) Headers (JSON) · 4) Payload — göndərilən (JSON) · 5) Response — qayıdan (formatlanmış JSON) (Sessiya #2, Q5, 5a)
+- [ ] Açıq qutuda **JSON formasında**, alt-alta: 1) tam URL · 2) `method: …` · 3) Request headers (JSON) · 4) Response headers (JSON) · 5) Payload — göndərilən (JSON) · 6) Response — qayıdan (formatlanmış JSON) (Sessiya #2, Q5, 5a, 5b)
 - [ ] Hər sətirin **sağ tərəfində "Yadda saxla" düyməsi** (💾) — bax: [F-003](F-003-snapshots.md)
 - [ ] Mətnlər i18n ilə ([ADR-002](../03-architecture/decisions/ADR-002-i18n.md))
 - [ ] Həssas sahələr mask olunmuş göstərilir ([F-005](F-005-masking.md))

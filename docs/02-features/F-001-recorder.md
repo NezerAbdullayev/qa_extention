@@ -19,7 +19,7 @@ QA və developer Inspect açmadan problemin baş verdiyi andakı bütün API tra
 - [ ] Redirect zənciri saxlanılır
 - [ ] Console error və exception-lar yazılır
 - [ ] Səhifə reload olsa belə artıq yazılmış body-lər itmir
-- [ ] Stop-dan sonra yazılmış request sayı göstərilir
+- [ ] Qeyd zamanı request sayı canlı artır; Stop-dan sonra yekun say göstərilir
 
 ## Texniki qeydlər
 - `chrome.debugger.attach({tabId}, "1.3")` → `Network.enable`, `Runtime.enable`

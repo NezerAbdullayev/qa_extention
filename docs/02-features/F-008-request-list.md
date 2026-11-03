@@ -121,6 +121,8 @@ QA və developer DevTools → Network-da gördüyü adı burada da eyni görsün
 - [ ] **— Kiçilt / ▢ Böyüt** düyməsi: kompakt rejim (yalnız REC statusu, say, Start/Stop) ↔ tam rejim
 - [ ] Panelin eni **əl ilə dartılaraq** dəyişdirilir; en və rejim yadda qalır
 - [ ] Start → Stop arasındakı bütün API request-ləri (**yalnız XHR / Fetch**) ümumi siyahıda (box) göstərilir
+- [ ] Siyahı **canlı** yenilənir: hər request baş verən kimi dərhal siyahıya əlavə olunur (DevTools → Network kimi). Status və müddət cavab gələndə sətirdə yenilənir (gözləyəndə `(pending)`) (Sessiya #2, Q2)
+- [ ] Qeyd davam edərkən də (Stop basmadan) istənilən sətiri açıb baxmaq və 💾 ilə saxlamaq olur
 - [ ] **Yeni Start** basılanda əvvəlki qeydin siyahısı **silinir**; əvvəlki qeyddən 💾 ilə **yadda saxlanmış** API-lər qalır ([F-003](F-003-snapshots.md)) (Sessiya #2, Q12)
 - [ ] Siyahıda **axtarış və filtr yoxdur** (Sessiya #2, Q13)
 - [ ] Bağlı sətir API adını **DevTools Network "Name" sütunu ilə eyni** göstərir: son path seqmenti + query (məs. `tasks?sort=regNumber&taskStatus=IN_WORK`)

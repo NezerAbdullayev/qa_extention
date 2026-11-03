@@ -25,6 +25,7 @@
 - Sessiya #2, Q12: yeni Start → siyahı silinir, saxlanmışlar qalır
 - Sessiya #2, Q13: axtarış / filtr yoxdur
 - Sessiya #2, Q5c: açıq qutuda method altında status
+- Sessiya #2, Q2: siyahı canlı yenilənir
 - Git repo yaradıldı, commit qaydaları `CLAUDE.md`-də yazıldı
 - GitHub remote qoşuldu; GitLab → GitHub keçidi (PR şablonu `.github/`-da)
 

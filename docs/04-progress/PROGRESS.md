@@ -6,12 +6,13 @@
 
 ## 2026-11-03
 **Görülən işlər**
-- Layihə strukturu qurulub (docs, MR şablonu, CONTRIBUTING, .gitignore)
+- Layihə strukturu qurulub (docs, PR şablonu, CONTRIBUTING, .gitignore)
 - Biznes sənədlərinin qaralamaları yazılıb
 - F-001…F-005 spec qaralamaları
 - ADR-001: `chrome.debugger` seçimi
 - Sessiya #1, Q1: əsas istifadəçilər təyin olundu (developer FE+BE, QA, müştəri)
 - Git repo yaradıldı, commit qaydaları `CLAUDE.md`-də yazıldı
+- GitHub remote qoşuldu; GitLab → GitHub keçidi (PR şablonu `.github/`-da)
 
 **Növbəti addım**
 - Sual-cavab sessiyası #1: biznes açıq sualları

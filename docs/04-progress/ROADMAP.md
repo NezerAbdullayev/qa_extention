@@ -8,7 +8,7 @@
 - [ ] MVP scope təsdiqləndi
 - [ ] Açıq suallar cavablandı
 - [x] Lokal git repo qurulub
-- [ ] GitLab remote qoşulub
+- [x] GitHub remote qoşulub (`origin`)
 
 ## Mərhələ 1 — MVP (v0.1)
 - [ ] F-001 Recorder

@@ -52,7 +52,12 @@ Tam rejim                                Kompakt rejim
 │ │   "Authorization": "***"                              │ │  │
 │ │ }                                                     │ │  │
 │ │                                                       │ │  │
-│ │ Response                                              │ │  │
+│ │ Payload  (göndərilən)                                 │ │  │
+│ │ {                                                     │ │  │
+│ │   "page": "1"                                         │ │  │
+│ │ }                                                     │ │  │
+│ │                                                       │ │  │
+│ │ Response  (qayıdan)                                   │ │  │
 │ │ {                                                     │ │  │
 │ │   "data": [ { "id": 42, "fin": "5ABC123" } ],         │ │  │
 │ │   "total": 1                                          │ │  │
@@ -73,9 +78,11 @@ Bölmələr **alt-alta**, bu sıra ilə:
 | 1 | **API-nin tam ünvanı** | Tam URL (host + path + query), məs. `https://site.az/api/v1/passports?page=1` |
 | 2 | **method** | Tam ünvanın altında: `method: GET` |
 | 3 | **Headers** | JSON obyekt: `{ "Header-Adı": "dəyər", … }`. Həssas header-lər mask olunur (`"***"`, [F-005](F-005-masking.md)) |
-| 4 | **Response** | Response body **formatlanmış JSON** (pretty-print, 2 boşluq girinti) |
+| 4 | **Payload** (göndərilən) | Request-in göndərdiyi data, **formatlanmış JSON**. DevTools "Payload" tab-ı kimi: POST/PUT/PATCH body + query string parametrləri (`?page=1` → `{ "page": "1" }`). Həssas sahələr mask olunur |
+| 5 | **Response** (qayıdan) | Response body **formatlanmış JSON** (pretty-print, 2 boşluq girinti) |
 
-- Response JSON deyilsə (HTML, mətn) → olduğu kimi mətn göstərilir.
+- Payload yoxdursa (məs. query-siz GET) → Payload bölməsi göstərilmir.
+- Payload və ya Response JSON deyilsə (form-data, HTML, mətn) → olduğu kimi mətn göstərilir.
 - Response boşdursa → `(boş)`.
 
 ### Bağlı sətirdə ad — DevTools "Name" sütunu ilə eyni (Sessiya #2, Q3)
@@ -111,7 +118,7 @@ QA və developer DevTools → Network-da gördüyü adı burada da eyni görsün
 - [ ] Hover → tam URL
 - [ ] Sətirə klik → qutu aşağıya doğru açılır; təkrar klik → bağlanır
 - [ ] Hər açılan qutunun hündürlüyü **sabit 500px**; məzmun çox olarsa qutunun daxilində scroll (Sessiya #2, Q3)
-- [ ] Açıq qutuda **JSON formasında**, alt-alta: 1) tam URL · 2) `method: …` · 3) Headers (JSON) · 4) Response (formatlanmış JSON) (Sessiya #2, Q5)
+- [ ] Açıq qutuda **JSON formasında**, alt-alta: 1) tam URL · 2) `method: …` · 3) Headers (JSON) · 4) Payload — göndərilən (JSON) · 5) Response — qayıdan (formatlanmış JSON) (Sessiya #2, Q5, 5a)
 - [ ] Hər sətirin **sağ tərəfində "Yadda saxla" düyməsi** (💾) — bax: [F-003](F-003-snapshots.md)
 - [ ] Mətnlər i18n ilə ([ADR-002](../03-architecture/decisions/ADR-002-i18n.md))
 - [ ] Həssas sahələr mask olunmuş göstərilir ([F-005](F-005-masking.md))

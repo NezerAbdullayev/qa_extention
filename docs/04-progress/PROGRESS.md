@@ -17,10 +17,11 @@
 - Yeni axın sənədləşdi: F-008 request siyahısı (500px açılan qutular), F-003 API yadda saxlama (6 rəqəmli avtomatik ad), F-004 müqayisə (key / dəyər / key+dəyər + hesabat)
 - Sessiya #2, Q1: UI side panel-də (bağla, kiçilt, əl ilə en dəyişmə)
 - Sessiya #2, Q6: müqayisə yalnız response body üzrə
-- Sessiya #2, Q3: siyahıda ad DevTools "Name" ilə eyni + method, status, müddət; açılan qutu sabit 500px
+- Sessiya #2, Q3: siyahıda ad DevTools "Name" ilə eyni + method, status, müddət; açılan qutu max 500px (Q15)
 - Sessiya #2, Q5 + 5a + 5b: açıq qutu JSON formasında — URL → method → Request headers → Response headers → Payload → Response
 - Sessiya #2, Q11: yalnız XHR / Fetch request-ləri yazılır
 - Sessiya #2, Q14: JSON olmayan response müqayisə olunmur, xəbərdarlıq göstərilir
+- Sessiya #2, Q15: açılan qutu məzmuna görə, maksimum 500px
 - Git repo yaradıldı, commit qaydaları `CLAUDE.md`-də yazıldı
 - GitHub remote qoşuldu; GitLab → GitHub keçidi (PR şablonu `.github/`-da)
 

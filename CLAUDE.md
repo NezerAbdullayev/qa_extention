@@ -3,7 +3,9 @@
 ## Git — bütün proseslər git ilə izlənir
 - Hər məntiqi iş (sənəd yeniləməsi, feature, fix) ayrıca commit olur.
 - Müəllif: **Nazar Abdullayev <nazar.abdullayev@cybernet.az>** (lokal `git config`, `--global` yox).
-- Commit yalnız istifadəçi **"commit et"** dedikdə edilir.
+- **Hər dəyişiklikdən sonra avtomatik commit + push** edilir (`origin main`) — istifadəçinin ayrıca "commit et" deməsini gözləmədən.
+- Bir cavabda bir neçə müstəqil qərar/dəyişiklik varsa → hər biri ayrıca commit, sonra bir push.
+- Remote: https://github.com/NezerAbdullayev/qa_extention
 
 ## Commit mesajı formatı — HƏMİŞƏ
 

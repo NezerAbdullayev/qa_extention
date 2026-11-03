@@ -15,7 +15,7 @@
 | FR-10 | Saxlanmış API-lər JSON kimi export/import olunur | F-003 | Should |
 | FR-11 | Extension istənilən saytda işləyir (domen məhdudiyyəti yoxdur). İstifadəçi istəsə yalnız seçdiyi host-ları yazmaq üçün filtr qura bilir (Sessiya #1, Q4) | F-006 | Should |
 | FR-12 | Qeyd birbaşa backend-ə göndərilir — **hələlik yox** (Sessiya #1, Q3): fayl yüklənir, istifadəçi özü manual göndərir | F-007 | Won't (indi) |
-| FR-13 | Start–Stop arasındakı API-lər ümumi siyahıda göstərilir; sətirə klik → qutu açılır (max 500px, daxildə scroll) | F-008 | Must |
+| FR-13 | Start–Stop arasındakı API-lər ümumi siyahıda göstərilir; ad DevTools "Name" sütunu ilə eynidir (son path seqmenti + query); sətirə klik → qutu açılır (max 500px, daxildə scroll) | F-008 | Must |
 | FR-14 | Açılan qutuda URL, method, status, headers, payload, response, timing göstərilir | F-008 | Must |
 | FR-15 | Hər müqayisə rejimi üçün hesabat: xülasə (saylar) + ətraflı fərqlər siyahısı | F-004 | Must |
 

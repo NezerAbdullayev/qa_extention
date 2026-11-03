@@ -40,10 +40,10 @@ Tam rejim                                Kompakt rejim
 ┌───────────────────────────────────────────────────────────┐
 │ ● REC  Qeyd: 14 request                    [Start] [Stop] │
 ├───────────────────────────────────────────────────────────┤
-│ ▸ POST  /api/orders            200   120 ms        [💾]   │  ← bağlı qutu
-│ ▾ GET   /api/users/42          200    85 ms        [💾]   │  ← açıq qutu
+│ ▸ MY_TASKS_COLUMNS                                 [💾]   │  ← bağlı qutu
+│ ▾ passports                                        [💾]   │  ← açıq qutu
 │ ┌───────────────────────────────────────────────────────┐ │
-│ │ URL:     https://site.az/api/users/42                 │ │
+│ │ URL:     https://site.az/api/v1/passports             │ │
 │ │ Method:  GET          Status: 200                     │ │
 │ │ ── Request headers ──                                 │ │  max 500px
 │ │ ── Payload ──                                         │ │  (daxildə scroll)
@@ -51,9 +51,30 @@ Tam rejim                                Kompakt rejim
 │ │ ── Response body ──                                   │ │
 │ │ ── Timing ──                                          │ │
 │ └───────────────────────────────────────────────────────┘ │
-│ ▸ GET   /api/products          500   310 ms        [💾]   │
+│ ▸ passports                                        [💾]   │
+│ ▸ tasks?sort=regNumber&taskStatus=IN_WORK          [💾]   │
+│ ▸ find.batch                                       [💾]   │
+│ ▸ list?checkFin=true                               [💾]   │
 └───────────────────────────────────────────────────────────┘
 ```
+
+### Bağlı sətirdə ad — DevTools "Name" sütunu ilə eyni (Sessiya #2, Q3)
+QA və developer DevTools → Network-da gördüyü adı burada da eyni görsün ki, qarışdırılmasın.
+
+| Tam URL | Siyahıda görünən ad |
+|---|---|
+| `https://site.az/api/settings/MY_TASKS_COLUMNS` | `MY_TASKS_COLUMNS` |
+| `https://site.az/api/v1/passports` | `passports` |
+| `https://site.az/api/tasks?sort=regNumber&taskStatus=IN_WORK` | `tasks?sort=regNumber&taskStatus=IN_WORK` |
+| `https://site.az/api/find.batch` | `find.batch` |
+| `https://site.az/api/users/list?checkFin=true` | `list?checkFin=true` |
+| `https://site.az/api/users/` (sonda `/`) | `users/` |
+
+**Qayda:** URL path-in **son seqmenti** + varsa **query string** (`?…`). Host və əvvəlki path göstərilmir.
+- Path sonda `/` ilə bitirsə → əvvəlki seqment + `/` (DevTools kimi).
+- Eyni adlı request-lər (məs. iki `passports`) ayrı-ayrı sətirlərdə, çağırılma sırası ilə göstərilir.
+- Ad uzundursa sonu `…` ilə kəsilir; mouse üzərinə gələndə (hover) **tam URL** göstərilir.
+- URL-də kodlanmış simvollar (`%20` və s.) DevTools-dakı kimi decode olunmuş göstərilir.
 
 ## Qəbul meyarları
 - [ ] Siyahı side panel-də göstərilir
@@ -61,7 +82,8 @@ Tam rejim                                Kompakt rejim
 - [ ] **— Kiçilt / ▢ Böyüt** düyməsi: kompakt rejim (yalnız REC statusu, say, Start/Stop) ↔ tam rejim
 - [ ] Panelin eni **əl ilə dartılaraq** dəyişdirilir; en və rejim yadda qalır
 - [ ] Start → Stop arasındakı bütün API request-ləri ümumi siyahıda (box) göstərilir
-- [ ] Hər sətir bağlı halda API-nin adını göstərir (bax: açıq sual — method, path, status, müddət)
+- [ ] Bağlı sətir API adını **DevTools Network "Name" sütunu ilə eyni** göstərir: son path seqmenti + query (məs. `tasks?sort=regNumber&taskStatus=IN_WORK`)
+- [ ] Hover → tam URL
 - [ ] Sətirə klik → qutu aşağıya doğru açılır; təkrar klik → bağlanır
 - [ ] Açılan qutunun hündürlüyü **maksimum 500px**; məzmun çox olarsa qutunun daxilində scroll
 - [ ] Açıq qutuda: URL, method, status, request headers, payload, response headers, response body, timing

@@ -20,9 +20,34 @@ Eyni API-nin iki cəhdi arasında hansı key-lərin olmadığını, hansı dəy�
 | 2 | **Dəyərlərə görə** | Hər iki tərəfdə olan key-lərin dəyərləri | ✏️ fərqli dəyərlər · ∅ dəyər gəlmir (`null`, boş `""`, boş `[]`/`{}`) · ⚠️ tip dəyişməsi (`number → string`) |
 | 3 | **Key + dəyər (tam)** | Hər ikisi birlikdə | 1 və 2-nin birləşmiş hesabatı |
 
-3. Hesabat ekranda göstərilir.
+3. Hesabat ekranda göstərilir: yuxarıda **xülasə**, altında iki response **JSON formasında qarşı-qarşıya** (A solda, B sağda) — fərqli sətirlər rənglə işarələnir (Sessiya #2, Q9).
 
-## Nümunə hesabat
+## Qarşı-qarşıya JSON görünüşü (Sessiya #2, Q9)
+```
+⚠️ Fərqli API-lər müqayisə olunur: GET /api/v1/passports ↔ GET /api/tasks   ← yalnız fərqli API-lərdə
+Xülasə: 2 key yoxdur · 1 yeni key · 3 dəyər fərqli · 1 dəyər gəlmir · 1 tip dəyişib
+
+┌──────── A: "sifariş-uğurlu" ────────┬──────── B: "482915" ─────────────────┐
+│ {                                   │ {                                    │
+│   "status": "success",          ✏️  │   "status": "error",             ✏️  │
+│   "data": {                         │   "data": {                          │
+│     "orderId": 12345,           ➖  │                                      │
+│     "amount": 100,              ✏️  │     "amount": -5,                ✏️  │
+│     "total": 100,               ⚠️  │     "total": "100",              ⚠️  │
+│     "customer": {                   │     "customer": {                    │
+│       "phone": "+994...",       ∅   │       "phone": null,             ∅   │
+│     }                               │     }                                │
+│   }                                 │   },                                 │
+│                                     │   "error": { "message": "…" }    ➕  │
+│ }                                   │ }                                    │
+└─────────────────────────────────────┴──────────────────────────────────────┘
+```
+- Rənglər: ➖ yalnız A-da (qırmızı) · ➕ yalnız B-də (yaşıl) · ✏️ fərqli dəyər (sarı) · ⚠️ tip dəyişməsi (narıncı) · ∅ dəyər gəlmir (boz)
+- Hər iki tərəf **eyni sətir hündürlüyündə** düzülür; bir tərəfdə olmayan key üçün qarşı tərəfdə boş sətir qalır
+- İki panel **sinxron scroll** olur
+- Rejimə görə işarələmə: **Key-lərə görə** → yalnız ➖ ➕ · **Dəyərlərə görə** → yalnız ✏️ ⚠️ ∅ · **Key + dəyər** → hamısı
+
+## Nümunə hesabat (siyahı şəklində — xülasənin altında)
 ```
 Müqayisə: "sifariş-uğurlu" (A)  ↔  "482915" (B)        Rejim: Key + dəyər
 POST /api/orders                               (yalnız response body)
@@ -49,6 +74,7 @@ Dəyərlər
 - [ ] 3 rejim: key-lərə görə · dəyərlərə görə · key + dəyər
 - [ ] İç-içə (nested) obyektlər tam yoxlanılır; yol nöqtə ilə göstərilir (`data.items[0].price`)
 - [ ] Hər rejim üçün hesabat: xülasə (saylar) + ətraflı siyahı
+- [ ] İki response **JSON formasında qarşı-qarşıya** göstərilir (A solda, B sağda), fərqlər rənglə işarələnir, sinxron scroll (Sessiya #2, Q9)
 - [ ] Response body JSON deyilsə (HTML, mətn, boş və ya parse olunmayan JSON) → **müqayisə olunmur**, xəbərdarlıq göstərilir: "⚠️ Response JSON formatında deyil — müqayisə mümkün deyil" (Sessiya #2, Q14)
 - [ ] Xəbərdarlıqda hansı API-nin (A və ya B, ya hər ikisi) JSON olmadığı və onun Content-Type-ı göstərilir
 - [ ] Ignore siyahısı (məs. `timestamp`, `createdAt`, `requestId`) — yadda qalır (Should)

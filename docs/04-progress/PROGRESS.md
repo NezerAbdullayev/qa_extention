@@ -28,6 +28,7 @@
 - Sessiya #2, Q2: siyahı canlı yenilənir
 - Sessiya #2, Q4: bir neçə qutu eyni anda açıq ola bilər
 - Sessiya #2, Q7: fərqli API-lər müqayisə oluna bilər, xəbərdarlıq ilə
+- Sessiya #2, Q9: müqayisə JSON formasında qarşı-qarşıya (A | B)
 - Git repo yaradıldı, commit qaydaları `CLAUDE.md`-də yazıldı
 - GitHub remote qoşuldu; GitLab → GitHub keçidi (PR şablonu `.github/`-da)
 

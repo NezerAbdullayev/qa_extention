@@ -20,6 +20,7 @@
 - Sessiya #2, Q3: siyahıda ad DevTools "Name" ilə eyni + method, status, müddət; açılan qutu sabit 500px
 - Sessiya #2, Q5: açıq qutu JSON formasında — URL → method → Headers → Response
 - Sessiya #2, Q11: yalnız XHR / Fetch request-ləri yazılır
+- Sessiya #2, Q14: JSON olmayan response müqayisə olunmur, xəbərdarlıq göstərilir
 - Git repo yaradıldı, commit qaydaları `CLAUDE.md`-də yazıldı
 - GitHub remote qoşuldu; GitLab → GitHub keçidi (PR şablonu `.github/`-da)
 

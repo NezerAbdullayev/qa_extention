@@ -47,7 +47,8 @@ Dəyərlər
 - [ ] 3 rejim: key-lərə görə · dəyərlərə görə · key + dəyər
 - [ ] İç-içə (nested) obyektlər tam yoxlanılır; yol nöqtə ilə göstərilir (`data.items[0].price`)
 - [ ] Hər rejim üçün hesabat: xülasə (saylar) + ətraflı siyahı
-- [ ] Response body JSON deyilsə (HTML, mətn, boş) → müqayisə olunmur, xəbərdarlıq göstərilir ❓
+- [ ] Response body JSON deyilsə (HTML, mətn, boş və ya parse olunmayan JSON) → **müqayisə olunmur**, xəbərdarlıq göstərilir: "⚠️ Response JSON formatında deyil — müqayisə mümkün deyil" (Sessiya #2, Q14)
+- [ ] Xəbərdarlıqda hansı API-nin (A və ya B, ya hər ikisi) JSON olmadığı və onun Content-Type-ı göstərilir
 - [ ] Ignore siyahısı (məs. `timestamp`, `createdAt`, `requestId`) — yadda qalır (Should)
 - [ ] Massivlər üçün "id-yə görə uyğunlaşdır" seçimi (Should)
 

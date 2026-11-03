@@ -1,13 +1,14 @@
 # Scope
 
-## MVP (v0.1) — təklif
-- F-001 Recorder (Start/Stop, chrome.debugger)
+## MVP (v0.1) — təsdiqlənib (Sessiya #2, Q10: hamısı birdən)
+- F-001 Recorder (Start/Stop, chrome.debugger, yalnız XHR / Fetch)
+- F-008 Request siyahısı (side panel, canlı, açılan qutular)
+- F-003 API yadda saxlama (💾, ad / 6 rəqəmli avtomatik ad)
+- F-004 API müqayisəsi və hesabat (key / dəyər / key + dəyər, JSON qarşı-qarşıya)
 - F-002 HAR export
 - F-005 Həssas data masking
 
 ## v0.2
-- F-003 Snapshot yaddaşı (IndexedDB)
-- F-004 Snapshot müqayisəsi
 - F-006 Domen filtri (opsional — default olaraq bütün saytlar yazılır)
 
 ## Sonra
@@ -19,5 +20,3 @@
 ## Scope-dan kənar
 - Firefox / Safari dəstəyi
 - Request-ləri dəyişdirmək / mock etmək
-
-<!-- ❓ Açıq sual: MVP-yə snapshot + compare daxil olsun, yoxsa ayrıca mərhələ? -->

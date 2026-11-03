@@ -29,6 +29,7 @@
 - Sessiya #2, Q4: bir neçə qutu eyni anda açıq ola bilər
 - Sessiya #2, Q7: fərqli API-lər müqayisə oluna bilər, xəbərdarlıq ilə
 - Sessiya #2, Q9: müqayisə JSON formasında qarşı-qarşıya (A | B)
+- Sessiya #2, Q10: MVP = F-001, F-008, F-003, F-004, F-002, F-005 (hamısı birdən)
 - Git repo yaradıldı, commit qaydaları `CLAUDE.md`-də yazıldı
 - GitHub remote qoşuldu; GitLab → GitHub keçidi (PR şablonu `.github/`-da)
 

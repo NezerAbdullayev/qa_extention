@@ -1,6 +1,6 @@
 # F-004 — API müqayisəsi və hesabat
 
-**Status:** 📝 Spec · **Mərhələ:** ❓ (bax: Sessiya #2) · **Tələblər:** FR-08, FR-09, FR-15
+**Status:** 📝 Spec · **Mərhələ:** MVP · **Tələblər:** FR-08, FR-09, FR-15
 
 ## Niyə
 Eyni API-nin iki cəhdi arasında hansı key-lərin olmadığını, hansı dəyərlərin səhv olduğunu və ya gəlmədiyini dərhal görmək.

@@ -15,11 +15,12 @@
 - [ ] F-001 Recorder
 - [ ] F-005 Masking
 - [ ] F-002 HAR export
+- [ ] F-008 Request siyahısı (side panel)
+- [ ] F-003 API yadda saxlama
+- [ ] F-004 API müqayisəsi və hesabat
 - [ ] Daxili test (QA)
 
-## Mərhələ 2 — QA alətləri (v0.2)
-- [ ] F-003 Snapshot yaddaşı
-- [ ] F-004 Müqayisə
+## Mərhələ 2 — v0.2
 - [ ] F-006 Domen filtri (opsional)
 
 ## Mərhələ 3 — Yayım

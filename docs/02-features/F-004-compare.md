@@ -43,6 +43,8 @@ Dəyərlər
 
 ## Qəbul meyarları
 - [ ] Saxlanmış API-lərdən ikisi seçilir (A və B)
+- [ ] **Fərqli API-lər** də müqayisə oluna bilər (məs. `passports` ↔ `tasks`). Bu halda hesabatın başında xəbərdarlıq: "⚠️ Fərqli API-lər müqayisə olunur: `GET /api/v1/passports` ↔ `GET /api/tasks`" (Sessiya #2, Q7)
+- [ ] "Fərqli API" = method və ya path (query-siz) fərqlidir
 - [ ] Yalnız **response body** müqayisə olunur (payload, headers, status, müddət — yox)
 - [ ] 3 rejim: key-lərə görə · dəyərlərə görə · key + dəyər
 - [ ] İç-içə (nested) obyektlər tam yoxlanılır; yol nöqtə ilə göstərilir (`data.items[0].price`)

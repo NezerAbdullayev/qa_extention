@@ -1,36 +1,56 @@
-# F-004 — Snapshot müqayisəsi
+# F-004 — API müqayisəsi və hesabat
 
-**Status:** 📝 Spec · **Mərhələ:** v0.2 · **Tələblər:** FR-08, FR-09
+**Status:** 📝 Spec · **Mərhələ:** ❓ (bax: Sessiya #2) · **Tələblər:** FR-08, FR-09, FR-15
 
 ## Niyə
-Eyni əməliyyatın iki cəhdi arasında nəyin dəyişdiyini (dəyər, key, tip, status) dərhal görmək.
+Eyni API-nin iki cəhdi arasında hansı key-lərin olmadığını, hansı dəyərlərin səhv olduğunu və ya gəlmədiyini dərhal görmək.
 
 ## İstifadəçi hekayəsi
-> **QA** kimi, **iki snapshot-u müqayisə etmək** istəyirəm ki, **response-da hansı dəyərlərin və key-lərin dəyişdiyini görüm**.
+> **QA** kimi, **iki saxlanmış API-ni seçib müqayisə etmək** istəyirəm ki, **key və dəyər fərqləri üzrə hesabat alım**.
+
+## UI / Axın
+1. Saxlanmış API-lər siyahısından ([F-003](F-003-snapshots.md)) **iki** API seçilir: **A** (əsas / gözlənilən) və **B** (yoxlanılan).
+2. Müqayisə rejimi seçilir:
+
+| # | Rejim | Nəyə baxır | Hesabat nə göstərir |
+|---|---|---|---|
+| 1 | **Key-lərə görə** | Yalnız struktur (key-lər) | ➖ A-da olub B-də olmayan key-lər · ➕ B-də olub A-da olmayan key-lər |
+| 2 | **Dəyərlərə görə** | Hər iki tərəfdə olan key-lərin dəyərləri | ✏️ fərqli dəyərlər · ∅ dəyər gəlmir (`null`, boş `""`, boş `[]`/`{}`) · ⚠️ tip dəyişməsi (`number → string`) |
+| 3 | **Key + dəyər (tam)** | Hər ikisi birlikdə | 1 və 2-nin birləşmiş hesabatı |
+
+3. Hesabat ekranda göstərilir.
+
+## Nümunə hesabat
+```
+Müqayisə: "sifariş-uğurlu" (A)  ↔  "482915" (B)        Rejim: Key + dəyər
+POST /api/orders                     status: 200 → 400  ⚠️
+
+Xülasə: 2 key yoxdur · 1 yeni key · 3 dəyər fərqli · 1 dəyər gəlmir · 1 tip dəyişib
+
+Key-lər
+  ➖ data.orderId          (A-da var, B-də yoxdur)
+  ➖ data.invoice.url      (A-da var, B-də yoxdur)
+  ➕ error.message         (yalnız B-də)
+Dəyərlər
+  ✏️ status:        "success" → "error"
+  ✏️ data.amount:   100       → -5
+  ✏️ data.currency: "AZN"     → "USD"
+  ∅  data.customer.phone: "+994..." → null
+  ⚠️ data.total:    number    → string
+```
 
 ## Qəbul meyarları
-- [ ] İki snapshot seçilir → endpoint-lər avtomatik cütləşdirilir (`method + normalize olunmuş path`)
-- [ ] Path-dəki ID-lər `:id` ilə normalize olunur
-- [ ] Müqayisə: status, payload, query, response body, (opsional) headers, müddət
-- [ ] Nəticə: ➕ yeni key · ➖ silinmiş key · ✏️ dəyişmiş dəyər · ⚠️ tip dəyişməsi
-- [ ] Yalnız bir snapshot-da olan endpoint-lər ayrıca göstərilir
-- [ ] Ignore siyahısı (məs. `timestamp`, `createdAt`, `token`, `requestId`) — yadda qalır
-- [ ] Massivlər üçün "id-yə görə uyğunlaşdır" seçimi
-
-## Nümunə çıxış
-```
-POST /api/orders                      status: 200 → 400  ⚠️
-Payload:
-  ✏️ amount:        100  → -5
-  ➕ couponCode:    "TEST10"
-Response:
-  ✏️ status:        "success" → "error"
-  ➖ data.orderId:  12345
-  ⚠️ data.total:    number → string
-```
+- [ ] Saxlanmış API-lərdən ikisi seçilir (A və B)
+- [ ] 3 rejim: key-lərə görə · dəyərlərə görə · key + dəyər
+- [ ] İç-içə (nested) obyektlər tam yoxlanılır; yol nöqtə ilə göstərilir (`data.items[0].price`)
+- [ ] Hər rejim üçün hesabat: xülasə (saylar) + ətraflı siyahı
+- [ ] Status kodu fərqi hesabatın başında göstərilir
+- [ ] Ignore siyahısı (məs. `timestamp`, `createdAt`, `requestId`) — yadda qalır (Should)
+- [ ] Massivlər üçün "id-yə görə uyğunlaşdır" seçimi (Should)
 
 ## Texniki qeydlər
-- Diff kitabxanası: `jsondiffpatch` (extension-un içinə daxil edilir)
+- Diff kitabxanası: `jsondiffpatch` (extension-un içinə daxil edilir) və ya öz yüngül diff funksiyamız
+- Müqayisə yalnız lokal, heç yerə göndərilmir
 
 ## Açıq suallar
-- ❓ Eyni endpoint bir snapshot-da bir neçə dəfə çağırılıbsa, necə cütləşdirək? (sıra ilə / payload-a görə)
+Bax: [Sessiya #2](../06-qa-sessions/2026-11-03-session-2.md)

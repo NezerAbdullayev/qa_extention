@@ -14,11 +14,12 @@
 - Sessiya #1, Q3: avtomatik göndərmə təxirə salındı — manual göndərmə
 - Sessiya #1, Q4: istənilən saytda işləyir; layihə daxilidir (yalnız öz şirkətimiz üçün)
 - Sessiya #1, Q5: interfeys dili — Azərbaycan dili, i18n ilə (ADR-002)
+- Yeni axın sənədləşdi: F-008 request siyahısı (500px açılan qutular), F-003 API yadda saxlama (6 rəqəmli avtomatik ad), F-004 müqayisə (key / dəyər / key+dəyər + hesabat)
 - Git repo yaradıldı, commit qaydaları `CLAUDE.md`-də yazıldı
 - GitHub remote qoşuldu; GitLab → GitHub keçidi (PR şablonu `.github/`-da)
 
 **Növbəti addım**
-- Sual-cavab sessiyası #1: biznes açıq sualları
+- Sessiya #2: F-008 / F-003 / F-004 açıq sualları (13 sual)
 
 **Bloklar**
 - —

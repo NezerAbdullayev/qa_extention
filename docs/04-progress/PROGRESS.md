@@ -19,6 +19,7 @@
 - Sabit extension ID (`manifest.json` → `key`)
 - Saxlanmışlar tab-ında da geniş pəncərədə bölünmüş görünüş (D8)
 - Dark mode (default), ☀️ / 🌙 keçid (D9)
+- Düzəliş: bütün sətir kliklənir — bölünmüş görünüşdə API-lər arası keçid (D10)
 
 **Növbəti addım**
 - F-004: müqayisə (key / dəyər / key + dəyər, JSON qarşı-qarşıya)

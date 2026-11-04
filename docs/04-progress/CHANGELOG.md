@@ -15,5 +15,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/) · Versiya: [SemVer](htt
 - Saxlanmışlar tab-ında geniş pəncərədə bölünmüş görünüş
 - Dark mode (default) və ☀️ / 🌙 keçid
 
+### Fixed
+- Bölünmüş görünüşdə yalnız ad kliklənirdi — indi bütün sətir kliklənir
+
 ### Changed
 - Extension adı: QA Debugger → API Lens

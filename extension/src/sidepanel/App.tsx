@@ -351,14 +351,11 @@ function RequestListRow(props: {
   return (
     <li ref={ref} className={selected ? 'bg-blue-100' : open ? 'bg-slate-50/60' : ''}>
       <div
-        className={`flex items-center gap-2 px-3 py-1.5 ${selected ? '' : 'hover:bg-slate-50'}`}
+        onClick={onToggle}
+        className={`flex cursor-pointer items-center gap-2 px-3 py-1.5 ${selected ? '' : 'hover:bg-slate-50'}`}
         title={row.url}
       >
-        <button
-          onClick={onToggle}
-          aria-expanded={open}
-          className="flex min-w-0 flex-1 items-center gap-2 text-left"
-        >
+        <button aria-expanded={open} className="flex min-w-0 flex-1 items-center gap-2 text-left">
           {mode === 'accordion' && <span className="text-slate-400">{open ? '▾' : '▸'}</span>}
           <span className="min-w-0 flex-1 truncate font-mono text-xs">{requestName(row.url)}</span>
         </button>
@@ -374,7 +371,10 @@ function RequestListRow(props: {
         <button
           title={t('list_save')}
           aria-label={t('list_save')}
-          onClick={onSave}
+          onClick={(e) => {
+            e.stopPropagation(); // do not also open / select the row
+            onSave();
+          }}
           className="shrink-0 rounded px-1 hover:bg-slate-200"
         >
           💾

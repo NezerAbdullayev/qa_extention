@@ -273,15 +273,18 @@ function SavedRow(props: {
 
   return (
     <li ref={ref} className={selected ? 'bg-blue-100' : open ? 'bg-slate-50/60' : ''}>
-      <div className={`flex items-center gap-2 px-3 py-1.5 ${selected ? '' : 'hover:bg-slate-50'}`}>
+      <div
+        onClick={props.onToggle}
+        className={`flex cursor-pointer items-center gap-2 px-3 py-1.5 ${selected ? '' : 'hover:bg-slate-50'}`}
+      >
         <input
           type="checkbox"
           aria-label={t('saved_select')}
           checked={props.checked}
           onChange={props.onCheck}
+          onClick={(e) => e.stopPropagation()}
         />
         <button
-          onClick={props.onToggle}
           aria-expanded={open}
           title={s.url}
           className="flex min-w-0 flex-1 items-center gap-2 text-left"
@@ -306,13 +309,19 @@ function SavedRow(props: {
           <span className="flex shrink-0 items-center gap-1 text-xs">
             <span className="text-red-600 dark:text-red-400">{t('saved_delete_confirm')}</span>
             <button
-              onClick={props.onDelete}
+              onClick={(e) => {
+                e.stopPropagation();
+                props.onDelete();
+              }}
               className="rounded bg-red-600 px-1.5 py-0.5 text-white hover:bg-red-500"
             >
               {t('common_yes')}
             </button>
             <button
-              onClick={props.onCancelDelete}
+              onClick={(e) => {
+                e.stopPropagation();
+                props.onCancelDelete();
+              }}
               className="rounded px-1.5 py-0.5 text-slate-600 hover:bg-slate-200"
             >
               {t('common_no')}
@@ -323,7 +332,10 @@ function SavedRow(props: {
             <button
               title={t('saved_rename')}
               aria-label={t('saved_rename')}
-              onClick={props.onRename}
+              onClick={(e) => {
+                e.stopPropagation();
+                props.onRename();
+              }}
               className="shrink-0 rounded px-1 hover:bg-slate-200"
             >
               ✏️
@@ -331,7 +343,10 @@ function SavedRow(props: {
             <button
               title={t('saved_delete')}
               aria-label={t('saved_delete')}
-              onClick={props.onAskDelete}
+              onClick={(e) => {
+                e.stopPropagation();
+                props.onAskDelete();
+              }}
               className="shrink-0 rounded px-1 hover:bg-slate-200"
             >
               🗑

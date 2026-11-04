@@ -68,7 +68,7 @@ Ayrı pəncərə **geniş** olanda (≥ 900px — məs. ikinci monitorda tam ekr
 - Eyni sətirə təkrar klik və ya **✕** / **Esc** → detallar bağlanır, siyahı tam enə qayıdır.
 - **↑ / ↓** — seçimi əvvəlki / növbəti request-ə keçirir (DevTools kimi).
 - Aradakı xətti mouse ilə dartıb siyahının enini dəyişmək olur; en yadda qalır.
-- Pəncərə daraldılanda (< 900px) və side panel-də — əvvəlki kimi sətirin altında açılan 300px qutular.
+- Pəncərə daraldılanda (< 900px) və side panel-də — əvvəlki kimi sətirin altında açılan 300px qutular. Ayrı pəncərədə eyni anda yalnız **bir** qutu açıq olur — başqasına klik əvvəlkini bağlayır (D7).
 
 ## UI / Axın
 ```
@@ -182,7 +182,8 @@ QA və developer DevTools → Network-da gördüyü adı burada da eyni görsün
 - [ ] Addan sonra **method, status, müddət** göstərilir; xətalı status (4xx, 5xx, failed) qırmızı (Sessiya #2, Q3)
 - [ ] Hover → tam URL
 - [ ] Sətirə klik → qutu aşağıya doğru açılır; təkrar klik → bağlanır
-- [ ] **Eyni anda bir neçə qutu açıq ola bilər** — yeni qutu açılanda əvvəlkilər bağlanmır; hər biri öz klik ilə bağlanır (Sessiya #2, Q4)
+- [ ] **Side panel-də** eyni anda bir neçə qutu açıq ola bilər — yeni qutu açılanda əvvəlkilər bağlanmır (Sessiya #2, Q4)
+- [ ] **Ayrı pəncərədə** yalnız bir qutu açıq olur: başqa sətirə klik → o açılır, əvvəlki avtomatik bağlanır; yeni açılan sətir görünən yerə scroll olunur (D7)
 - [ ] Açılan qutunun hündürlüyü **məzmuna görədir, maksimum 300px** (CSS `max-height: 300px`): qısa məzmunda qutu kiçik olur, 300px-dən çox olanda qutunun daxilində scroll (Sessiya #2, Q15; test sonrası 500 → 300px, 2026-11-04)
 - [ ] JSON **DevTools Preview kimi açılan ağac** şəklində göstərilir: yalnız kök açıq, iç-içə obyekt/massivlər bağlı + önizləmə, böyük massivlər `[0 … 99]` qruplarında (D3)
 - [ ] Açıq qutuda **JSON formasında**, alt-alta: 1) tam URL · 2) `method: …` + `status: …` · 3) Payload — göndərilən (JSON) · 4) Response — qayıdan (JSON); headers göstərilmir (Sessiya #2, Q5, 5a; D4)

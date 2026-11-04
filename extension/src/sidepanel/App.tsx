@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import { t } from '../shared/i18n';
 import { requestName } from '../shared/requestName';
 import type { RequestRow } from '../shared/types';
@@ -22,10 +22,12 @@ export function App() {
   const { popOut, dock } = useWindowMode();
   const count = state.requests.length;
 
-  // Several boxes can be open at once (Session #2, Q4).
+  // Side panel: several boxes can be open at once (Session #2, Q4).
+  // Separate window: only one box — clicking another row opens it and closes the previous (D7).
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
   const toggleRow = useCallback((id: string) => {
     setExpanded((prev) => {
+      if (isWindowMode) return prev.has(id) ? new Set() : new Set([id]);
       const next = new Set(prev);
       if (next.has(id)) next.delete(id);
       else next.add(id);
@@ -248,6 +250,15 @@ function RequestListRow(props: {
 }) {
   const { row, mode, open, onToggle } = props;
   const selected = mode === 'select' && open;
+
+  // Separate window: keep the newly opened / selected row visible (the previous box closing
+  // above it shifts the list; ↑ / ↓ may move the selection off-screen).
+  const ref = useRef<HTMLLIElement>(null);
+  useEffect(() => {
+    if (!open || !isWindowMode) return;
+    const id = requestAnimationFrame(() => ref.current?.scrollIntoView({ block: 'nearest' }));
+    return () => cancelAnimationFrame(id);
+  }, [open]);
   const isError = row.failed !== undefined || (row.status !== undefined && row.status >= 400);
   const statusText =
     row.failed !== undefined
@@ -259,7 +270,7 @@ function RequestListRow(props: {
         : t('list_pending');
 
   return (
-    <li className={selected ? 'bg-blue-100' : open ? 'bg-slate-50/60' : ''}>
+    <li ref={ref} className={selected ? 'bg-blue-100' : open ? 'bg-slate-50/60' : ''}>
       <div
         className={`flex items-center gap-2 px-3 py-1.5 ${selected ? '' : 'hover:bg-slate-50'}`}
         title={row.url}

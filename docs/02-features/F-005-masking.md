@@ -10,7 +10,7 @@
 - [ ] Default mask olunan body key-ləri: `password`, `token`, `accessToken`, `refreshToken`, `secret`
 - [ ] Mask: `***`
 - [ ] Siyahı ayarlardan dəyişdirilə bilir
-- [ ] Mask yaddaşa yazılarkən, yoxsa yalnız export zamanı? → ❓
+- [ ] Mask **yalnız export faylında** (JSON, HAR) tətbiq olunur; extension daxilində real dəyərlər görünür (Sessiya #3, Q4)
 
 ## Açıq suallar
-- ❓ QA öz snapshot-larında mask-sız data görməlidirmi?
+- ✅ Bəli — extension daxilində mask-sız, export faylında mask-lı (Sessiya #3, Q4)

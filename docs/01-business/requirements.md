@@ -8,11 +8,11 @@
 | FR-03 | Uğursuz request-lər (net::ERR, CORS, blocked, canceled) yazılır | F-001 | Must |
 | FR-04 | Console error və JS exception-lar yazılır | F-001 | Should |
 | FR-05 | Qeyd HAR faylı kimi export olunur | F-002 | Must |
-| FR-06 | Authorization, Cookie, token, parol sahələri mask olunur | F-005 | Must |
+| FR-06 | Authorization, Cookie, token, parol sahələri **export faylında** mask olunur; extension daxilində real dəyər görünür (Sessiya #3, Q4) | F-005 | Must |
 | FR-07 | Siyahıdakı istənilən API ad verilərək yadda saxlanılır; ad boşdursa təsadüfi 6 rəqəmli tam ədəd verilir | F-003 | Must |
 | FR-08 | İki saxlanmış API-nin **yalnız response body**-si müqayisə olunur: key-lərə görə / dəyərlərə görə / key + dəyər (Sessiya #2, Q6) | F-004 | Must |
 | FR-09 | Müqayisədə ignore ediləcək sahələr təyin olunur | F-004 | Should |
-| FR-10 | Saxlanmış API-lər JSON kimi export/import olunur | F-003 | Should |
+| FR-10 | Saxlanmış API-lər JSON kimi export/import olunur; export-da həssas sahələr mask olunur (Sessiya #3, Q4, Q5) | F-003 | Must |
 | FR-11 | Extension istənilən saytda işləyir (domen məhdudiyyəti yoxdur). İstifadəçi istəsə yalnız seçdiyi host-ları yazmaq üçün filtr qura bilir (Sessiya #1, Q4) | F-006 | Should |
 | FR-12 | Qeyd birbaşa backend-ə göndərilir — **hələlik yox** (Sessiya #1, Q3): fayl yüklənir, istifadəçi özü manual göndərir | F-007 | Won't (indi) |
 | FR-13 | Start–Stop arasındakı API-lər ümumi siyahıda **canlı** göstərilir (hər request dərhal əlavə olunur — Sessiya #2, Q2); sətirdə: ad (DevTools "Name" ilə eyni) + method + status + müddət; sətirə klik → qutu açılır (hündürlük məzmuna görə, maksimum 300px; çox olanda daxildə scroll — Sessiya #2, Q15; 2026-11-04 test sonrası 300px) | F-008 | Must |

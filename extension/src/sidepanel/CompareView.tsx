@@ -22,11 +22,10 @@ const OPTIONS_KEY = 'compareOptions';
 
 interface StoredOptions {
   mode: CompareMode;
-  ignore: string;
   matchById: boolean;
 }
 
-const DEFAULT_OPTIONS: StoredOptions = { mode: 'full', ignore: '', matchById: false };
+const DEFAULT_OPTIONS: StoredOptions = { mode: 'full', matchById: false };
 
 export const KIND_ICON: Record<DiffKind, string> = {
   missing: '➖',
@@ -105,11 +104,16 @@ export function CompareView({
     };
   }, [source, ids]);
 
-  // Mode, ignore list and id matching are remembered (Should: "yadda qalır").
+  // Mode and id matching are remembered.
   useEffect(() => {
     chrome.storage.local.get(OPTIONS_KEY).then((v) => {
       const saved = v[OPTIONS_KEY] as Partial<StoredOptions> | undefined;
-      if (saved) setOptions({ ...DEFAULT_OPTIONS, ...saved });
+      // Only known fields — an old "ignore" list (removed, D17) is dropped.
+      if (saved)
+        setOptions({
+          mode: saved.mode ?? DEFAULT_OPTIONS.mode,
+          matchById: saved.matchById ?? DEFAULT_OPTIONS.matchById,
+        });
     });
   }, []);
 
@@ -142,7 +146,6 @@ export function CompareView({
     if (!bodies?.a.ok || !bodies.b.ok) return null;
     return compareJson(bodies.a.value, bodies.b.value, {
       mode: options.mode,
-      ignore: options.ignore.split(','),
       matchById: options.matchById,
     });
   }, [bodies, options]);
@@ -182,7 +185,7 @@ export function CompareView({
       ) : (
         <>
           <div className="space-y-1.5 border-b border-slate-200 px-3 py-2 text-xs">
-            <div className="grid grid-cols-[auto_1fr] gap-x-2 gap-y-0.5">
+            <div className="grid grid-cols-[auto_1fr] gap-x-2 gap-y-0.5 py-1">
               <SideLabel side="A" item={a} />
               <SideLabel side="B" item={b} />
             </div>
@@ -208,15 +211,8 @@ export function CompareView({
             </div>
 
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-              <label className="flex min-w-48 flex-1 items-center gap-1.5 text-slate-600">
-                {t('compare_ignore_label')}
-                <input
-                  value={options.ignore}
-                  onChange={(e) => update({ ignore: e.target.value })}
-                  placeholder={t('compare_ignore_placeholder')}
-                  className="min-w-0 flex-1 rounded border border-slate-300 bg-surface px-1.5 py-0.5 font-mono text-[11px]"
-                />
-              </label>
+              {/* "Nəzərə alma" field removed (D17) — its space is kept empty on purpose. */}
+              <div aria-hidden="true" className="h-[20.25px] min-w-48 flex-1" />
               <label className="flex items-center gap-1.5 text-slate-600">
                 <input
                   type="checkbox"

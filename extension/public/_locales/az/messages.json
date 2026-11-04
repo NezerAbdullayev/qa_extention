@@ -275,12 +275,6 @@
   "compare_view_list": {
     "message": "Siyahı"
   },
-  "compare_ignore_label": {
-    "message": "Nəzərə alma:"
-  },
-  "compare_ignore_placeholder": {
-    "message": "məs. timestamp, createdAt, requestId"
-  },
   "compare_match_by_id": {
     "message": "Massivləri id-yə görə uyğunlaşdır"
   },

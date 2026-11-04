@@ -166,6 +166,7 @@ QA və developer DevTools → Network-da gördüyü adı burada da eyni görsün
 - Uğursuz request-də status yerinə səbəb qısa yazılır (məs. `(failed)`, `CORS`) — DevTools kimi.
 
 ## Qəbul meyarları
+- [x] **Payload** və **Response** başlıqlarının yanında kopyala ikonu: klik → məzmun buferə köçür (JSON səliqəli, 2 boşluq); payload-da body, body yoxdursa query parametrləri; "✓ Kopyalandı" 1.5 san görünür (D14, v2.4.7)
 - [ ] Siyahı side panel-də göstərilir
 - [ ] **⧉** düyməsi ilə panel **ayrı pəncərədə** açılır (ikinci monitor üçün); **⇥** ilə side panel-ə qayıdır; pəncərənin yeri və ölçüsü yadda qalır (D5)
 - [ ] Qeyd zamanı yazılan tab göstərilir: `Yazılır: <host> — <başlıq>` (D5)

@@ -16,7 +16,6 @@ Developer faylı öz Chrome-unda DevTools → Network tab-ına sürükləyib Ins
 - [x] Fayl HAR 1.2 standartına uyğundur, Chrome DevTools-a import olunur
 - [x] Fayl adı: `<host>_<YYYY-MM-DD_HH-mm>.har`
 - [x] Mask olunmuş sahələr (F-005) export-da da mask olunub
-- [ ] Console logları ayrıca JSON və ya HAR `_console` sahəsində — console hələ yazılmır (F-001-in açıq hissəsi)
 
 ## Texniki qeydlər
 - Kod: `extension/src/shared/har.ts` (`buildHar`), background-da `EXPORT_HAR` mesajı
@@ -29,4 +28,4 @@ Developer faylı öz Chrome-unda DevTools → Network tab-ına sürükləyib Ins
 - Mask (F-005): Authorization, Cookie, Set-Cookie, X-API-Key header-ləri; password, token, accessToken, refreshToken, secret — URL query, payload və response-da `***`
 
 ## Açıq suallar
-- ❓ Console logları HAR-ın içində, yoxsa ayrıca fayl? (console yazılması F-001-də hazırlananda qərar veriləcək)
+- ✅ Console logları HAR-a düşmür — console yazılmır (F-001, 2026-11-04, maksimum sadəlik)

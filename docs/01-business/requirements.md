@@ -4,9 +4,9 @@
 | ID | Tələb | Feature | Prioritet |
 |---|---|---|---|
 | FR-01 | İstifadəçi aktiv tab üçün qeydi başlada və dayandıra bilir | F-001 | Must |
-| FR-02 | Yalnız **XHR / Fetch** request-ləri yazılır (statik resurslar yox — Sessiya #2, Q11); hər biri üçün URL, method, headers, payload, status, response headers, body, timing, initiator | F-001 | Must |
+| FR-02 | Yalnız **XHR / Fetch** request-ləri yazılır (statik resurslar yox — Sessiya #2, Q11); hər biri üçün URL, method, headers, payload, status, response headers, body, timing (initiator yox — 2026-11-04, sadəlik) | F-001 | Must |
 | FR-03 | Uğursuz request-lər (net::ERR, CORS, blocked, canceled) yazılır | F-001 | Must |
-| FR-04 | Console error və JS exception-lar yazılır | F-001 | Should |
+| FR-04 | Console error və JS exception-lar yazılır — **yox**: maksimum sadəlik (2026-11-04); redirect zənciri də yazılmır | F-001 | Won't |
 | FR-05 | Qeyd HAR faylı kimi export olunur | F-002 | Must |
 | FR-06 | Authorization, Cookie, token, parol sahələri **export faylında** mask olunur; extension daxilində real dəyər görünür (Sessiya #3, Q4) | F-005 | Must |
 | FR-07 | Siyahıdakı istənilən API ad verilərək yadda saxlanılır; ad boşdursa təsadüfi 6 rəqəmli tam ədəd verilir | F-003 | Must |

@@ -24,9 +24,10 @@
 - F-004: path parametrləri (`objects/{id}`) "fərqli API" sayılmır — ℹ️ fərqli parametr göstərilir (D11)
 - Versiya 2.4.0 təyin edildi; hər dəyişiklikdə son rəqəm +1 (CLAUDE.md)
 - F-002: HAR 1.2 export (mask-lı) — v2.4.1
+- Qərar: F-001-də console error, redirect zənciri, initiator **yazılmır** — maksimum sadəlik (D12)
 
 **Növbəti addım**
-- F-001: console error-lar (F-002 `_console` üçün də lazımdır), redirect zənciri
+- MVP-nin real istifadədə yoxlanması (test-plan.md yenilənməsi)
 - F-005: mask siyahısının UI-dan idarəsi
 
 **Bloklar**

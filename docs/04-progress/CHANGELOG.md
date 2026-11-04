@@ -2,6 +2,10 @@
 
 Format: [Keep a Changelog](https://keepachangelog.com/) · Versiya: [SemVer](https://semver.org/)
 
+## [2.4.6] — 2026-11-04
+### Changed
+- Yadda saxlama popup-unda placeholder: "məs. sifariş-uğurlu" → "API üçün ad yazın"
+
 ## [2.4.5] — 2026-11-04
 ### Added
 - Saxlanmışlarda **Hamısını sil** (təsdiq ilə)

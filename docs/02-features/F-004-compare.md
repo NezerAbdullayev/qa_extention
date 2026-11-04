@@ -78,7 +78,7 @@ Dəyərlər
 - [x] İki response **JSON formasında qarşı-qarşıya** göstərilir (A solda, B sağda), fərqlər rənglə işarələnir, sinxron scroll (Sessiya #2, Q9)
 - [x] Response body JSON deyilsə (HTML, mətn, boş və ya parse olunmayan JSON) → **müqayisə olunmur**, xəbərdarlıq göstərilir: "⚠️ Response JSON formatında deyil — müqayisə mümkün deyil" (Sessiya #2, Q14)
 - [x] Xəbərdarlıqda hansı API-nin (A və ya B, ya hər ikisi) JSON olmadığı və onun Content-Type-ı göstərilir
-- [x] Ignore siyahısı (məs. `timestamp`, `createdAt`, `requestId`) — yadda qalır (Should)
+- ~~Ignore siyahısı ("Nəzərə alma")~~ — UI-dan çıxarıldı (D17, v2.4.11); yeri boş saxlanılır (20px). `compareJson`-un `ignore` parametri kodda qalır, UI istifadə etmir
 - [x] Massivlər üçün "id-yə görə uyğunlaşdır" seçimi (Should)
 
 ## Texniki qeydlər
@@ -90,8 +90,9 @@ Dəyərlər
 - Görünüş: **Qarşı-qarşıya** (bir scroll konteyneri → sinxron scroll) və **Siyahı** (Key-lər / Dəyərlər)
 - ∅ "dəyər gəlmir" = B-də `null`, `""`, `[]`, `{}` (A-da dolu); key ümumiyyətlə yoxdursa → ➖ (Sessiya #2, Q8 — variant A)
 - Massiv elementləri default olaraq indeksə görə; "id-yə görə" seçimi yalnız bütün elementlərdə unikal `id` olduqda işləyir (yol: `items[id=5]`)
-- "Eyni API" qaydası (`matchApis`): query atılır; path hissə-hissə tutuşdurulur — eyni → OK; fərqli, amma hər ikisi parametr kimi (rəqəm / rəqəm-tire `2908125632-71002` / UUID / uzun hex / ≥20 simvollu token) → eyni API, fərqli parametr; fərqli söz (`objects` ↔ `passports`), fərqli method və ya hissə sayı → fərqli API. Response-dakı parametr dəyərləri (məs. `taxpayerId`) üçün Ignore siyahısı istifadə olunur
-- Ignore: key adı (istənilən dərinlikdə) və ya tam yol, vergüllə ayrılır; rejim, ignore və id seçimi `chrome.storage.local` → `compareOptions`-da yadda qalır
+- "Eyni API" qaydası (`matchApis`): query atılır; path hissə-hissə tutuşdurulur — eyni → OK; fərqli, amma hər ikisi parametr kimi (rəqəm / rəqəm-tire `2908125632-71002` / UUID / uzun hex / ≥20 simvollu token) → eyni API, fərqli parametr; fərqli söz (`objects` ↔ `passports`), fərqli method və ya hissə sayı → fərqli API.
+- Rejim və id seçimi `chrome.storage.local` → `compareOptions`-da yadda qalır
+- A / B bloku: üstdə 12px, altda 10px məsafə (D17)
 - Müqayisə yalnız lokal, heç yerə göndərilmir
 
 ## Açıq suallar

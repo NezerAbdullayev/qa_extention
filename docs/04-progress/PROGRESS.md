@@ -29,6 +29,7 @@
 - D14: Payload / Response kopyala düyməsi (2.4.7)
 - D15: ✕ ilə bağlayanda saxlanmamış Qeyd silinir, qeyd dayanır (2.4.8); Chrome-un öz ✕-i və digər bağlama yolları üçün də (2.4.9)
 - D16: "— Kiçilt" düyməsi silindi (2.4.10)
+- D17: müqayisədə "Nəzərə alma" silindi (yeri boş qalır), A / B blokuna +4px məsafə (2.4.11)
 
 **Növbəti addım**
 - MVP-nin real istifadədə yoxlanması (test-plan.md yenilənməsi)

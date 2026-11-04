@@ -2,6 +2,12 @@
 
 Format: [Keep a Changelog](https://keepachangelog.com/) · Versiya: [SemVer](https://semver.org/)
 
+## [2.4.11] — 2026-11-04
+### Removed
+- Müqayisədə "Nəzərə alma" sahəsi (yeri boş saxlanılır)
+### Changed
+- Müqayisədə A / B blokunun üstünə və altına +4px məsafə
+
 ## [2.4.10] — 2026-11-04
 ### Removed
 - "— Kiçilt / ▢ Böyüt" düyməsi (panelin ölçüsünü dəyişmirdi)

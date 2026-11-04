@@ -393,9 +393,21 @@ function RequestListRow(props: {
             e.stopPropagation(); // do not also open / select the row
             onSave();
           }}
-          className="shrink-0 rounded px-1 hover:bg-slate-200"
+          className="flex h-6 w-6 shrink-0 items-center justify-center rounded border border-slate-300 text-slate-500 transition-colors hover:border-blue-600 hover:bg-blue-600 hover:text-white"
         >
-          💾
+          {/* Bookmark icon — "save this API" */}
+          <svg
+            viewBox="0 0 24 24"
+            className="h-3.5 w-3.5"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+          </svg>
         </button>
       </div>
       {mode === 'accordion' && open && <RequestDetail row={row} />}

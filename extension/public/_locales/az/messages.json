@@ -175,7 +175,7 @@
     }
   },
   "saved_empty": {
-    "message": "Hələ saxlanmış API yoxdur. \"Qeyd\" tab-ında 💾 basın."
+    "message": "Hələ saxlanmış API yoxdur. \"Qeyd\" tab-ında sətirdəki \"Yadda saxla\" düyməsini basın."
   },
   "saved_select": {
     "message": "Seç"

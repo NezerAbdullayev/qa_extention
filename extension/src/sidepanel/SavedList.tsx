@@ -4,6 +4,7 @@ import { requestName } from '../shared/requestName';
 import type { PanelMessage, SavedApiExport, SavedApiSummary, SaveResult } from '../shared/types';
 import { NameDialog } from './NameDialog';
 import { SavedDetail } from './RequestDetail';
+import { useSplitLayout } from './useSplitLayout';
 import { isWindowMode } from './useWindowMode';
 
 const send = <T,>(msg: PanelMessage) => chrome.runtime.sendMessage(msg) as Promise<T>;
@@ -51,6 +52,7 @@ export function SavedList({
     const ids = new Set(items.map((i) => i.id));
     setSelected((prev) => new Set([...prev].filter((id) => ids.has(id))));
     setExpanded((prev) => new Set([...prev].filter((id) => ids.has(id))));
+    setActiveId((prev) => (prev && ids.has(prev) ? prev : null));
   }, [items]);
 
   const toggle = (set: Set<string>, id: string, single = false) => {
@@ -85,6 +87,58 @@ export function SavedList({
       onToast(t('saved_import_invalid'));
     }
   };
+
+  // Wide separate window → DevTools-like split view, same as the "Qeyd" tab (D6).
+  const { split, leftWidth, startResize } = useSplitLayout();
+  const [activeId, setActiveId] = useState<string | null>(null);
+  const activeItem = split ? items.find((i) => i.id === activeId) : undefined;
+
+  // ↑ / ↓ change the selected API, Esc closes the details (split view only).
+  useEffect(() => {
+    if (!split || !activeId) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (renaming) return; // keys belong to the rename dialog
+      if (e.key === 'Escape') return setActiveId(null);
+      if (e.key !== 'ArrowUp' && e.key !== 'ArrowDown') return;
+      const i = items.findIndex((s) => s.id === activeId);
+      const next = items[e.key === 'ArrowUp' ? i - 1 : i + 1];
+      if (next) {
+        e.preventDefault();
+        setActiveId(next.id);
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [split, activeId, items, renaming]);
+
+  const list = (
+    <ul className="divide-y divide-slate-100 dark:divide-slate-800">
+      {items.map((s) => (
+        <SavedRow
+          key={s.id}
+          s={s}
+          mode={split ? 'select' : 'accordion'}
+          open={split ? s.id === activeId : expanded.has(s.id)}
+          checked={selected.has(s.id)}
+          confirmingDelete={confirmDelete === s.id}
+          onToggle={() =>
+            split
+              ? setActiveId(s.id === activeId ? null : s.id)
+              : setExpanded((p) => toggle(p, s.id, isWindowMode))
+          }
+          onCheck={() => setSelected((p) => toggle(p, s.id))}
+          onRename={() => setRenaming(s)}
+          onAskDelete={() => setConfirmDelete(s.id)}
+          onCancelDelete={() => setConfirmDelete(null)}
+          onDelete={async () => {
+            await send({ type: 'DELETE_SAVED', id: s.id });
+            setConfirmDelete(null);
+            onToast(t('saved_deleted', s.name));
+          }}
+        />
+      ))}
+    </ul>
+  );
 
   return (
     <div className="flex h-full flex-col">
@@ -124,93 +178,54 @@ export function SavedList({
         </div>
       </div>
 
-      <div className="min-h-0 flex-1 overflow-y-auto">
-        {items.length === 0 ? (
+      {items.length === 0 ? (
+        <div className="min-h-0 flex-1 overflow-y-auto">
           <p className="px-3 py-6 text-center text-slate-400">{t('saved_empty')}</p>
-        ) : (
-          <ul className="divide-y divide-slate-100">
-            {items.map((s) => {
-              const open = expanded.has(s.id);
-              const isError = s.failed !== undefined || (s.status ?? 0) >= 400;
-              return (
-                <li key={s.id} className={open ? 'bg-slate-50/60' : ''}>
-                  <div className="flex items-center gap-2 px-3 py-1.5 hover:bg-slate-50">
-                    <input
-                      type="checkbox"
-                      aria-label={t('saved_select')}
-                      checked={selected.has(s.id)}
-                      onChange={() => setSelected((p) => toggle(p, s.id))}
-                    />
-                    <button
-                      onClick={() => setExpanded((p) => toggle(p, s.id, isWindowMode))}
-                      aria-expanded={open}
-                      title={s.url}
-                      className="flex min-w-0 flex-1 items-center gap-2 text-left"
-                    >
-                      <span className="text-slate-400">{open ? '▾' : '▸'}</span>
-                      <span className="min-w-0 flex-1">
-                        <span className="block truncate font-medium">{s.name}</span>
-                        <span className="block truncate font-mono text-[11px] text-slate-500">
-                          {s.method} {requestName(s.url)}
-                        </span>
-                      </span>
-                    </button>
-                    <span
-                      className={`w-12 shrink-0 text-xs ${isError ? 'font-semibold text-red-600' : 'text-slate-700'}`}
-                    >
-                      {s.failed !== undefined ? t('list_failed') : (s.status ?? '')}
+        </div>
+      ) : split ? (
+        /* Wide separate window (D6): list left, details right — same as the "Qeyd" tab. */
+        <div className="flex min-h-0 flex-1">
+          <div
+            className="min-w-0 overflow-y-auto"
+            style={activeItem ? { width: leftWidth, flexShrink: 0 } : { flex: 1 }}
+          >
+            {list}
+          </div>
+          {activeItem && (
+            <>
+              <div
+                role="separator"
+                aria-orientation="vertical"
+                onPointerDown={startResize}
+                className="w-1 shrink-0 cursor-col-resize bg-slate-200 hover:bg-blue-400"
+              />
+              <section className="flex min-w-0 flex-1 flex-col">
+                <div className="flex items-center gap-2 border-b border-slate-200 bg-slate-50 px-3 py-1.5">
+                  <span className="min-w-0 flex-1 truncate text-xs">
+                    <span className="font-semibold">{activeItem.name}</span>
+                    <span className="ml-2 font-mono text-slate-500">
+                      {activeItem.method} {requestName(activeItem.url)}
                     </span>
-                    <span className="w-20 shrink-0 text-right text-[11px] text-slate-400">
-                      {dateFmt.format(s.savedAt)}
-                    </span>
-                    {confirmDelete === s.id ? (
-                      <span className="flex shrink-0 items-center gap-1 text-xs">
-                        <span className="text-red-600">{t('saved_delete_confirm')}</span>
-                        <button
-                          onClick={async () => {
-                            await send({ type: 'DELETE_SAVED', id: s.id });
-                            setConfirmDelete(null);
-                            onToast(t('saved_deleted', s.name));
-                          }}
-                          className="rounded bg-red-600 px-1.5 py-0.5 text-white hover:bg-red-500"
-                        >
-                          {t('common_yes')}
-                        </button>
-                        <button
-                          onClick={() => setConfirmDelete(null)}
-                          className="rounded px-1.5 py-0.5 text-slate-600 hover:bg-slate-200"
-                        >
-                          {t('common_no')}
-                        </button>
-                      </span>
-                    ) : (
-                      <>
-                        <button
-                          title={t('saved_rename')}
-                          aria-label={t('saved_rename')}
-                          onClick={() => setRenaming(s)}
-                          className="shrink-0 rounded px-1 hover:bg-slate-200"
-                        >
-                          ✏️
-                        </button>
-                        <button
-                          title={t('saved_delete')}
-                          aria-label={t('saved_delete')}
-                          onClick={() => setConfirmDelete(s.id)}
-                          className="shrink-0 rounded px-1 hover:bg-slate-200"
-                        >
-                          🗑
-                        </button>
-                      </>
-                    )}
-                  </div>
-                  {open && <SavedDetail id={s.id} />}
-                </li>
-              );
-            })}
-          </ul>
-        )}
-      </div>
+                  </span>
+                  <button
+                    title={t('detail_close')}
+                    aria-label={t('detail_close')}
+                    onClick={() => setActiveId(null)}
+                    className="flex h-6 w-6 items-center justify-center rounded text-slate-500 hover:bg-slate-200 hover:text-slate-800"
+                  >
+                    ✕
+                  </button>
+                </div>
+                <div className="min-h-0 flex-1">
+                  <SavedDetail key={activeItem.id} id={activeItem.id} variant="pane" />
+                </div>
+              </section>
+            </>
+          )}
+        </div>
+      ) : (
+        <div className="min-h-0 flex-1 overflow-y-auto">{list}</div>
+      )}
 
       {renaming && (
         <NameDialog
@@ -227,5 +242,104 @@ export function SavedList({
         />
       )}
     </div>
+  );
+}
+
+/** One saved API row. 'accordion' → details open below; 'select' → details in the right pane. */
+function SavedRow(props: {
+  s: SavedApiSummary;
+  mode: 'accordion' | 'select';
+  open: boolean;
+  checked: boolean;
+  confirmingDelete: boolean;
+  onToggle: () => void;
+  onCheck: () => void;
+  onRename: () => void;
+  onAskDelete: () => void;
+  onCancelDelete: () => void;
+  onDelete: () => void;
+}) {
+  const { s, mode, open } = props;
+  const selected = mode === 'select' && open;
+  const isError = s.failed !== undefined || (s.status ?? 0) >= 400;
+
+  // Separate window: keep the opened / selected row visible.
+  const ref = useRef<HTMLLIElement>(null);
+  useEffect(() => {
+    if (!open || !isWindowMode) return;
+    const id = requestAnimationFrame(() => ref.current?.scrollIntoView({ block: 'nearest' }));
+    return () => cancelAnimationFrame(id);
+  }, [open]);
+
+  return (
+    <li ref={ref} className={selected ? 'bg-blue-100' : open ? 'bg-slate-50/60' : ''}>
+      <div className={`flex items-center gap-2 px-3 py-1.5 ${selected ? '' : 'hover:bg-slate-50'}`}>
+        <input
+          type="checkbox"
+          aria-label={t('saved_select')}
+          checked={props.checked}
+          onChange={props.onCheck}
+        />
+        <button
+          onClick={props.onToggle}
+          aria-expanded={open}
+          title={s.url}
+          className="flex min-w-0 flex-1 items-center gap-2 text-left"
+        >
+          {mode === 'accordion' && <span className="text-slate-400">{open ? '▾' : '▸'}</span>}
+          <span className="min-w-0 flex-1">
+            <span className="block truncate font-medium">{s.name}</span>
+            <span className="block truncate font-mono text-[11px] text-slate-500">
+              {s.method} {requestName(s.url)}
+            </span>
+          </span>
+        </button>
+        <span
+          className={`w-12 shrink-0 text-xs ${isError ? 'font-semibold text-red-600' : 'text-slate-700'}`}
+        >
+          {s.failed !== undefined ? t('list_failed') : (s.status ?? '')}
+        </span>
+        <span className="w-20 shrink-0 text-right text-[11px] text-slate-400">
+          {dateFmt.format(s.savedAt)}
+        </span>
+        {props.confirmingDelete ? (
+          <span className="flex shrink-0 items-center gap-1 text-xs">
+            <span className="text-red-600">{t('saved_delete_confirm')}</span>
+            <button
+              onClick={props.onDelete}
+              className="rounded bg-red-600 px-1.5 py-0.5 text-white hover:bg-red-500"
+            >
+              {t('common_yes')}
+            </button>
+            <button
+              onClick={props.onCancelDelete}
+              className="rounded px-1.5 py-0.5 text-slate-600 hover:bg-slate-200"
+            >
+              {t('common_no')}
+            </button>
+          </span>
+        ) : (
+          <>
+            <button
+              title={t('saved_rename')}
+              aria-label={t('saved_rename')}
+              onClick={props.onRename}
+              className="shrink-0 rounded px-1 hover:bg-slate-200"
+            >
+              ✏️
+            </button>
+            <button
+              title={t('saved_delete')}
+              aria-label={t('saved_delete')}
+              onClick={props.onAskDelete}
+              className="shrink-0 rounded px-1 hover:bg-slate-200"
+            >
+              🗑
+            </button>
+          </>
+        )}
+      </div>
+      {mode === 'accordion' && open && <SavedDetail id={s.id} />}
+    </li>
   );
 }

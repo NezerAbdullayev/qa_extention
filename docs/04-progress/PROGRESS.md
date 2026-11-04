@@ -17,6 +17,7 @@
 - Sessiya #3: F-003 yaddaş qərarları (IndexedDB, unikal ad, mask yalnız export-da, export / import MVP-də)
 - F-003: 💾 yadda saxlama, Qeyd / Saxlanmışlar tab-ları, adını dəyiş, sil, JSON export (mask-lı) / import
 - Sabit extension ID (`manifest.json` → `key`)
+- Saxlanmışlar tab-ında da geniş pəncərədə bölünmüş görünüş (D8)
 
 **Növbəti addım**
 - F-004: müqayisə (key / dəyər / key + dəyər, JSON qarşı-qarşıya)

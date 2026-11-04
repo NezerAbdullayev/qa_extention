@@ -54,6 +54,7 @@ Panelin yuxarısında iki tab (Q1):
 [Hamısını seç]   [⬇ Export]   [⬆ Import]
 ```
 - Sətirə klik → detallar (F-008 ilə eyni: URL, method, status, Payload, Response — JSON ağacı).
+- Geniş ayrı pəncərədə (≥ 900px) **Qeyd tab-ı ilə eyni bölünmüş görünüş**: siyahı solda, seçilmiş API sağda tam hündürlükdə; ✕ / Esc, ↑ / ↓, dartılan ara xətt (D8).
 - ✏️ → adı dəyiş (eyni unikallıq qaydası) · 🗑 → sil (təsdiq ilə).
 - ☐ seçim → seçilmişləri export; F-004-də müqayisə üçün də istifadə olunacaq.
 

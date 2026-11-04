@@ -205,7 +205,7 @@ export function App() {
                       </IconButton>
                     </div>
                     <div className="min-h-0 flex-1">
-                      <RequestDetail row={selectedRow} variant="pane" />
+                      <RequestDetail key={selectedRow.id} row={selectedRow} variant="pane" />
                     </div>
                   </section>
                 </>

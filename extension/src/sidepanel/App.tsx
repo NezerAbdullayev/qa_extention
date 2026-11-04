@@ -1,10 +1,13 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import { t } from '../shared/i18n';
 import { requestName } from '../shared/requestName';
-import type { RequestRow } from '../shared/types';
+import type { PanelMessage, RequestRow, SaveResult } from '../shared/types';
 import { RequestDetail } from './RequestDetail';
 import { usePanelCollapsed } from './usePanelCollapsed';
 import { useRecorder } from './useRecorder';
+import { NameDialog } from './NameDialog';
+import { SavedList } from './SavedList';
+import { useSaved } from './useSaved';
 import { useSplitLayout } from './useSplitLayout';
 import { isWindowMode, useWindowMode } from './useWindowMode';
 
@@ -20,6 +23,18 @@ export function App() {
   const { state, start, stop } = useRecorder();
   const { collapsed, toggle } = usePanelCollapsed();
   const { popOut, dock } = useWindowMode();
+  const saved = useSaved();
+
+  // F-003: tabs, save dialog, toast notification.
+  const [tab, setTab] = useState<'record' | 'saved'>('record');
+  const [saving, setSaving] = useState<RequestRow | null>(null);
+  const [toast, setToast] = useState<string | null>(null);
+  const toastTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const showToast = useCallback((text: string) => {
+    setToast(text);
+    clearTimeout(toastTimer.current);
+    toastTimer.current = setTimeout(() => setToast(null), 2500);
+  }, []);
   const count = state.requests.length;
 
   // Side panel: several boxes can be open at once (Session #2, Q4).
@@ -49,7 +64,7 @@ export function App() {
 
   // DevTools-like keys in split layout: ↑ / ↓ change selection, Esc closes the details.
   useEffect(() => {
-    if (!split || !selectedId) return;
+    if (!split || !selectedId || tab !== 'record') return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') return setSelectedId(null);
       if (e.key !== 'ArrowUp' && e.key !== 'ArrowDown') return;
@@ -62,7 +77,7 @@ export function App() {
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [split, selectedId, state.requests]);
+  }, [split, selectedId, state.requests, tab]);
 
   return (
     <div className="flex h-full flex-col text-sm">
@@ -121,7 +136,32 @@ export function App() {
             </p>
           )}
 
-          {count === 0 ? (
+          {/* Tabs (F-003, Session #3 Q1): current recording | saved APIs */}
+          <nav className="flex border-b border-slate-200 px-2 text-xs" role="tablist">
+            {(['record', 'saved'] as const).map((id) => (
+              <button
+                key={id}
+                role="tab"
+                aria-selected={tab === id}
+                onClick={() => setTab(id)}
+                className={`-mb-px border-b-2 px-3 py-1.5 ${
+                  tab === id
+                    ? 'border-blue-600 font-semibold text-blue-700'
+                    : 'border-transparent text-slate-500 hover:text-slate-800'
+                }`}
+              >
+                {id === 'record'
+                  ? t('tab_record', String(count))
+                  : t('tab_saved', String(saved.items.length))}
+              </button>
+            ))}
+          </nav>
+
+          {tab === 'saved' ? (
+            <main className="min-h-0 flex-1">
+              <SavedList items={saved.items} onToast={showToast} />
+            </main>
+          ) : count === 0 ? (
             <main className="flex-1 overflow-y-auto">
               <p className="px-3 py-6 text-center text-slate-400">
                 {state.recording ? t('list_empty_recording') : t('list_empty_idle')}
@@ -142,6 +182,7 @@ export function App() {
                       mode="select"
                       open={r.id === selectedId}
                       onToggle={() => setSelectedId(r.id === selectedId ? null : r.id)}
+                      onSave={() => setSaving(r)}
                     />
                   ))}
                 </ul>
@@ -180,12 +221,39 @@ export function App() {
                     mode="accordion"
                     open={expanded.has(r.id)}
                     onToggle={() => toggleRow(r.id)}
+                    onSave={() => setSaving(r)}
                   />
                 ))}
               </ul>
             </main>
           )}
         </>
+      )}
+
+      {saving && (
+        <NameDialog
+          title={t('save_title')}
+          subtitle={`${requestName(saving.url)} · ${saving.method} · ${saving.status ?? saving.failed ?? ''}`}
+          submitLabel={t('save_submit')}
+          onSubmit={async (name) => {
+            const msg: PanelMessage = { type: 'SAVE_API', requestId: saving.id, name };
+            const r = (await chrome.runtime.sendMessage(msg)) as SaveResult;
+            if (r.ok) showToast(t('save_done', r.saved.name));
+            return r;
+          }}
+          onClose={() => setSaving(null)}
+        />
+      )}
+
+      {toast && (
+        <div
+          role="status"
+          className="pointer-events-none fixed inset-x-0 bottom-3 z-50 flex justify-center px-3"
+        >
+          <span className="rounded bg-slate-800 px-3 py-1.5 text-xs text-white shadow-lg">
+            {toast}
+          </span>
+        </div>
       )}
     </div>
   );
@@ -240,15 +308,16 @@ function IconButton(props: { label: string; onClick: () => void; children: React
  * Row: name (DevTools "Name") · method · status · duration · save.
  *  - mode 'accordion': click → detail box opens below the row (max 300px); click again → closes
  *  - mode 'select':    click → row is selected, details open in the right-hand pane (D6)
- * TODO (F-003): save button opens the name dialog.
+ * 💾 → name dialog (F-003).
  */
 function RequestListRow(props: {
   row: RequestRow;
   mode: 'accordion' | 'select';
   open: boolean;
   onToggle: () => void;
+  onSave: () => void;
 }) {
-  const { row, mode, open, onToggle } = props;
+  const { row, mode, open, onToggle, onSave } = props;
   const selected = mode === 'select' && open;
 
   // Separate window: keep the newly opened / selected row visible (the previous box closing
@@ -295,8 +364,8 @@ function RequestListRow(props: {
         <button
           title={t('list_save')}
           aria-label={t('list_save')}
-          disabled
-          className="shrink-0 rounded px-1 opacity-40"
+          onClick={onSave}
+          className="shrink-0 rounded px-1 hover:bg-slate-200"
         >
           💾
         </button>

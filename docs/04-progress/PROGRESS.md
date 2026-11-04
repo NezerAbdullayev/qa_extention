@@ -14,9 +14,12 @@
 - Ad dəyişdi: QA Debugger → **API Lens**
 - F-008: Headers bölməsi çıxarıldı (D4); ayrı pəncərə rejimi — ikinci monitor üçün (D5)
 - F-008: geniş pəncərədə DevTools kimi bölünmüş görünüş (D6); ayrı pəncərədə tək açıq qutu (D7)
+- Sessiya #3: F-003 yaddaş qərarları (IndexedDB, unikal ad, mask yalnız export-da, export / import MVP-də)
+- F-003: 💾 yadda saxlama, Qeyd / Saxlanmışlar tab-ları, adını dəyiş, sil, JSON export (mask-lı) / import
+- Sabit extension ID (`manifest.json` → `key`)
 
 **Növbəti addım**
-- F-003: 💾 yadda saxlama (ad popup-u, 6 rəqəmli avtomatik ad)
+- F-004: müqayisə (key / dəyər / key + dəyər, JSON qarşı-qarşıya)
 - F-001: console error-lar, redirect zənciri
 
 **Bloklar**

@@ -1,53 +1,248 @@
 {
-  "ext_name": { "message": "API Lens" },
-  "ext_description": { "message": "API request-lərini yazır, yadda saxlayır və müqayisə edir — Inspect açmadan." },
-  "ext_action_title": { "message": "API Lens panelini aç" },
-
-  "panel_title": { "message": "API Lens" },
-  "panel_collapse": { "message": "Kiçilt" },
-  "panel_expand": { "message": "Böyüt" },
-  "panel_close": { "message": "Bağla" },
-  "panel_popout": { "message": "Ayrı pəncərədə aç (başqa monitora daşımaq üçün)" },
-  "panel_dock": { "message": "Side panel-ə qaytar" },
+  "ext_name": {
+    "message": "API Lens"
+  },
+  "ext_description": {
+    "message": "API request-lərini yazır, yadda saxlayır və müqayisə edir — Inspect açmadan."
+  },
+  "ext_action_title": {
+    "message": "API Lens panelini aç"
+  },
+  "panel_title": {
+    "message": "API Lens"
+  },
+  "panel_collapse": {
+    "message": "Kiçilt"
+  },
+  "panel_expand": {
+    "message": "Böyüt"
+  },
+  "panel_close": {
+    "message": "Bağla"
+  },
+  "panel_popout": {
+    "message": "Ayrı pəncərədə aç (başqa monitora daşımaq üçün)"
+  },
+  "panel_dock": {
+    "message": "Side panel-ə qaytar"
+  },
   "rec_target": {
     "message": "Yazılır: $HOST$",
-    "placeholders": { "host": { "content": "$1" } }
+    "placeholders": {
+      "host": {
+        "content": "$1"
+      }
+    }
   },
-
-  "rec_start": { "message": "Start" },
-  "rec_stop": { "message": "Stop" },
-  "rec_status_recording": { "message": "REC" },
-  "rec_status_idle": { "message": "Dayanıb" },
+  "rec_start": {
+    "message": "Start"
+  },
+  "rec_stop": {
+    "message": "Stop"
+  },
+  "rec_status_recording": {
+    "message": "REC"
+  },
+  "rec_status_idle": {
+    "message": "Dayanıb"
+  },
   "rec_count": {
     "message": "$COUNT$ request",
-    "placeholders": { "count": { "content": "$1" } }
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
   },
   "rec_error_attach": {
     "message": "Tab-a qoşulmaq alınmadı: $REASON$",
-    "placeholders": { "reason": { "content": "$1" } }
+    "placeholders": {
+      "reason": {
+        "content": "$1"
+      }
+    }
   },
-
-  "list_empty_idle": { "message": "Qeydi başlatmaq üçün Start basın." },
-  "list_empty_recording": { "message": "Request gözlənilir…" },
-  "list_pending": { "message": "(pending)" },
-  "list_failed": { "message": "(failed)" },
-  "list_save": { "message": "Yadda saxla" },
-
-  "detail_loading": { "message": "Yüklənir…" },
-  "detail_close": { "message": "Detalları bağla (Esc)" },
-  "detail_payload": { "message": "Payload" },
-  "detail_payload_query": { "message": "Query parametrləri" },
-  "detail_payload_body": { "message": "Body" },
-  "detail_response": { "message": "Response" },
-  "detail_empty": { "message": "(boş)" },
-  "detail_body_failed": { "message": "Request uğursuz oldu — response yoxdur." },
+  "list_empty_idle": {
+    "message": "Qeydi başlatmaq üçün Start basın."
+  },
+  "list_empty_recording": {
+    "message": "Request gözlənilir…"
+  },
+  "list_pending": {
+    "message": "(pending)"
+  },
+  "list_failed": {
+    "message": "(failed)"
+  },
+  "list_save": {
+    "message": "Yadda saxla"
+  },
+  "detail_loading": {
+    "message": "Yüklənir…"
+  },
+  "detail_close": {
+    "message": "Detalları bağla (Esc)"
+  },
+  "detail_payload": {
+    "message": "Payload"
+  },
+  "detail_payload_query": {
+    "message": "Query parametrləri"
+  },
+  "detail_payload_body": {
+    "message": "Body"
+  },
+  "detail_response": {
+    "message": "Response"
+  },
+  "detail_empty": {
+    "message": "(boş)"
+  },
+  "detail_body_failed": {
+    "message": "Request uğursuz oldu — response yoxdur."
+  },
   "detail_body_unavailable": {
     "message": "Response body oxunmadı: $REASON$",
-    "placeholders": { "reason": { "content": "$1" } }
+    "placeholders": {
+      "reason": {
+        "content": "$1"
+      }
+    }
   },
   "detail_body_binary": {
     "message": "Binary response ($MIME$) — göstərilmir.",
-    "placeholders": { "mime": { "content": "$1" } }
+    "placeholders": {
+      "mime": {
+        "content": "$1"
+      }
+    }
   },
-  "detail_body_truncated": { "message": "⚠️ Response 5 MB-dan böyükdür — kəsilib." }
+  "detail_body_truncated": {
+    "message": "⚠️ Response 5 MB-dan böyükdür — kəsilib."
+  },
+  "common_cancel": {
+    "message": "Ləğv et"
+  },
+  "common_yes": {
+    "message": "Bəli"
+  },
+  "common_no": {
+    "message": "Xeyr"
+  },
+  "tab_record": {
+    "message": "Qeyd ($COUNT$)",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "tab_saved": {
+    "message": "Saxlanmışlar ($COUNT$)",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "save_title": {
+    "message": "API-ni yadda saxla"
+  },
+  "save_submit": {
+    "message": "Saxla"
+  },
+  "save_name_label": {
+    "message": "Ad"
+  },
+  "save_name_placeholder": {
+    "message": "məs. sifariş-uğurlu"
+  },
+  "save_name_hint": {
+    "message": "Boş qalsa avtomatik 6 rəqəmli nömrə veriləcək."
+  },
+  "save_error_duplicate": {
+    "message": "Bu ad artıq var — başqa ad yazın."
+  },
+  "save_error_failed": {
+    "message": "Saxlamaq alınmadı."
+  },
+  "save_done": {
+    "message": "Saxlanıldı: $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1"
+      }
+    }
+  },
+  "saved_empty": {
+    "message": "Hələ saxlanmış API yoxdur. \"Qeyd\" tab-ında 💾 basın."
+  },
+  "saved_select": {
+    "message": "Seç"
+  },
+  "saved_select_all": {
+    "message": "Hamısını seç"
+  },
+  "saved_export": {
+    "message": "Export"
+  },
+  "saved_export_selected": {
+    "message": "Seçilmişləri JSON faylı kimi yüklə (həssas sahələr mask olunur)"
+  },
+  "saved_export_all": {
+    "message": "Hamısını JSON faylı kimi yüklə (həssas sahələr mask olunur)"
+  },
+  "saved_exported": {
+    "message": "$COUNT$ API export olundu",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "saved_import": {
+    "message": "Import"
+  },
+  "saved_imported": {
+    "message": "$IMPORTED$ API import olundu, $SKIPPED$ ötürüldü",
+    "placeholders": {
+      "imported": {
+        "content": "$1"
+      },
+      "skipped": {
+        "content": "$2"
+      }
+    }
+  },
+  "saved_import_invalid": {
+    "message": "Fayl API Lens export faylı deyil."
+  },
+  "saved_rename": {
+    "message": "Adını dəyiş"
+  },
+  "saved_rename_title": {
+    "message": "Adını dəyiş"
+  },
+  "saved_renamed": {
+    "message": "Ad dəyişdi: $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1"
+      }
+    }
+  },
+  "saved_delete": {
+    "message": "Sil"
+  },
+  "saved_delete_confirm": {
+    "message": "Silinsin?"
+  },
+  "saved_deleted": {
+    "message": "Silindi: $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1"
+      }
+    }
+  }
 }

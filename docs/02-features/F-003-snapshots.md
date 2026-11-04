@@ -1,6 +1,6 @@
 # F-003 — API yadda saxlama
 
-**Status:** 📝 Spec · **Mərhələ:** MVP · **Tələblər:** FR-07, FR-10 · **Qərarlar:** [Sessiya #3](../06-qa-sessions/2026-11-04-session-3.md)
+**Status:** 🔵 Hazırlanır · **Mərhələ:** MVP · **Tələblər:** FR-07, FR-10 · **Qərarlar:** [Sessiya #3](../06-qa-sessions/2026-11-04-session-3.md)
 
 ## Niyə
 QA bir API-nin nəticəsini saxlasın, sonra başqa dəyərlərlə təkrar edib müqayisə etsin ([F-004](F-004-compare.md)).

@@ -13,6 +13,15 @@
  * TODO (F-001): console errors / exceptions, redirect chain, masking (F-005).
  */
 import { db } from './db';
+import {
+  deleteSaved,
+  exportSaved,
+  getSaved,
+  importSaved,
+  listSaved,
+  renameSaved,
+  saveApi,
+} from './saved';
 import type {
   BackgroundMessage,
   Headers,
@@ -56,6 +65,12 @@ function snapshot(): RecorderState {
 
 let broadcastTimer: ReturnType<typeof setTimeout> | undefined;
 /** Coalesce bursts of CDP events into one message (~20 fps). */
+/** Tell every open panel (side panel + separate window) to reload the saved list. */
+function notifySavedChanged(): void {
+  const msg: BackgroundMessage = { type: 'SAVED_CHANGED' };
+  chrome.runtime.sendMessage(msg).catch(() => {});
+}
+
 function scheduleBroadcast(): void {
   if (broadcastTimer !== undefined) return;
   broadcastTimer = setTimeout(() => {
@@ -379,6 +394,35 @@ chrome.runtime.onMessage.addListener((msg: PanelMessage, _sender, sendResponse) 
       case 'STOP':
         await stop();
         return snapshot();
+
+      // ---- F-003 saved APIs
+      case 'SAVE_API': {
+        const record = records.get(msg.requestId) ?? (await db.get(msg.requestId));
+        if (!record) return { ok: false, error: 'not_found' };
+        const result = await saveApi(record, msg.name, target);
+        if (result.ok) notifySavedChanged();
+        return result;
+      }
+      case 'LIST_SAVED':
+        return listSaved();
+      case 'GET_SAVED':
+        return (await getSaved(msg.id)) ?? null;
+      case 'RENAME_SAVED': {
+        const result = await renameSaved(msg.id, msg.name);
+        if (result.ok) notifySavedChanged();
+        return result;
+      }
+      case 'DELETE_SAVED':
+        await deleteSaved(msg.id);
+        notifySavedChanged();
+        return null;
+      case 'EXPORT_SAVED':
+        return exportSaved(msg.ids);
+      case 'IMPORT_SAVED': {
+        const result = await importSaved(msg.items);
+        if (result.imported > 0) notifySavedChanged();
+        return result;
+      }
     }
   };
   handle().then(sendResponse, (err) => {

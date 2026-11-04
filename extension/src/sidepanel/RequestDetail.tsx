@@ -2,7 +2,7 @@ import { useEffect, useState, type ReactNode } from 'react';
 import { buildPayload, decodeBase64Text } from '../shared/format';
 import { t } from '../shared/i18n';
 import { JsonTree } from './JsonTree';
-import type { PanelMessage, RequestRecord, RequestRow } from '../shared/types';
+import type { PanelMessage, RequestRecord, RequestRow, SavedApi } from '../shared/types';
 
 /**
  * Request details (F-008, Session #2 Q5 / 5a / 5c):
@@ -13,13 +13,10 @@ import type { PanelMessage, RequestRecord, RequestRow } from '../shared/types';
  *  - 'inline' → box under the row, height follows content up to 300px (D1), scrolls inside
  *  - 'pane'   → full-height right-hand pane of the wide split layout (D6), like DevTools
  */
-export function RequestDetail({
-  row,
-  variant = 'inline',
-}: {
-  row: RequestRow;
-  variant?: 'inline' | 'pane';
-}) {
+type Variant = 'inline' | 'pane';
+
+/** Details of a request in the current recording ("Qeyd" tab). */
+export function RequestDetail({ row, variant = 'inline' }: { row: RequestRow; variant?: Variant }) {
   const [detail, setDetail] = useState<RequestRecord | null>(null);
 
   // Refetch whenever the row changes (status, headers, body arriving later).
@@ -34,6 +31,28 @@ export function RequestDetail({
     };
   }, [row.id, row.rev]);
 
+  return <DetailBox detail={detail} variant={variant} />;
+}
+
+/** Details of a saved API ("Saxlanmışlar" tab, F-003). */
+export function SavedDetail({ id, variant = 'inline' }: { id: string; variant?: Variant }) {
+  const [detail, setDetail] = useState<RequestRecord | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    const msg: PanelMessage = { type: 'GET_SAVED', id };
+    chrome.runtime.sendMessage(msg).then((s: SavedApi | null) => {
+      if (!cancelled) setDetail(s?.request ?? null);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [id]);
+
+  return <DetailBox detail={detail} variant={variant} />;
+}
+
+function DetailBox({ detail, variant }: { detail: RequestRecord | null; variant: Variant }) {
   return (
     <div
       className={

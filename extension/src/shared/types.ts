@@ -49,6 +49,47 @@ export interface RecorderState {
   target?: { title: string; url: string };
 }
 
+/** A request saved with 💾 (F-003). Stored in IndexedDB → `savedApis`; never auto-deleted. */
+export interface SavedApi {
+  /** Own unique id (UUID) — independent of the CDP requestId. */
+  id: string;
+  /** Unique (case-insensitive) user name, or a random 6-digit number. */
+  name: string;
+  /** Epoch ms. */
+  savedAt: number;
+  /** Page the request was recorded on. */
+  source?: { title: string; url: string };
+  /** Full copy of the captured request at save time. */
+  request: RequestRecord;
+}
+
+/** Light list item for the "Saxlanmışlar" tab. */
+export interface SavedApiSummary {
+  id: string;
+  name: string;
+  savedAt: number;
+  url: string;
+  method: string;
+  status?: number;
+  failed?: string;
+}
+
+export function toSummary(s: SavedApi): SavedApiSummary {
+  const { url, method, status, failed } = s.request;
+  return { id: s.id, name: s.name, savedAt: s.savedAt, url, method, status, failed };
+}
+
+/** JSON export file format (F-003, Session #3 Q5). Sensitive fields are masked. */
+export interface SavedApiExport {
+  format: 'api-lens/saved-apis';
+  version: 1;
+  exportedAt: string;
+  items: SavedApi[];
+}
+
+export type SaveResult =
+  { ok: true; saved: SavedApiSummary } | { ok: false; error: 'duplicate' | 'not_found' };
+
 /** Messages: side panel → background */
 export type PanelMessage =
   | { type: 'GET_STATE' }
@@ -56,10 +97,18 @@ export type PanelMessage =
   | { type: 'START'; tabId: number }
   | { type: 'STOP' }
   /** Open the panel in a separate window (or focus it if already open). */
-  | { type: 'POP_OUT' };
+  | { type: 'POP_OUT' }
+  // ---- F-003 saved APIs
+  | { type: 'SAVE_API'; requestId: string; name: string }
+  | { type: 'LIST_SAVED' }
+  | { type: 'GET_SAVED'; id: string }
+  | { type: 'RENAME_SAVED'; id: string; name: string }
+  | { type: 'DELETE_SAVED'; id: string }
+  | { type: 'EXPORT_SAVED'; ids: string[] }
+  | { type: 'IMPORT_SAVED'; items: SavedApi[] };
 
 /** Messages: background → side panel (broadcast) */
-export type BackgroundMessage = { type: 'STATE'; state: RecorderState };
+export type BackgroundMessage = { type: 'STATE'; state: RecorderState } | { type: 'SAVED_CHANGED' };
 
 export function toRow(r: RequestRecord): RequestRow {
   const { id, rev, seq, url, method, type, status, failed, startedAt, durationMs } = r;

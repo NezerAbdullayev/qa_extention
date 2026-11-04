@@ -25,6 +25,7 @@
 - Versiya 2.4.0 təyin edildi; hər dəyişiklikdə son rəqəm +1 (CLAUDE.md)
 - F-002: HAR 1.2 export (mask-lı) — v2.4.1
 - Qərar: F-001-də console error, redirect zənciri, initiator **yazılmır** — maksimum sadəlik (D12)
+- D13: Export / Import silindi (2.4.2) · "Yadda saxla" düyməsinin yeni stili (2.4.3) · Qeyd tab-ında müqayisə (2.4.4) · Saxlanmışlarda "Hamısını sil" (2.4.5)
 
 **Növbəti addım**
 - MVP-nin real istifadədə yoxlanması (test-plan.md yenilənməsi)

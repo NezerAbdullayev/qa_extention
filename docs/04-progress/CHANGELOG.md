@@ -2,6 +2,22 @@
 
 Format: [Keep a Changelog](https://keepachangelog.com/) · Versiya: [SemVer](https://semver.org/)
 
+## [2.4.5] — 2026-11-04
+### Added
+- Saxlanmışlarda **Hamısını sil** (təsdiq ilə)
+
+## [2.4.4] — 2026-11-04
+### Added
+- Qeyd tab-ında müqayisə: 2 request seç → ⇄ Müqayisə et (yalnız cari qeydin request-ləri)
+
+## [2.4.3] — 2026-11-04
+### Changed
+- "Yadda saxla" düyməsi: emoji əvəzinə çərçivəli bookmark ikonu, hover-də mavi
+
+## [2.4.2] — 2026-11-04
+### Removed
+- Saxlanmışlarda Export / Import və "Hamısını seç"
+
 ## [2.4.1] — 2026-11-04
 ### Added
 - HAR export (F-002): Stop → ⬇ HAR, HAR 1.2, DevTools-a import olunur, həssas sahələr mask olunur

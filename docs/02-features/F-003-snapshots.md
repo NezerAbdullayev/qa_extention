@@ -22,7 +22,7 @@ api-lens (IndexedDB)
 | Extension ⟳ (reload) | ✅ qalır |
 | "Load unpacked" qovluğu başqa yerə köçürülsə | ✅ qalır — `manifest.json`-da sabit `key` (Q8) |
 | Extension silinsə | ❌ silinir |
-| Başqa kompüter / Chrome profili | ❌ görünmür → **JSON export / import** |
+| Başqa kompüter / Chrome profili | ❌ görünmür (export / import çıxarılıb — D13) |
 
 ## UI / Axın
 Panelin yuxarısında iki tab (Q1):
@@ -33,7 +33,7 @@ Panelin yuxarısında iki tab (Q1):
 ```
 
 ### Saxlamaq
-1. **Qeyd** tab-ında API sətirinin sağındakı **💾** düyməsi basılır.
+1. **Qeyd** tab-ında API sətirinin sağındakı **Yadda saxla** düyməsi (çərçivəli bookmark ikonu, hover-də mavi — D13) basılır.
 2. Popup açılır — yalnız **ad** sahəsi (Q7):
    ```
    ┌──────────── API-ni yadda saxla ────────────┐
@@ -49,19 +49,18 @@ Panelin yuxarısında iki tab (Q1):
 
 ### Saxlanmışlar tab-ı
 ```
+[🗑 Hamısını sil]                       Seçilib: 2   [⇄ Müqayisə et]
 ☐ sifariş-uğurlu          POST  orders        200   04.11 10:15   ✏️ 🗑
 ☐ 482915                  GET   passports     200   04.11 10:18   ✏️ 🗑
-[Hamısını seç]   [⬇ Export]   [⬆ Import]
 ```
 - Sətirə klik → detallar (F-008 ilə eyni: URL, method, status, Payload, Response — JSON ağacı).
 - Geniş ayrı pəncərədə (≥ 900px) **Qeyd tab-ı ilə eyni bölünmüş görünüş**: siyahı solda, seçilmiş API sağda tam hündürlükdə; ✕ / Esc, ↑ / ↓, dartılan ara xətt (D8).
 - ✏️ → adı dəyiş (eyni unikallıq qaydası) · 🗑 → sil (təsdiq ilə).
-- ☐ seçim → seçilmişləri export; F-004-də müqayisə üçün də istifadə olunacaq.
+- ☐ seçim → 2 API seçiləndə **⇄ Müqayisə et** (F-004) — yalnız saxlanmışlar arasında.
+- **🗑 Hamısını sil** → təsdiq ("Bütün saxlanmışlar (N) silinsin?" Bəli / Xeyr) → hamısı silinir (D13).
 
-### Export / import (Q5)
-- **Export** → JSON fayl: `api-lens_saved_<YYYY-MM-DD_HH-mm>.json` (seçilmişlər, seçim yoxdursa hamısı).
-- Export faylında həssas sahələr **mask olunur** (`***`) — Q4 / [F-005](F-005-masking.md). Extension daxilində real dəyərlər görünür.
-- **Import** → JSON faylı seçilir; eyni ad varsa yeni ada ` (2)`, ` (3)` əlavə olunur; eyni ID artıq varsa — ötürülür.
+### ~~Export / import (Q5)~~ — çıxarılıb (D13, 2026-11-04)
+İstifadəçi qərarı: maksimum sadəlik — **⬇ Export** və **⬆ Import** düymələri (və "Hamısını seç") silindi. Developer-ə göndərmək üçün HAR ([F-002](F-002-har-export.md)) istifadə olunur.
 
 ## Qəbul meyarları
 - [ ] Hər request sətirində 💾 düyməsi; klikdə ad popup-u (yalnız ad)
@@ -73,12 +72,12 @@ Panelin yuxarısında iki tab (Q1):
 - [ ] Saxlanmış API-ni açıb detallarına baxmaq
 - [ ] Adını dəyişmək, silmək (təsdiq ilə)
 - [ ] Brauzer bağlanandan sonra data qalır; avtomatik silmə yoxdur (Q3)
-- [ ] JSON export (seçilmiş / hamısı) — həssas sahələr mask olunur
-- [ ] JSON import — ad toqquşmasında ` (2)` əlavə olunur
+- ~~JSON export / import~~ — çıxarılıb (D13)
+- [x] **Hamısını sil** (təsdiq ilə) (D13)
 - [ ] Sabit extension ID (`manifest.json` → `key`)
 
 ## Texniki qeydlər
 - Yaddaş: IndexedDB (`savedApis` store, DB versiya 2)
 - İcazə: `unlimitedStorage`
 - Təsadüfi ad: `crypto.getRandomValues` ilə `100000 + n % 900000`
-- Export faylı brauzerin özü ilə yüklənir (`<a download>`), əlavə icazə lazım deyil
+- "Hamısını sil": `DELETE_ALL_SAVED` → `savedApis.clear()` — yalnız istifadəçinin təsdiqi ilə

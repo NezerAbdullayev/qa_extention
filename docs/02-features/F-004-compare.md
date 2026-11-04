@@ -83,7 +83,10 @@ Dəyərlər
 
 ## Texniki qeydlər
 - Diff: öz yüngül funksiyamız — `extension/src/shared/compare.ts` (kitabxana yoxdur); UI — `CompareView.tsx`
-- Açılış: Saxlanmışlar → 2 API seç (ilk seçilən **A**, ikinci **B**) → **⇄ Müqayisə et**; ⇆ A/B yerini dəyişir; Esc / ← Geri siyahıya qaytarır
+- Açılış: **iki yerdən**, hər biri yalnız öz datası ilə (D13):
+  - **Qeyd** tab-ı → 2 request seç → **⇄ Müqayisə et** — yalnız cari qeydin request-ləri
+  - **Saxlanmışlar** tab-ı → 2 API seç → **⇄ Müqayisə et** — yalnız saxlanmışlar
+  - İlk seçilən **A**, ikinci **B**; ⇆ A/B yerini dəyişir; Esc / ← Geri siyahıya qaytarır (seçim qalır); yeni Start Qeyd-dəki seçimi sıfırlayır
 - Görünüş: **Qarşı-qarşıya** (bir scroll konteyneri → sinxron scroll) və **Siyahı** (Key-lər / Dəyərlər)
 - ∅ "dəyər gəlmir" = B-də `null`, `""`, `[]`, `{}` (A-da dolu); key ümumiyyətlə yoxdursa → ➖ (Sessiya #2, Q8 — variant A)
 - Massiv elementləri default olaraq indeksə görə; "id-yə görə" seçimi yalnız bütün elementlərdə unikal `id` olduqda işləyir (yol: `items[id=5]`)

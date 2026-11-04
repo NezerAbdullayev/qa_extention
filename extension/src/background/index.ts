@@ -39,7 +39,7 @@ const extraResponseHeaders = new Map<string, Headers>();
 
 chrome.sidePanel
   .setPanelBehavior({ openPanelOnActionClick: true })
-  .catch((err) => console.error('[QA Debugger] setPanelBehavior failed', err));
+  .catch((err) => console.error('[API Lens] setPanelBehavior failed', err));
 
 // ---------------------------------------------------------------- state & persistence
 
@@ -65,7 +65,7 @@ function scheduleBroadcast(): void {
 
 function persist(record: RequestRecord): void {
   record.rev++;
-  db.put(record).catch((err) => console.error('[QA Debugger] IndexedDB put failed', err));
+  db.put(record).catch((err) => console.error('[API Lens] IndexedDB put failed', err));
 }
 
 function saveSession(): Promise<void> {
@@ -92,7 +92,7 @@ const ready: Promise<void> = (async () => {
       }
     }
   } catch (err) {
-    console.error('[QA Debugger] restore failed', err);
+    console.error('[API Lens] restore failed', err);
   }
 })();
 
@@ -313,7 +313,7 @@ chrome.runtime.onMessage.addListener((msg: PanelMessage, _sender, sendResponse) 
     }
   };
   handle().then(sendResponse, (err) => {
-    console.error('[QA Debugger] message failed', msg, err);
+    console.error('[API Lens] message failed', msg, err);
     sendResponse(null);
   });
   return true; // async response

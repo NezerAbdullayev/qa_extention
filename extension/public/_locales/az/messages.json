@@ -1,9 +1,9 @@
 {
-  "ext_name": { "message": "QA Debugger" },
+  "ext_name": { "message": "API Lens" },
   "ext_description": { "message": "API request-lərini yazır, yadda saxlayır və müqayisə edir — Inspect açmadan." },
-  "ext_action_title": { "message": "QA Debugger panelini aç" },
+  "ext_action_title": { "message": "API Lens panelini aç" },
 
-  "panel_title": { "message": "QA Debugger" },
+  "panel_title": { "message": "API Lens" },
   "panel_collapse": { "message": "Kiçilt" },
   "panel_expand": { "message": "Böyüt" },
   "panel_close": { "message": "Bağla" },

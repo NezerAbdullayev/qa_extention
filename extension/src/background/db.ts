@@ -5,7 +5,7 @@
  */
 import type { RequestRecord } from '../shared/types';
 
-const DB_NAME = 'qa-debugger';
+const DB_NAME = 'api-lens';
 const DB_VERSION = 1;
 const STORE = 'requests';
 

@@ -1,6 +1,6 @@
-# Debugger Extension
+# API Lens
 
-Chrome extension (Manifest V3). `chrome.debugger` API vasitəsilə tab-da gedən bütün network request-lərini (URL, headers, payload, response, status, xətalar) yazır, HAR kimi export edir, snapshot kimi yadda saxlayır və iki snapshot arasındakı fərqləri göstərir.
+**API Lens** — Chrome extension (Manifest V3). `chrome.debugger` API vasitəsilə tab-da gedən bütün network request-lərini (URL, headers, payload, response, status, xətalar) yazır, HAR kimi export edir, snapshot kimi yadda saxlayır və iki snapshot arasındakı fərqləri göstərir.
 
 ## Sənədlər
 

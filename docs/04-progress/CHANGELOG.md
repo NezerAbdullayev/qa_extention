@@ -2,6 +2,10 @@
 
 Format: [Keep a Changelog](https://keepachangelog.com/) · Versiya: [SemVer](https://semver.org/)
 
+## [2.4.8] — 2026-11-04
+### Changed
+- ✕ Bağla: qeyd dayanır və saxlanmamış "Qeyd" siyahısı silinir (Saxlanmışlar qalır)
+
 ## [2.4.7] — 2026-11-04
 ### Added
 - Detallarda Payload və Response üçün kopyala düyməsi

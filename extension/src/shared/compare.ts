@@ -288,6 +288,65 @@ export function compareJson(a: unknown, b: unknown, options: CompareOptions): Co
   };
 }
 
+/**
+ * A path segment that looks like a parameter value, not a fixed name:
+ * `12345`, `2908125632-71002`, `2024_01` · UUID · long hex (ObjectId) · long mixed token (ULID…).
+ * Words such as `objects` or `v1` are not parameters.
+ */
+export function isParamSegment(segment: string): boolean {
+  return (
+    /^\d[\d\-_.:]*$/.test(segment) ||
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(segment) ||
+    /^(?=.*\d)[0-9a-f]{16,}$/i.test(segment) ||
+    /^(?=.*\d)(?=.*[a-z])[a-z0-9_-]{20,}$/i.test(segment)
+  );
+}
+
+function pathSegments(url: string): string[] {
+  let path: string;
+  try {
+    path = new URL(url).pathname;
+  } catch {
+    path = url.split(/[?#]/)[0];
+  }
+  return path
+    .split('/')
+    .filter(Boolean)
+    .map((s) => {
+      try {
+        return decodeURIComponent(s);
+      } catch {
+        return s;
+      }
+    });
+}
+
+export interface ApiMatch {
+  /** Same method and same path once parameter values are skipped. */
+  same: boolean;
+  /** Path parameter values that differ (A ↔ B). Query strings are always ignored. */
+  params: { a: string; b: string }[];
+}
+
+/**
+ * Is it the same API (Session #2, Q7)? Query strings are ignored. Path segments are compared
+ * one by one: equal → fine; different but both look like parameter values
+ * (`objects/2908125632-71002` ↔ `objects/1500412371-00015`) → same API, different parameter;
+ * different words (`objects` ↔ `passports`) or a different number of segments → different API.
+ */
+export function matchApis(methodA: string, urlA: string, methodB: string, urlB: string): ApiMatch {
+  const a = pathSegments(urlA);
+  const b = pathSegments(urlB);
+  const params: { a: string; b: string }[] = [];
+  let same = methodA.toUpperCase() === methodB.toUpperCase() && a.length === b.length;
+  for (let i = 0; same && i < a.length; i++) {
+    if (a[i] === b[i]) continue;
+    if (isParamSegment(a[i]) && isParamSegment(b[i])) params.push({ a: a[i], b: b[i] });
+    else same = false;
+  }
+  return { same, params: same ? params : [] };
+}
+
 /** `GET /api/v1/passports` — method + path without query (Session #2, Q7). */
 export function apiSignature(method: string, url: string): string {
   try {

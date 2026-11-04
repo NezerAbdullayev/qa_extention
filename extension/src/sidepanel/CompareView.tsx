@@ -4,6 +4,7 @@ import {
   compareJson,
   DIFF_KINDS,
   jsonType,
+  matchApis,
   preview,
   type CompareMode,
   type Diff,
@@ -123,6 +124,9 @@ export function CompareView({ ids, onBack }: { ids: [string, string]; onBack: ()
 
   const sigA = a ? apiSignature(a.request.method, a.request.url) : '';
   const sigB = b ? apiSignature(b.request.method, b.request.url) : '';
+  // Same API with different path parameters (`objects/{id}`) is not a "different API".
+  const match =
+    a && b ? matchApis(a.request.method, a.request.url, b.request.method, b.request.url) : null;
 
   return (
     <div className="flex h-full flex-col">
@@ -199,7 +203,15 @@ export function CompareView({ ids, onBack }: { ids: [string, string]; onBack: ()
             </div>
           </div>
 
-          {sigA !== sigB && <Warning>{t('compare_different_api', [sigA, sigB])}</Warning>}
+          {match && !match.same && <Warning>{t('compare_different_api', [sigA, sigB])}</Warning>}
+          {match && match.params.length > 0 && (
+            <div className="border-b border-blue-500/30 bg-blue-500/10 px-3 py-1.5 text-xs text-blue-700">
+              ℹ️ {t('compare_param_diff')}{' '}
+              <span className="font-mono">
+                {match.params.map((p) => `${p.a} ↔ ${p.b}`).join(', ')}
+              </span>
+            </div>
+          )}
 
           {bodies && (!bodies.a.ok || !bodies.b.ok) ? (
             <Warning>

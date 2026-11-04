@@ -310,6 +310,9 @@
       }
     }
   },
+  "compare_param_diff": {
+    "message": "Eyni API, fərqli path parametri:"
+  },
   "compare_not_json": {
     "message": "⚠️ Response JSON formatında deyil — müqayisə mümkün deyil"
   },

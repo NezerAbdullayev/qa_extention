@@ -42,6 +42,16 @@ export function App() {
   }, []);
   const count = state.requests.length;
 
+  // ✕: the unsaved "Qeyd" list is deleted (recording stops); saved APIs stay (D15).
+  const closePanel = async () => {
+    const msg: PanelMessage = { type: 'CLEAR_RECORDING' };
+    try {
+      await chrome.runtime.sendMessage(msg);
+    } finally {
+      window.close();
+    }
+  };
+
   // F-002: HAR file of the last recording (after Stop), masked (F-005).
   const exportHar = async () => {
     const msg: PanelMessage = { type: 'EXPORT_HAR' };
@@ -153,7 +163,7 @@ export function App() {
           <IconButton label={collapsed ? t('panel_expand') : t('panel_collapse')} onClick={toggle}>
             {collapsed ? '▢' : '—'}
           </IconButton>
-          <IconButton label={t('panel_close')} onClick={() => window.close()}>
+          <IconButton label={t('panel_close')} onClick={closePanel}>
             ✕
           </IconButton>
         </div>

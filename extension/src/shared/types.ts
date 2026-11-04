@@ -95,6 +95,8 @@ export type PanelMessage =
   | { type: 'STOP' }
   /** Open the panel in a separate window (or focus it if already open). */
   | { type: 'POP_OUT' }
+  /** ✕: stop recording and delete the unsaved "Qeyd" list (saved APIs stay). */
+  | { type: 'CLEAR_RECORDING' }
   /** F-002: HAR of the last recording. */
   | { type: 'EXPORT_HAR' }
   // ---- F-003 saved APIs

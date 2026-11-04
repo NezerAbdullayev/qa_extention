@@ -109,10 +109,8 @@ const ready: Promise<void> = (async () => {
 
 // ---------------------------------------------------------------- start / stop
 
-async function start(targetTab: number): Promise<void> {
-  if (recording) await stop();
-
-  // New Start clears the previous (unsaved) list — Session #2, Q12.
+/** Forgets the current (unsaved) recording: memory + IndexedDB `requests`. Saved APIs stay. */
+async function clearRecords(): Promise<void> {
   records.clear();
   extraRequestHeaders.clear();
   extraResponseHeaders.clear();
@@ -120,6 +118,21 @@ async function start(targetTab: number): Promise<void> {
   lastError = undefined;
   target = undefined;
   await db.clear();
+}
+
+/** ✕ in the panel header: stop recording and delete the unsaved "Qeyd" list (D15). */
+async function closeAndClear(): Promise<void> {
+  if (recording) await stop();
+  await clearRecords();
+  await saveSession();
+  scheduleBroadcast();
+}
+
+async function start(targetTab: number): Promise<void> {
+  if (recording) await stop();
+
+  // New Start clears the previous (unsaved) list — Session #2, Q12.
+  await clearRecords();
 
   try {
     await chrome.debugger.attach({ tabId: targetTab }, CDP_VERSION);
@@ -398,6 +411,9 @@ chrome.runtime.onMessage.addListener((msg: PanelMessage, _sender, sendResponse) 
       case 'STOP':
         await stop();
         return snapshot();
+      case 'CLEAR_RECORDING':
+        await closeAndClear();
+        return null;
 
       // ---- F-002 HAR export (masked, F-005)
       case 'EXPORT_HAR': {

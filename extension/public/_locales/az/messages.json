@@ -11,12 +11,6 @@
   "panel_title": {
     "message": "API Lens"
   },
-  "panel_collapse": {
-    "message": "Kiçilt"
-  },
-  "panel_expand": {
-    "message": "Böyüt"
-  },
   "panel_close": {
     "message": "Bağla (saxlanmamış qeyd silinir)"
   },

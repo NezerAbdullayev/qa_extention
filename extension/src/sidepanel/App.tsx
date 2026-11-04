@@ -6,7 +6,6 @@ import type { Har } from '../shared/har';
 import { download, fileStamp, safeFileName } from './download';
 import { CompareView } from './CompareView';
 import { RequestDetail } from './RequestDetail';
-import { usePanelCollapsed } from './usePanelCollapsed';
 import { useRecorder } from './useRecorder';
 import { NameDialog } from './NameDialog';
 import { SavedList } from './SavedList';
@@ -26,7 +25,6 @@ function hostOf(url: string): string {
 
 export function App() {
   const { state, start, stop } = useRecorder();
-  const { collapsed, toggle } = usePanelCollapsed();
   const { popOut, dock } = useWindowMode();
   const saved = useSaved();
   const { theme, toggle: toggleTheme } = useTheme();
@@ -138,15 +136,10 @@ export function App() {
 
   return (
     <div className="flex h-full flex-col text-sm">
-      {/* Header: title (full mode) or compact status bar, collapse + close buttons */}
+      {/* Header: title, theme, pop out / dock, close */}
       <header className="flex items-center gap-2 border-b border-slate-200 bg-slate-50 px-3 py-2">
-        {collapsed ? (
-          <RecStatus recording={state.recording} count={count} />
-        ) : (
-          <h1 className="font-semibold">{t('panel_title')}</h1>
-        )}
+        <h1 className="font-semibold">{t('panel_title')}</h1>
         <div className="ml-auto flex items-center gap-1">
-          {collapsed && <RecButton recording={state.recording} onStart={start} onStop={stop} />}
           <IconButton
             label={theme === 'dark' ? t('theme_light') : t('theme_dark')}
             onClick={toggleTheme}
@@ -162,147 +155,97 @@ export function App() {
               ⧉
             </IconButton>
           )}
-          <IconButton label={collapsed ? t('panel_expand') : t('panel_collapse')} onClick={toggle}>
-            {collapsed ? '▢' : '—'}
-          </IconButton>
           <IconButton label={t('panel_close')} onClick={closePanel}>
             ✕
           </IconButton>
         </div>
       </header>
 
-      {!collapsed && (
-        <>
-          <div className="flex items-center gap-2 border-b border-slate-200 px-3 py-2">
-            <RecStatus recording={state.recording} count={count} />
-            <div className="ml-auto flex items-center gap-1.5">
-              <button
-                onClick={exportHar}
-                disabled={state.recording || count === 0}
-                title={state.recording ? t('har_hint_recording') : t('har_hint')}
-                className="rounded px-2 py-1 text-xs text-slate-700 hover:bg-slate-100 disabled:opacity-40"
-              >
-                ⬇ {t('har_export')}
-              </button>
-              <RecButton recording={state.recording} onStart={start} onStop={stop} />
-            </div>
-          </div>
-
-          {/* Which tab is being recorded — essential when the panel is in its own window. */}
-          {state.recording && state.target && (
-            <p
-              className="truncate border-b border-slate-200 bg-red-50/50 px-3 py-1 text-xs text-slate-600"
-              title={state.target.url}
+      <>
+        <div className="flex items-center gap-2 border-b border-slate-200 px-3 py-2">
+          <RecStatus recording={state.recording} count={count} />
+          <div className="ml-auto flex items-center gap-1.5">
+            <button
+              onClick={exportHar}
+              disabled={state.recording || count === 0}
+              title={state.recording ? t('har_hint_recording') : t('har_hint')}
+              className="rounded px-2 py-1 text-xs text-slate-700 hover:bg-slate-100 disabled:opacity-40"
             >
-              {t('rec_target', hostOf(state.target.url))}
-              {state.target.title && (
-                <span className="text-slate-400"> — {state.target.title}</span>
-              )}
-            </p>
-          )}
+              ⬇ {t('har_export')}
+            </button>
+            <RecButton recording={state.recording} onStart={start} onStop={stop} />
+          </div>
+        </div>
 
-          {state.error && (
-            <p className="border-b border-red-200 bg-red-50 px-3 py-2 text-red-700">
-              {t('rec_error_attach', state.error)}
-            </p>
-          )}
+        {/* Which tab is being recorded — essential when the panel is in its own window. */}
+        {state.recording && state.target && (
+          <p
+            className="truncate border-b border-slate-200 bg-red-50/50 px-3 py-1 text-xs text-slate-600"
+            title={state.target.url}
+          >
+            {t('rec_target', hostOf(state.target.url))}
+            {state.target.title && <span className="text-slate-400"> — {state.target.title}</span>}
+          </p>
+        )}
 
-          {/* Tabs (F-003, Session #3 Q1): current recording | saved APIs */}
-          <nav className="flex border-b border-slate-200 px-2 text-xs" role="tablist">
-            {(['record', 'saved'] as const).map((id) => (
-              <button
-                key={id}
-                role="tab"
-                aria-selected={tab === id}
-                onClick={() => setTab(id)}
-                className={`-mb-px border-b-2 px-3 py-1.5 ${
-                  tab === id
-                    ? 'border-blue-600 font-semibold text-blue-700'
-                    : 'border-transparent text-slate-500 hover:text-slate-800'
-                }`}
+        {state.error && (
+          <p className="border-b border-red-200 bg-red-50 px-3 py-2 text-red-700">
+            {t('rec_error_attach', state.error)}
+          </p>
+        )}
+
+        {/* Tabs (F-003, Session #3 Q1): current recording | saved APIs */}
+        <nav className="flex border-b border-slate-200 px-2 text-xs" role="tablist">
+          {(['record', 'saved'] as const).map((id) => (
+            <button
+              key={id}
+              role="tab"
+              aria-selected={tab === id}
+              onClick={() => setTab(id)}
+              className={`-mb-px border-b-2 px-3 py-1.5 ${
+                tab === id
+                  ? 'border-blue-600 font-semibold text-blue-700'
+                  : 'border-transparent text-slate-500 hover:text-slate-800'
+              }`}
+            >
+              {id === 'record'
+                ? t('tab_record', String(count))
+                : t('tab_saved', String(saved.items.length))}
+            </button>
+          ))}
+        </nav>
+
+        {tab === 'saved' ? (
+          <main className="min-h-0 flex-1">
+            <SavedList items={saved.items} onToast={showToast} />
+          </main>
+        ) : comparing ? (
+          <main className="min-h-0 flex-1">
+            <CompareView source="record" ids={comparing} onBack={closeCompare} />
+          </main>
+        ) : count === 0 ? (
+          <main className="flex-1 overflow-y-auto">
+            <p className="px-3 py-6 text-center text-slate-400">
+              {state.recording ? t('list_empty_recording') : t('list_empty_idle')}
+            </p>
+          </main>
+        ) : split ? (
+          /* Wide separate window (D6): list left, details right — like DevTools Network. */
+          <main className="flex min-h-0 flex-1 flex-col">
+            {compareBar}
+            <div className="flex min-h-0 flex-1">
+              <div
+                className="min-w-0 overflow-y-auto"
+                style={selectedRow ? { width: leftWidth, flexShrink: 0 } : { flex: 1 }}
               >
-                {id === 'record'
-                  ? t('tab_record', String(count))
-                  : t('tab_saved', String(saved.items.length))}
-              </button>
-            ))}
-          </nav>
-
-          {tab === 'saved' ? (
-            <main className="min-h-0 flex-1">
-              <SavedList items={saved.items} onToast={showToast} />
-            </main>
-          ) : comparing ? (
-            <main className="min-h-0 flex-1">
-              <CompareView source="record" ids={comparing} onBack={closeCompare} />
-            </main>
-          ) : count === 0 ? (
-            <main className="flex-1 overflow-y-auto">
-              <p className="px-3 py-6 text-center text-slate-400">
-                {state.recording ? t('list_empty_recording') : t('list_empty_idle')}
-              </p>
-            </main>
-          ) : split ? (
-            /* Wide separate window (D6): list left, details right — like DevTools Network. */
-            <main className="flex min-h-0 flex-1 flex-col">
-              {compareBar}
-              <div className="flex min-h-0 flex-1">
-                <div
-                  className="min-w-0 overflow-y-auto"
-                  style={selectedRow ? { width: leftWidth, flexShrink: 0 } : { flex: 1 }}
-                >
-                  <ul className="divide-y divide-slate-100">
-                    {state.requests.map((r) => (
-                      <RequestListRow
-                        key={r.id}
-                        row={r}
-                        mode="select"
-                        open={r.id === selectedId}
-                        onToggle={() => setSelectedId(r.id === selectedId ? null : r.id)}
-                        checked={checked.has(r.id)}
-                        onCheck={() => toggleChecked(r.id)}
-                        onSave={() => setSaving(r)}
-                      />
-                    ))}
-                  </ul>
-                </div>
-                {selectedRow && (
-                  <>
-                    <div
-                      role="separator"
-                      aria-orientation="vertical"
-                      onPointerDown={startResize}
-                      className="w-1 shrink-0 cursor-col-resize bg-slate-200 hover:bg-blue-400"
-                    />
-                    <section className="flex min-w-0 flex-1 flex-col">
-                      <div className="flex items-center gap-2 border-b border-slate-200 bg-slate-50 px-3 py-1.5">
-                        <span className="min-w-0 flex-1 truncate font-mono text-xs font-semibold">
-                          {requestName(selectedRow.url)}
-                        </span>
-                        <IconButton label={t('detail_close')} onClick={() => setSelectedId(null)}>
-                          ✕
-                        </IconButton>
-                      </div>
-                      <div className="min-h-0 flex-1">
-                        <RequestDetail key={selectedRow.id} row={selectedRow} variant="pane" />
-                      </div>
-                    </section>
-                  </>
-                )}
-              </div>
-            </main>
-          ) : (
-            <main className="flex min-h-0 flex-1 flex-col">
-              {compareBar}
-              <div className="min-h-0 flex-1 overflow-y-auto">
                 <ul className="divide-y divide-slate-100">
                   {state.requests.map((r) => (
                     <RequestListRow
                       key={r.id}
                       row={r}
-                      mode="accordion"
-                      open={expanded.has(r.id)}
-                      onToggle={() => toggleRow(r.id)}
+                      mode="select"
+                      open={r.id === selectedId}
+                      onToggle={() => setSelectedId(r.id === selectedId ? null : r.id)}
                       checked={checked.has(r.id)}
                       onCheck={() => toggleChecked(r.id)}
                       onSave={() => setSaving(r)}
@@ -310,10 +253,53 @@ export function App() {
                   ))}
                 </ul>
               </div>
-            </main>
-          )}
-        </>
-      )}
+              {selectedRow && (
+                <>
+                  <div
+                    role="separator"
+                    aria-orientation="vertical"
+                    onPointerDown={startResize}
+                    className="w-1 shrink-0 cursor-col-resize bg-slate-200 hover:bg-blue-400"
+                  />
+                  <section className="flex min-w-0 flex-1 flex-col">
+                    <div className="flex items-center gap-2 border-b border-slate-200 bg-slate-50 px-3 py-1.5">
+                      <span className="min-w-0 flex-1 truncate font-mono text-xs font-semibold">
+                        {requestName(selectedRow.url)}
+                      </span>
+                      <IconButton label={t('detail_close')} onClick={() => setSelectedId(null)}>
+                        ✕
+                      </IconButton>
+                    </div>
+                    <div className="min-h-0 flex-1">
+                      <RequestDetail key={selectedRow.id} row={selectedRow} variant="pane" />
+                    </div>
+                  </section>
+                </>
+              )}
+            </div>
+          </main>
+        ) : (
+          <main className="flex min-h-0 flex-1 flex-col">
+            {compareBar}
+            <div className="min-h-0 flex-1 overflow-y-auto">
+              <ul className="divide-y divide-slate-100">
+                {state.requests.map((r) => (
+                  <RequestListRow
+                    key={r.id}
+                    row={r}
+                    mode="accordion"
+                    open={expanded.has(r.id)}
+                    onToggle={() => toggleRow(r.id)}
+                    checked={checked.has(r.id)}
+                    onCheck={() => toggleChecked(r.id)}
+                    onSave={() => setSaving(r)}
+                  />
+                ))}
+              </ul>
+            </div>
+          </main>
+        )}
+      </>
 
       {saving && (
         <NameDialog

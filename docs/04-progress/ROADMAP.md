@@ -4,6 +4,7 @@
 - [x] Layihə strukturu qurulub
 - [x] ADR-001: chrome.debugger seçildi
 - [x] ADR-002: i18n (default dil AZ)
+- [x] ADR-003: React + TypeScript + Vite + Tailwind CSS
 - [ ] Vizyon və uğur meyarları təsdiqləndi
 - [ ] İstifadəçilər və tələblər təsdiqləndi
 - [ ] MVP scope təsdiqləndi

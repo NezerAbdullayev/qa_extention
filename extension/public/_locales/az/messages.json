@@ -250,5 +250,142 @@
   },
   "theme_dark": {
     "message": "Qaranlıq rejimə keç"
+  },
+  "saved_compare": {
+    "message": "Müqayisə et"
+  },
+  "saved_compare_hint": {
+    "message": "Müqayisə üçün 2 API seçin (ilk seçilən A, ikinci B olur)"
+  },
+  "compare_title": {
+    "message": "Müqayisə"
+  },
+  "compare_back": {
+    "message": "Geri"
+  },
+  "compare_back_hint": {
+    "message": "Saxlanmışlar siyahısına qayıt (Esc)"
+  },
+  "compare_body_only": {
+    "message": "yalnız response body"
+  },
+  "compare_swap": {
+    "message": "A və B-nin yerini dəyiş"
+  },
+  "compare_item_missing": {
+    "message": "Saxlanmış API tapılmadı — silinmiş ola bilər."
+  },
+  "compare_mode_keys": {
+    "message": "Key-lərə görə"
+  },
+  "compare_mode_values": {
+    "message": "Dəyərlərə görə"
+  },
+  "compare_mode_full": {
+    "message": "Key + dəyər"
+  },
+  "compare_view_json": {
+    "message": "Qarşı-qarşıya"
+  },
+  "compare_view_list": {
+    "message": "Siyahı"
+  },
+  "compare_ignore_label": {
+    "message": "Nəzərə alma:"
+  },
+  "compare_ignore_placeholder": {
+    "message": "məs. timestamp, createdAt, requestId"
+  },
+  "compare_match_by_id": {
+    "message": "Massivləri id-yə görə uyğunlaşdır"
+  },
+  "compare_different_api": {
+    "message": "⚠️ Fərqli API-lər müqayisə olunur: $A$ ↔ $B$",
+    "placeholders": {
+      "a": {
+        "content": "$1"
+      },
+      "b": {
+        "content": "$2"
+      }
+    }
+  },
+  "compare_not_json": {
+    "message": "⚠️ Response JSON formatında deyil — müqayisə mümkün deyil"
+  },
+  "compare_not_json_side": {
+    "message": "$SIDE$ ($NAME$) — Content-Type: $TYPE$",
+    "placeholders": {
+      "side": {
+        "content": "$1"
+      },
+      "name": {
+        "content": "$2"
+      },
+      "type": {
+        "content": "$3"
+      }
+    }
+  },
+  "compare_summary": {
+    "message": "Xülasə"
+  },
+  "compare_no_diff": {
+    "message": "Fərq yoxdur"
+  },
+  "compare_count_missing": {
+    "message": "$COUNT$ key yoxdur",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "compare_count_added": {
+    "message": "$COUNT$ yeni key",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "compare_count_changed": {
+    "message": "$COUNT$ dəyər fərqli",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "compare_count_empty": {
+    "message": "$COUNT$ dəyər gəlmir",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "compare_count_type": {
+    "message": "$COUNT$ tip dəyişib",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "compare_group_keys": {
+    "message": "Key-lər"
+  },
+  "compare_group_values": {
+    "message": "Dəyərlər"
+  },
+  "compare_only_a": {
+    "message": "(A-da var, B-də yoxdur)"
+  },
+  "compare_only_b": {
+    "message": "(yalnız B-də)"
+  },
+  "compare_root": {
+    "message": "(kök)"
   }
 }

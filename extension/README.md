@@ -57,7 +57,7 @@ extension/
 - ✅ JSON görünüşü DevTools Preview kimi açılan ağacdır (`JsonTree.tsx`)
 - ✅ 💾 Yadda saxla: ad popup-u (boş → 6 rəqəmli ad, təkrar ad qadağan), **Qeyd / Saxlanmışlar** tab-ları, adını dəyiş, sil, JSON export (mask-lı) / import — F-003
 - ✅ Sabit extension ID (`manifest.json` → `key`): `aihlikhdadfldanjagdcalplpjklijhd`
-- ⬜ Müqayisə — F-004
+- ✅ Müqayisə — F-004 (Saxlanmışlar → 2 API seç → ⇄ Müqayisə et)
 - ⬜ HAR export — F-002
 - ⬜ Masking — F-005
 - ✅ Headers (ExtraInfo ilə, Cookie / Set-Cookie daxil), payload, response body (≤ 5 MB), IndexedDB-yə yazma və service worker yenidən başlayanda bərpa — F-001

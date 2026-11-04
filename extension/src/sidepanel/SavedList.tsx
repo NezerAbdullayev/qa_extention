@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState, type ChangeEvent } from 'react';
+import { useCallback, useEffect, useRef, useState, type ChangeEvent } from 'react';
 import { t } from '../shared/i18n';
 import { requestName } from '../shared/requestName';
 import type { PanelMessage, SavedApiExport, SavedApiSummary, SaveResult } from '../shared/types';
+import { CompareView } from './CompareView';
 import { NameDialog } from './NameDialog';
 import { SavedDetail } from './RequestDetail';
 import { useSplitLayout } from './useSplitLayout';
@@ -32,7 +33,7 @@ function download(filename: string, text: string): void {
 
 /**
  * "Saxlanmışlar" tab (F-003): saved APIs, newest first.
- * Click → details · ✏️ rename · 🗑 delete (confirm) · ☐ select → export (and later compare, F-004).
+ * Click → details · ✏️ rename · 🗑 delete (confirm) · ☐ select → export · 2 selected → compare (F-004).
  */
 export function SavedList({
   items,
@@ -46,6 +47,9 @@ export function SavedList({
   const [renaming, setRenaming] = useState<SavedApiSummary | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
   const fileInput = useRef<HTMLInputElement>(null);
+  // F-004: two selected APIs (A = selected first, B = second) → comparison screen.
+  const [comparing, setComparing] = useState<[string, string] | null>(null);
+  const closeCompare = useCallback(() => setComparing(null), []);
 
   // Drop selection / open boxes of items that no longer exist.
   useEffect(() => {
@@ -140,6 +144,8 @@ export function SavedList({
     </ul>
   );
 
+  if (comparing) return <CompareView ids={comparing} onBack={closeCompare} />;
+
   return (
     <div className="flex h-full flex-col">
       <div className="flex items-center gap-2 border-b border-slate-200 px-3 py-1.5 text-xs">
@@ -153,6 +159,14 @@ export function SavedList({
           {t('saved_select_all')}
         </label>
         <div className="ml-auto flex gap-1">
+          <button
+            onClick={() => setComparing([...selected] as [string, string])}
+            disabled={selected.size !== 2}
+            title={t('saved_compare_hint')}
+            className="rounded px-2 py-1 text-slate-700 hover:bg-slate-100 disabled:opacity-40"
+          >
+            ⇄ {t('saved_compare')}
+          </button>
           <button
             onClick={exportItems}
             disabled={items.length === 0}

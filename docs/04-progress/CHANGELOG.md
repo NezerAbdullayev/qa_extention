@@ -2,6 +2,10 @@
 
 Format: [Keep a Changelog](https://keepachangelog.com/) · Versiya: [SemVer](https://semver.org/)
 
+## [2.4.1] — 2026-11-04
+### Added
+- HAR export (F-002): Stop → ⬇ HAR, HAR 1.2, DevTools-a import olunur, həssas sahələr mask olunur
+
 ## [2.4.0] — 2026-11-04
 ### Added
 - Layihə strukturu və sənədləşmə

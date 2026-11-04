@@ -22,10 +22,12 @@
 - Düzəliş: bütün sətir kliklənir — bölünmüş görünüşdə API-lər arası keçid (D10)
 - F-004: müqayisə — 3 rejim, JSON qarşı-qarşıya (sinxron scroll), siyahı hesabatı, fərqli API və JSON olmayan response xəbərdarlığı, ignore siyahısı, massivləri id-yə görə uyğunlaşdırma
 - F-004: path parametrləri (`objects/{id}`) "fərqli API" sayılmır — ℹ️ fərqli parametr göstərilir (D11)
+- Versiya 2.4.0 təyin edildi; hər dəyişiklikdə son rəqəm +1 (CLAUDE.md)
+- F-002: HAR 1.2 export (mask-lı) — v2.4.1
 
 **Növbəti addım**
-- F-002: HAR export
-- F-001: console error-lar, redirect zənciri
+- F-001: console error-lar (F-002 `_console` üçün də lazımdır), redirect zənciri
+- F-005: mask siyahısının UI-dan idarəsi
 
 **Bloklar**
 - —

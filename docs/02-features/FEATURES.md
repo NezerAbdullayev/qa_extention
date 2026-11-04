@@ -3,7 +3,7 @@
 | ID | Feature | Mərhələ | Status | Spec |
 |---|---|---|---|---|
 | F-001 | Network Recorder | MVP | 🔵 Hazırlanır | [link](F-001-recorder.md) |
-| F-002 | HAR Export | MVP | 📝 Spec | [link](F-002-har-export.md) |
+| F-002 | HAR Export | MVP | 🔵 Hazırlanır | [link](F-002-har-export.md) |
 | F-003 | API yadda saxlama (ad / 6 rəqəmli avtomatik ad) | MVP | 🔵 Hazırlanır | [link](F-003-snapshots.md) |
 | F-004 | API müqayisəsi və hesabat (key / dəyər / key + dəyər) | MVP | 🔵 Hazırlanır | [link](F-004-compare.md) |
 | F-005 | Həssas data masking | MVP | 📝 Spec | [link](F-005-masking.md) |

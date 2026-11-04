@@ -15,7 +15,7 @@
 ## Mərhələ 1 — MVP (v0.1)
 - [ ] F-001 Recorder
 - [ ] F-005 Masking
-- [ ] F-002 HAR export
+- [x] F-002 HAR export
 - [ ] F-008 Request siyahısı (side panel)
 - [ ] F-003 API yadda saxlama
 - [x] F-004 API müqayisəsi və hesabat

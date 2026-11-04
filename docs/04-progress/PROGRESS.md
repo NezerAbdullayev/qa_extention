@@ -13,6 +13,7 @@
 - F-008: JSON DevTools Preview kimi açılan ağac (D3); Headers göstərilmir (D4); max 300px (D1)
 - Ad dəyişdi: QA Debugger → **API Lens**
 - F-008: Headers bölməsi çıxarıldı (D4); ayrı pəncərə rejimi — ikinci monitor üçün (D5)
+- F-008: geniş pəncərədə DevTools kimi bölünmüş görünüş (D6)
 
 **Növbəti addım**
 - F-003: 💾 yadda saxlama (ad popup-u, 6 rəqəmli avtomatik ad)

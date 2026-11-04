@@ -49,6 +49,27 @@ Tam rejim                                Kompakt rejim
 - Qeyd zamanı panel hansı saytın yazıldığını göstərir: `Yazılır: site.az — Səhifə başlığı`.
 - Siyahı, açılan qutular, kiçilt / bağla — hər iki rejimdə eyni işləyir; ikisi eyni anda açıq olsa da canlı yenilənir.
 
+### Geniş pəncərədə DevTools kimi bölünmüş görünüş (test sonrası D6, 2026-11-04)
+Ayrı pəncərə **geniş** olanda (≥ 900px — məs. ikinci monitorda tam ekran) görünüş avtomatik DevTools → Network kimi olur:
+
+```
+┌──────────────────────────────┬──────────────────────────────────────────────┐
+│ MY_TASKS_COLUMNS  GET 200 45ms│ passports                                 ✕ │
+│▌passports        GET 200 85ms│ https://site.az/api/v1/passports?page=1      │
+│ tasks?sort=…     GET 200 120ms│ method: GET                                  │
+│ find.batch       POST 500 310 │ status: 200                                  │
+│ list?checkFin=…  GET 200 60ms │ PAYLOAD   ▾ {page: "1"}                      │
+│                              ⇔ RESPONSE  ▾ {countries: Array(250), …}       │
+│                              │             ▸ countries: (250) [{…}, …]      │
+└──────────────────────────────┴──────────────────────────────────────────────┘
+   siyahı (solda)        ⇔ dartılır       detallar (sağda, tam hündürlük)
+```
+- Sətirə klik → sətir seçilir (göy fon), detallar **sağda tam hündürlükdə** açılır — 300px məhdudiyyəti yoxdur.
+- Eyni sətirə təkrar klik və ya **✕** / **Esc** → detallar bağlanır, siyahı tam enə qayıdır.
+- **↑ / ↓** — seçimi əvvəlki / növbəti request-ə keçirir (DevTools kimi).
+- Aradakı xətti mouse ilə dartıb siyahının enini dəyişmək olur; en yadda qalır.
+- Pəncərə daraldılanda (< 900px) və side panel-də — əvvəlki kimi sətirin altında açılan 300px qutular.
+
 ## UI / Axın
 ```
 ┌───────────────────────────────────────────────────────────┐
@@ -148,6 +169,7 @@ QA və developer DevTools → Network-da gördüyü adı burada da eyni görsün
 - [ ] Siyahı side panel-də göstərilir
 - [ ] **⧉** düyməsi ilə panel **ayrı pəncərədə** açılır (ikinci monitor üçün); **⇥** ilə side panel-ə qayıdır; pəncərənin yeri və ölçüsü yadda qalır (D5)
 - [ ] Qeyd zamanı yazılan tab göstərilir: `Yazılır: <host> — <başlıq>` (D5)
+- [ ] Ayrı pəncərə ≥ 900px olanda **bölünmüş görünüş**: siyahı solda, seçilmiş request-in detalları sağda tam hündürlükdə; ✕ / Esc bağlayır; ↑ / ↓ seçimi dəyişir; ara xətt dartılır (D6)
 - [ ] Side panel **✕ düyməsi** ilə bağlanır; qeyd davam edirsə dayanmır
 - [ ] **— Kiçilt / ▢ Böyüt** düyməsi: kompakt rejim (yalnız REC statusu, say, Start/Stop) ↔ tam rejim
 - [ ] Panelin eni **əl ilə dartılaraq** dəyişdirilir; en və rejim yadda qalır

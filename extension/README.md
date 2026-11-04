@@ -49,6 +49,7 @@ extension/
 ## Hazırkı vəziyyət (skelet)
 - ✅ Side panel: başlıq, — Kiçilt / ▢ Böyüt (yadda qalır), ✕ Bağla
 - ✅ Ayrı pəncərə rejimi: ⧉ → ayrıca pəncərə (ikinci monitor), ⇥ → side panel-ə qaytar; yer və ölçü yadda qalır
+- ✅ Geniş ayrı pəncərədə (≥ 900px) DevTools kimi bölünmüş görünüş: siyahı solda, detallar sağda (↑ / ↓, Esc, dartılan ara xətt)
 - ✅ Start / Stop → `chrome.debugger` attach / detach
 - ✅ Yalnız XHR / Fetch, canlı siyahı: ad · method · status · müddət
 - ✅ Açılan qutu: URL · method · status · Payload · Response (headers göstərilmir) (JSON, max 300px, bir neçəsi eyni anda açıq) — F-008

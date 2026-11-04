@@ -19,6 +19,7 @@
 | FR-14 | Açılan qutuda JSON DevTools Preview kimi açılan ağac şəklində (D3), alt-alta: tam URL → `method: …` → `status: …` → Payload (göndərilən) → Response (qayıdan); headers göstərilmir (Sessiya #2, Q5, 5a; D4) | F-008 | Must |
 | FR-15 | Hər müqayisə rejimi üçün hesabat: xülasə (saylar) + iki response JSON formasında qarşı-qarşıya (A solda, B sağda), fərqlər rənglə işarələnir (Sessiya #2, Q9) | F-004 | Must |
 | FR-16 | Panel ayrı pəncərədə açıla bilir (DevTools "Undock" kimi) — ikinci monitorda saxlamaq və saytın enini daraltmamaq üçün; yeri və ölçüsü yadda qalır (D5) | F-008 | Must |
+| FR-17 | Geniş ayrı pəncərədə (≥ 900px) DevTools Network kimi bölünmüş görünüş: siyahı solda, detallar sağda tam hündürlükdə (D6) | F-008 | Must |
 
 ## Qeyri-funksional (NFR)
 | ID | Tələb |

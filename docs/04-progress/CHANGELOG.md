@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/) · Versiya: [SemVer](htt
 - Recorder: headers, payload, response body, IndexedDB
 - Side panel: açılan request qutusu (JSON formasında)
 - Ayrı pəncərə rejimi (⧉ / ⇥), yazılan tab-ın göstərilməsi
+- Geniş pəncərədə DevTools kimi bölünmüş görünüş (siyahı | detallar)
 
 ### Changed
 - Extension adı: QA Debugger → API Lens

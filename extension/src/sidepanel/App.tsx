@@ -5,6 +5,7 @@ import type { RequestRow } from '../shared/types';
 import { RequestDetail } from './RequestDetail';
 import { usePanelCollapsed } from './usePanelCollapsed';
 import { useRecorder } from './useRecorder';
+import { useSplitLayout } from './useSplitLayout';
 import { isWindowMode, useWindowMode } from './useWindowMode';
 
 function hostOf(url: string): string {
@@ -31,10 +32,35 @@ export function App() {
       return next;
     });
   }, []);
-  // New recording (list cleared) → forget open boxes.
+  // Split layout (wide separate window, D6): one selected request shown on the right.
+  const { split, leftWidth, startResize } = useSplitLayout();
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const selectedRow = state.requests.find((r) => r.id === selectedId);
+
+  // New recording (list cleared) → forget open boxes / selection.
   useEffect(() => {
-    if (count === 0) setExpanded(new Set());
+    if (count === 0) {
+      setExpanded(new Set());
+      setSelectedId(null);
+    }
   }, [count]);
+
+  // DevTools-like keys in split layout: ↑ / ↓ change selection, Esc closes the details.
+  useEffect(() => {
+    if (!split || !selectedId) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') return setSelectedId(null);
+      if (e.key !== 'ArrowUp' && e.key !== 'ArrowDown') return;
+      const i = state.requests.findIndex((r) => r.id === selectedId);
+      const next = state.requests[e.key === 'ArrowUp' ? i - 1 : i + 1];
+      if (next) {
+        e.preventDefault();
+        setSelectedId(next.id);
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [split, selectedId, state.requests]);
 
   return (
     <div className="flex h-full flex-col text-sm">
@@ -93,24 +119,70 @@ export function App() {
             </p>
           )}
 
-          <main className="flex-1 overflow-y-auto">
-            {count === 0 ? (
+          {count === 0 ? (
+            <main className="flex-1 overflow-y-auto">
               <p className="px-3 py-6 text-center text-slate-400">
                 {state.recording ? t('list_empty_recording') : t('list_empty_idle')}
               </p>
-            ) : (
+            </main>
+          ) : split ? (
+            /* Wide separate window (D6): list left, details right — like DevTools Network. */
+            <main className="flex min-h-0 flex-1">
+              <div
+                className="min-w-0 overflow-y-auto"
+                style={selectedRow ? { width: leftWidth, flexShrink: 0 } : { flex: 1 }}
+              >
+                <ul className="divide-y divide-slate-100">
+                  {state.requests.map((r) => (
+                    <RequestListRow
+                      key={r.id}
+                      row={r}
+                      mode="select"
+                      open={r.id === selectedId}
+                      onToggle={() => setSelectedId(r.id === selectedId ? null : r.id)}
+                    />
+                  ))}
+                </ul>
+              </div>
+              {selectedRow && (
+                <>
+                  <div
+                    role="separator"
+                    aria-orientation="vertical"
+                    onPointerDown={startResize}
+                    className="w-1 shrink-0 cursor-col-resize bg-slate-200 hover:bg-blue-400"
+                  />
+                  <section className="flex min-w-0 flex-1 flex-col">
+                    <div className="flex items-center gap-2 border-b border-slate-200 bg-slate-50 px-3 py-1.5">
+                      <span className="min-w-0 flex-1 truncate font-mono text-xs font-semibold">
+                        {requestName(selectedRow.url)}
+                      </span>
+                      <IconButton label={t('detail_close')} onClick={() => setSelectedId(null)}>
+                        ✕
+                      </IconButton>
+                    </div>
+                    <div className="min-h-0 flex-1">
+                      <RequestDetail row={selectedRow} variant="pane" />
+                    </div>
+                  </section>
+                </>
+              )}
+            </main>
+          ) : (
+            <main className="flex-1 overflow-y-auto">
               <ul className="divide-y divide-slate-100">
                 {state.requests.map((r) => (
                   <RequestListRow
                     key={r.id}
                     row={r}
+                    mode="accordion"
                     open={expanded.has(r.id)}
                     onToggle={() => toggleRow(r.id)}
                   />
                 ))}
               </ul>
-            )}
-          </main>
+            </main>
+          )}
         </>
       )}
     </div>
@@ -164,11 +236,18 @@ function IconButton(props: { label: string; onClick: () => void; children: React
 
 /**
  * Row: name (DevTools "Name") · method · status · duration · save.
- * Click → expands the detail box below (F-008); click again → collapses.
+ *  - mode 'accordion': click → detail box opens below the row (max 300px); click again → closes
+ *  - mode 'select':    click → row is selected, details open in the right-hand pane (D6)
  * TODO (F-003): save button opens the name dialog.
  */
-function RequestListRow(props: { row: RequestRow; open: boolean; onToggle: () => void }) {
-  const { row, open, onToggle } = props;
+function RequestListRow(props: {
+  row: RequestRow;
+  mode: 'accordion' | 'select';
+  open: boolean;
+  onToggle: () => void;
+}) {
+  const { row, mode, open, onToggle } = props;
+  const selected = mode === 'select' && open;
   const isError = row.failed !== undefined || (row.status !== undefined && row.status >= 400);
   const statusText =
     row.failed !== undefined
@@ -180,14 +259,17 @@ function RequestListRow(props: { row: RequestRow; open: boolean; onToggle: () =>
         : t('list_pending');
 
   return (
-    <li className={open ? 'bg-slate-50/60' : ''}>
-      <div className="flex items-center gap-2 px-3 py-1.5 hover:bg-slate-50" title={row.url}>
+    <li className={selected ? 'bg-blue-100' : open ? 'bg-slate-50/60' : ''}>
+      <div
+        className={`flex items-center gap-2 px-3 py-1.5 ${selected ? '' : 'hover:bg-slate-50'}`}
+        title={row.url}
+      >
         <button
           onClick={onToggle}
           aria-expanded={open}
           className="flex min-w-0 flex-1 items-center gap-2 text-left"
         >
-          <span className="text-slate-400">{open ? '▾' : '▸'}</span>
+          {mode === 'accordion' && <span className="text-slate-400">{open ? '▾' : '▸'}</span>}
           <span className="min-w-0 flex-1 truncate font-mono text-xs">{requestName(row.url)}</span>
         </button>
         <span className="w-12 shrink-0 text-xs text-slate-500">{row.method}</span>
@@ -208,7 +290,7 @@ function RequestListRow(props: { row: RequestRow; open: boolean; onToggle: () =>
           💾
         </button>
       </div>
-      {open && <RequestDetail row={row} />}
+      {mode === 'accordion' && open && <RequestDetail row={row} />}
     </li>
   );
 }

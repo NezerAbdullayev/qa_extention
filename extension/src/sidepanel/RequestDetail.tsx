@@ -5,11 +5,21 @@ import { JsonTree } from './JsonTree';
 import type { PanelMessage, RequestRecord, RequestRow } from '../shared/types';
 
 /**
- * Expanded box (F-008, Session #2 Q5 / 5a / 5b / 5c / Q15):
+ * Request details (F-008, Session #2 Q5 / 5a / 5c):
  * URL → method → status → Payload → Response (no headers, D4),
- * JSON shown as a collapsible tree like DevTools Preview (D3); height follows content up to 300px (2026-11-04), then scrolls inside.
+ * JSON shown as a collapsible tree like DevTools Preview (D3).
+ *
+ * variant:
+ *  - 'inline' → box under the row, height follows content up to 300px (D1), scrolls inside
+ *  - 'pane'   → full-height right-hand pane of the wide split layout (D6), like DevTools
  */
-export function RequestDetail({ row }: { row: RequestRow }) {
+export function RequestDetail({
+  row,
+  variant = 'inline',
+}: {
+  row: RequestRow;
+  variant?: 'inline' | 'pane';
+}) {
   const [detail, setDetail] = useState<RequestRecord | null>(null);
 
   // Refetch whenever the row changes (status, headers, body arriving later).
@@ -25,7 +35,13 @@ export function RequestDetail({ row }: { row: RequestRow }) {
   }, [row.id, row.rev]);
 
   return (
-    <div className="mx-3 mb-2 max-h-[300px] overflow-auto rounded border border-slate-200 bg-slate-50 p-3 font-mono text-xs">
+    <div
+      className={
+        variant === 'pane'
+          ? 'h-full overflow-auto p-4 font-mono text-xs'
+          : 'mx-3 mb-2 max-h-[300px] overflow-auto rounded border border-slate-200 bg-slate-50 p-3 font-mono text-xs'
+      }
+    >
       {detail === null ? (
         <p className="text-slate-400">{t('detail_loading')}</p>
       ) : (

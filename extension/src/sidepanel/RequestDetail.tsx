@@ -1,12 +1,12 @@
 import { useEffect, useState, type ReactNode } from 'react';
-import { buildPayload, decodeBase64Text, header } from '../shared/format';
+import { buildPayload, decodeBase64Text } from '../shared/format';
 import { t } from '../shared/i18n';
 import { JsonTree } from './JsonTree';
 import type { PanelMessage, RequestRecord, RequestRow } from '../shared/types';
 
 /**
  * Expanded box (F-008, Session #2 Q5 / 5a / 5b / 5c / Q15):
- * URL → method → status → Headers (Referer only) → Payload → Response,
+ * URL → method → status → Payload → Response (no headers, D4),
  * JSON shown as a collapsible tree like DevTools Preview (D3); height follows content up to 300px (2026-11-04), then scrolls inside.
  */
 export function RequestDetail({ row }: { row: RequestRow }) {
@@ -37,7 +37,6 @@ export function RequestDetail({ row }: { row: RequestRow }) {
 
 function DetailContent({ d }: { d: RequestRecord }) {
   const payload = buildPayload(d.url, d.postData, d.requestHeaders);
-  const referer = header(d.requestHeaders, 'referer');
   const status =
     d.failed !== undefined
       ? `${t('list_failed')} ${d.failed}`
@@ -60,15 +59,8 @@ function DetailContent({ d }: { d: RequestRecord }) {
         </p>
       </div>
 
-      {/* Only "Referer" is shown; response headers are not shown (2026-11-04).
-          All headers are still recorded (needed for HAR export, F-002). */}
-      <Section title={t('detail_headers')}>
-        {referer !== undefined ? (
-          <JsonTree value={{ Referer: referer }} />
-        ) : (
-          <Muted>{t('detail_empty')}</Muted>
-        )}
-      </Section>
+      {/* No headers section (D4, 2026-11-04). All headers are still recorded —
+          needed for HAR export (F-002). */}
 
       {payload && (
         <Section title={t('detail_payload')}>

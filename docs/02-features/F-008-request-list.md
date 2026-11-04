@@ -47,14 +47,9 @@ Tam rejim                                Kompakt rejim
 │ │ method: GET                                           │ │  │
 │ │ status: 200                                           │ │  │
 │ │                                                       │ │  │
-│ │ Headers                                               │ │  │ hündürlük
+│ │ Payload  (göndərilən)                                 │ │  │ hündürlük
 │ │ {                                                     │ │  │ max 300px
-│ │   "Referer": "https://site.az/tasks"                  │ │  │ (daxildə scroll)
-│ │ }                                                     │ │  │
-│ │                                                       │ │  │
-│ │ Payload  (göndərilən)                                 │ │  │
-│ │ {                                                     │ │  │
-│ │   "page": "1"                                         │ │  │
+│ │   "page": "1"                                         │ │  │ (daxildə scroll)
 │ │ }                                                     │ │  │
 │ │                                                       │ │  │
 │ │ Response  (qayıdan)                                   │ │  │
@@ -77,9 +72,9 @@ Bölmələr **alt-alta**, bu sıra ilə:
 |---|---|---|
 | 1 | **API-nin tam ünvanı** | Tam URL (host + path + query), məs. `https://site.az/api/v1/passports?page=1` |
 | 2 | **method + status** | Tam ünvanın altında: `method: GET`, onun altında `status: 200` (uğursuz request-də səbəb, məs. `status: (failed) net::ERR_CONNECTION_REFUSED`) (Sessiya #2, Q5c) |
-| 3 | **Headers** | **Yalnız `Referer`** request header-i: `{ "Referer": "…" }`. Yoxdursa `(boş)`. Response headers **göstərilmir** (test sonrası D2, 2026-11-04). Bütün header-lər yenə də yazılır — HAR export üçün lazımdır ([F-002](F-002-har-export.md)) |
-| 4 | **Payload** (göndərilən) | Request-in göndərdiyi data, **formatlanmış JSON**. DevTools "Payload" tab-ı kimi: POST/PUT/PATCH body + query string parametrləri (`?page=1` → `{ "page": "1" }`). Həssas sahələr mask olunur |
-| 5 | **Response** (qayıdan) | Response body **formatlanmış JSON** (pretty-print, 2 boşluq girinti) |
+| — | ~~Headers~~ | **Göstərilmir** (test sonrası D4, 2026-11-04 — əvvəl D2: yalnız Referer). Bütün header-lər yenə də yazılır — HAR export üçün lazımdır ([F-002](F-002-har-export.md)) |
+| 3 | **Payload** (göndərilən) | Request-in göndərdiyi data, **formatlanmış JSON**. DevTools "Payload" tab-ı kimi: POST/PUT/PATCH body + query string parametrləri (`?page=1` → `{ "page": "1" }`). Həssas sahələr mask olunur |
+| 4 | **Response** (qayıdan) | Response body **formatlanmış JSON** (pretty-print, 2 boşluq girinti) |
 
 ### JSON görünüşü — DevTools "Preview" kimi açılan ağac (test sonrası D3, 2026-11-04)
 Uzun JSON tam açıq göstərilmir. Qaydalar DevTools → Network → **Preview** ilə eynidir:
@@ -107,7 +102,7 @@ Uzun JSON tam açıq göstərilmir. Qaydalar DevTools → Network → **Preview*
 - Bağlı obyekt bir sətirlik önizləmə göstərir: `{id: "AZE", nameAz: "…", …}`; massiv — uzunluq + önizləmə: `(250) [{…}, {…}, …]`.
 - 100-dən çox elementli massivlər `[0 … 99]`, `[100 … 199]` qruplarına bölünür.
 - Rənglər: key — bənövşəyi, string — qırmızı, number / boolean — göy, null — boz.
-- Headers, Payload və Response bölmələrinin hamısında istifadə olunur. JSON olmayan mətn olduğu kimi göstərilir.
+- Payload və Response bölmələrində istifadə olunur. JSON olmayan mətn olduğu kimi göstərilir.
 
 - Payload yoxdursa (məs. query-siz GET) → Payload bölməsi göstərilmir.
 - Payload və ya Response JSON deyilsə (form-data, HTML, mətn) → olduğu kimi mətn göstərilir.
@@ -152,7 +147,7 @@ QA və developer DevTools → Network-da gördüyü adı burada da eyni görsün
 - [ ] **Eyni anda bir neçə qutu açıq ola bilər** — yeni qutu açılanda əvvəlkilər bağlanmır; hər biri öz klik ilə bağlanır (Sessiya #2, Q4)
 - [ ] Açılan qutunun hündürlüyü **məzmuna görədir, maksimum 300px** (CSS `max-height: 300px`): qısa məzmunda qutu kiçik olur, 300px-dən çox olanda qutunun daxilində scroll (Sessiya #2, Q15; test sonrası 500 → 300px, 2026-11-04)
 - [ ] JSON **DevTools Preview kimi açılan ağac** şəklində göstərilir: yalnız kök açıq, iç-içə obyekt/massivlər bağlı + önizləmə, böyük massivlər `[0 … 99]` qruplarında (D3)
-- [ ] Açıq qutuda **JSON formasında**, alt-alta: 1) tam URL · 2) `method: …` + `status: …` · 3) Headers — yalnız `Referer` (JSON) · 4) Payload — göndərilən (JSON) · 5) Response — qayıdan (formatlanmış JSON) (Sessiya #2, Q5, 5a; D2)
+- [ ] Açıq qutuda **JSON formasında**, alt-alta: 1) tam URL · 2) `method: …` + `status: …` · 3) Payload — göndərilən (JSON) · 4) Response — qayıdan (JSON); headers göstərilmir (Sessiya #2, Q5, 5a; D4)
 - [ ] Hər sətirin **sağ tərəfində "Yadda saxla" düyməsi** (💾) — bax: [F-003](F-003-snapshots.md)
 - [ ] Mətnlər i18n ilə ([ADR-002](../03-architecture/decisions/ADR-002-i18n.md))
 - [ ] Həssas sahələr mask olunmuş göstərilir ([F-005](F-005-masking.md))

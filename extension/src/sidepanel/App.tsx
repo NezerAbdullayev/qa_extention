@@ -8,6 +8,7 @@ import { useRecorder } from './useRecorder';
 import { NameDialog } from './NameDialog';
 import { SavedList } from './SavedList';
 import { useSaved } from './useSaved';
+import { useTheme } from './useTheme';
 import { useSplitLayout } from './useSplitLayout';
 import { isWindowMode, useWindowMode } from './useWindowMode';
 
@@ -24,6 +25,7 @@ export function App() {
   const { collapsed, toggle } = usePanelCollapsed();
   const { popOut, dock } = useWindowMode();
   const saved = useSaved();
+  const { theme, toggle: toggleTheme } = useTheme();
 
   // F-003: tabs, save dialog, toast notification.
   const [tab, setTab] = useState<'record' | 'saved'>('record');
@@ -90,6 +92,12 @@ export function App() {
         )}
         <div className="ml-auto flex items-center gap-1">
           {collapsed && <RecButton recording={state.recording} onStart={start} onStop={stop} />}
+          <IconButton
+            label={theme === 'dark' ? t('theme_light') : t('theme_dark')}
+            onClick={toggleTheme}
+          >
+            {theme === 'dark' ? '☀️' : '🌙'}
+          </IconButton>
           {isWindowMode ? (
             <IconButton label={t('panel_dock')} onClick={dock}>
               ⇥
@@ -250,7 +258,7 @@ export function App() {
           role="status"
           className="pointer-events-none fixed inset-x-0 bottom-3 z-50 flex justify-center px-3"
         >
-          <span className="rounded bg-slate-800 px-3 py-1.5 text-xs text-white shadow-lg">
+          <span className="rounded bg-gray-800 px-3 py-1.5 text-xs text-white shadow-lg dark:bg-gray-700">
             {toast}
           </span>
         </div>
@@ -265,7 +273,9 @@ function RecStatus({ recording, count }: { recording: boolean; count: number }) 
       <span
         className={`h-2.5 w-2.5 rounded-full ${recording ? 'animate-pulse bg-red-500' : 'bg-slate-300'}`}
       />
-      <span className={recording ? 'font-semibold text-red-600' : 'text-slate-500'}>
+      <span
+        className={recording ? 'font-semibold text-red-600 dark:text-red-400' : 'text-slate-500'}
+      >
         {recording ? t('rec_status_recording') : t('rec_status_idle')}
       </span>
       <span className="text-slate-500">· {t('rec_count', String(count))}</span>
@@ -277,7 +287,7 @@ function RecButton(props: { recording: boolean; onStart: () => void; onStop: () 
   return props.recording ? (
     <button
       onClick={props.onStop}
-      className="rounded bg-slate-800 px-3 py-1 text-xs font-medium text-white hover:bg-slate-700"
+      className="rounded bg-gray-800 px-3 py-1 text-xs font-medium text-white hover:bg-gray-700 dark:bg-gray-600 dark:hover:bg-gray-500"
     >
       {t('rec_stop')}
     </button>
@@ -354,7 +364,7 @@ function RequestListRow(props: {
         </button>
         <span className="w-12 shrink-0 text-xs text-slate-500">{row.method}</span>
         <span
-          className={`w-16 shrink-0 text-xs ${isError ? 'font-semibold text-red-600' : row.status && row.status >= 300 ? 'text-slate-400' : 'text-slate-700'}`}
+          className={`w-16 shrink-0 text-xs ${isError ? 'font-semibold text-red-600 dark:text-red-400' : row.status && row.status >= 300 ? 'text-slate-400' : 'text-slate-700'}`}
         >
           {statusText}
         </span>

@@ -112,7 +112,7 @@ export function SavedList({
   }, [split, activeId, items, renaming]);
 
   const list = (
-    <ul className="divide-y divide-slate-100 dark:divide-slate-800">
+    <ul className="divide-y divide-slate-100">
       {items.map((s) => (
         <SavedRow
           key={s.id}
@@ -295,7 +295,7 @@ function SavedRow(props: {
           </span>
         </button>
         <span
-          className={`w-12 shrink-0 text-xs ${isError ? 'font-semibold text-red-600' : 'text-slate-700'}`}
+          className={`w-12 shrink-0 text-xs ${isError ? 'font-semibold text-red-600 dark:text-red-400' : 'text-slate-700'}`}
         >
           {s.failed !== undefined ? t('list_failed') : (s.status ?? '')}
         </span>
@@ -304,7 +304,7 @@ function SavedRow(props: {
         </span>
         {props.confirmingDelete ? (
           <span className="flex shrink-0 items-center gap-1 text-xs">
-            <span className="text-red-600">{t('saved_delete_confirm')}</span>
+            <span className="text-red-600 dark:text-red-400">{t('saved_delete_confirm')}</span>
             <button
               onClick={props.onDelete}
               className="rounded bg-red-600 px-1.5 py-0.5 text-white hover:bg-red-500"

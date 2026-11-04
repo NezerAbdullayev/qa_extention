@@ -12,6 +12,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/) · Versiya: [SemVer](htt
 - Geniş pəncərədə DevTools kimi bölünmüş görünüş (siyahı | detallar)
 - API yadda saxlama (F-003): 💾, Saxlanmışlar tab-ı, adını dəyiş, sil, JSON export / import (həssas sahələr export-da mask olunur)
 - Sabit extension ID
+- Saxlanmışlar tab-ında geniş pəncərədə bölünmüş görünüş
+- Dark mode (default) və ☀️ / 🌙 keçid
 
 ### Changed
 - Extension adı: QA Debugger → API Lens

@@ -6,7 +6,7 @@ import { useState, type ReactNode } from 'react';
  *  - a collapsed object shows a one-line preview:  {id: "AZE", nameAz: "Azərbaycan", …}
  *  - a collapsed array shows its length + preview:  (250) [{…}, {…}, {…}, …]
  *  - arrays with more than 100 items are grouped into ranges:  [0 … 99], [100 … 199], …
- *  - colours: key = purple, string = red, number / boolean = blue, null = grey
+ *  - colours: key = purple, string = red, number / boolean = blue, null = grey (dark: index.css)
  */
 
 type Json = null | boolean | number | string | Json[] | { [key: string]: Json };
@@ -166,7 +166,7 @@ function Toggle(props: {
 function Key({ name }: { name: string }) {
   return (
     <>
-      <span className="text-[#881391]">{name}</span>
+      <span className="text-[var(--json-key)]">{name}</span>
       <span className="text-slate-500">: </span>
     </>
   );
@@ -174,6 +174,7 @@ function Key({ name }: { name: string }) {
 
 function Primitive({ value }: { value: null | boolean | number | string }) {
   if (value === null) return <span className="text-slate-500">null</span>;
-  if (typeof value === 'string') return <span className="break-all text-[#c41a16]">"{value}"</span>;
-  return <span className="text-[#1c00cf]">{String(value)}</span>;
+  if (typeof value === 'string')
+    return <span className="break-all text-[var(--json-string)]">"{value}"</span>;
+  return <span className="text-[var(--json-number)]">{String(value)}</span>;
 }

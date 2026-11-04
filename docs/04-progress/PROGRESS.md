@@ -18,6 +18,7 @@
 - F-003: 💾 yadda saxlama, Qeyd / Saxlanmışlar tab-ları, adını dəyiş, sil, JSON export (mask-lı) / import
 - Sabit extension ID (`manifest.json` → `key`)
 - Saxlanmışlar tab-ında da geniş pəncərədə bölünmüş görünüş (D8)
+- Dark mode (default), ☀️ / 🌙 keçid (D9)
 
 **Növbəti addım**
 - F-004: müqayisə (key / dəyər / key + dəyər, JSON qarşı-qarşıya)

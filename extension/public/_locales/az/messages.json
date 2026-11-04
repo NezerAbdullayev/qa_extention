@@ -244,5 +244,11 @@
         "content": "$1"
       }
     }
+  },
+  "theme_light": {
+    "message": "İşıqlı rejimə keç"
+  },
+  "theme_dark": {
+    "message": "Qaranlıq rejimə keç"
   }
 }

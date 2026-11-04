@@ -88,7 +88,13 @@ function DetailContent({ d }: { d: RequestRecord }) {
         </p>
         <p>
           <span className="text-slate-500">status:</span>{' '}
-          <span className={d.failed !== undefined || (d.status ?? 0) >= 400 ? 'text-red-600' : ''}>
+          <span
+            className={
+              d.failed !== undefined || (d.status ?? 0) >= 400
+                ? 'text-red-600 dark:text-red-400'
+                : ''
+            }
+          >
             {status}
           </span>
         </p>

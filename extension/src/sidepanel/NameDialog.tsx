@@ -39,7 +39,7 @@ export function NameDialog(props: {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-start justify-center bg-slate-900/30 p-4 pt-16"
+      className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 p-4 pt-16"
       onMouseDown={(e) => e.target === e.currentTarget && props.onClose()}
       onKeyDown={(e) => e.key === 'Escape' && props.onClose()}
     >
@@ -48,7 +48,7 @@ export function NameDialog(props: {
         role="dialog"
         aria-modal="true"
         aria-labelledby="name-dialog-title"
-        className="w-full max-w-sm rounded-lg bg-white p-4 shadow-xl"
+        className="w-full max-w-sm rounded-lg border border-slate-200 bg-surface p-4 shadow-xl"
       >
         <h2 id="name-dialog-title" className="font-semibold">
           {props.title}
@@ -75,7 +75,9 @@ export function NameDialog(props: {
             error ? 'border-red-400 focus:ring-red-200' : 'border-slate-300 focus:ring-blue-200'
           }`}
         />
-        <p className={`mt-1 text-xs ${error ? 'text-red-600' : 'text-slate-400'}`}>
+        <p
+          className={`mt-1 text-xs ${error ? 'text-red-600 dark:text-red-400' : 'text-slate-400'}`}
+        >
           {error ?? t('save_name_hint')}
         </p>
 

@@ -48,6 +48,7 @@ extension/
 
 ## Hazırkı vəziyyət (skelet)
 - ✅ Side panel: başlıq, — Kiçilt / ▢ Böyüt (yadda qalır), ✕ Bağla
+- ✅ Dark mode (default) — ☀️ / 🌙 ilə işıqlı rejim, yadda qalır
 - ✅ Ayrı pəncərə rejimi: ⧉ → ayrıca pəncərə (ikinci monitor), ⇥ → side panel-ə qaytar; yer və ölçü yadda qalır
 - ✅ Geniş ayrı pəncərədə (≥ 900px) DevTools kimi bölünmüş görünüş: siyahı solda, detallar sağda (↑ / ↓, Esc, dartılan ara xətt)
 - ✅ Start / Stop → `chrome.debugger` attach / detach

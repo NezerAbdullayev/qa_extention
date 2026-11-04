@@ -1,5 +1,54 @@
 @import "tailwindcss";
 
+/* Dark mode via the `dark` class on <html> (toggled in the header, remembered). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* Page / dialog background — use `bg-surface` instead of `bg-white`. */
+  --color-surface: #ffffff;
+}
+
+:root {
+  /* JSON tree colours — DevTools light theme (JsonTree.tsx). */
+  --json-key: #881391;
+  --json-string: #c41a16;
+  --json-number: #1c00cf;
+}
+
+/*
+ * Dark theme. The UI is built on the slate scale, so the scale itself is swapped for a dark
+ * one: light backgrounds (slate-50/100/200) become dark, dark text (slate-600…900) becomes
+ * light. A few tinted colours get dark equivalents. Saturated button colours stay as they are.
+ */
+.dark {
+  color-scheme: dark;
+
+  --color-surface: #0b1220;
+  --color-slate-50: #131c2e;
+  --color-slate-100: #1b2537;
+  --color-slate-200: #2c3a50;
+  --color-slate-300: #475569;
+  --color-slate-400: #7c8aa0;
+  --color-slate-500: #94a3b8;
+  --color-slate-600: #a9b6c9;
+  --color-slate-700: #cbd5e1;
+  --color-slate-800: #e2e8f0;
+  --color-slate-900: #f1f5f9;
+
+  --color-red-50: #3a1218;
+  --color-red-200: #7f1d1d;
+  --color-red-700: #fca5a5;
+  --color-blue-100: #1e3a5f;
+  --color-blue-200: #1e40af;
+  --color-blue-700: #93c5fd;
+  --color-amber-700: #fbbf24;
+
+  /* JSON tree colours — DevTools dark theme. */
+  --json-key: #c58af9;
+  --json-string: #f28b54;
+  --json-number: #9980ff;
+}
+
 html,
 body,
 #root {
@@ -7,6 +56,6 @@ body,
 }
 
 body {
-  @apply bg-white text-slate-800 antialiased;
+  @apply bg-surface text-slate-800 antialiased;
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }

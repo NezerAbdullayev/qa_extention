@@ -22,7 +22,7 @@ import type {
   RecorderState,
   RequestRecord,
 } from '../shared/types';
-import { toRow } from '../shared/types';
+import { PANEL_PORT, toRow } from '../shared/types';
 
 const CDP_VERSION = '1.3';
 const RECORDED_TYPES = new Set(['XHR', 'Fetch']);
@@ -393,6 +393,32 @@ chrome.debugger.onDetach.addListener((source) => {
 });
 
 // ---------------------------------------------------------------- messages from the side panel
+
+// ---------------------------------------------------------------- panel closed → clear (D15)
+
+/**
+ * Every open panel (side panel or separate window) holds a port. When the last one closes —
+ * however it was closed, incl. Chrome's own "Close side panel" — the recording stops and the
+ * unsaved "Qeyd" list is deleted. Saved APIs stay. A short grace period keeps the data when
+ * the panel only moves (⧉ pop out / ⇥ dock / reload): the new panel connects within it.
+ */
+const CLOSE_GRACE_MS = 3000;
+let openPanels = 0;
+let clearTimer: ReturnType<typeof setTimeout> | undefined;
+
+chrome.runtime.onConnect.addListener((port) => {
+  if (port.name !== PANEL_PORT) return;
+  openPanels++;
+  clearTimeout(clearTimer);
+  port.onDisconnect.addListener(() => {
+    openPanels = Math.max(0, openPanels - 1);
+    if (openPanels > 0) return;
+    clearTimeout(clearTimer);
+    clearTimer = setTimeout(() => {
+      if (openPanels === 0) void ready.then(closeAndClear);
+    }, CLOSE_GRACE_MS);
+  });
+});
 
 chrome.runtime.onMessage.addListener((msg: PanelMessage, _sender, sendResponse) => {
   const handle = async (): Promise<unknown> => {

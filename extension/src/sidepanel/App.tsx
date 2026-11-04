@@ -11,6 +11,7 @@ import { useRecorder } from './useRecorder';
 import { NameDialog } from './NameDialog';
 import { SavedList } from './SavedList';
 import { useSaved } from './useSaved';
+import { usePanelPresence } from './usePanelPresence';
 import { useTheme } from './useTheme';
 import { useSplitLayout } from './useSplitLayout';
 import { isWindowMode, useWindowMode } from './useWindowMode';
@@ -29,6 +30,7 @@ export function App() {
   const { popOut, dock } = useWindowMode();
   const saved = useSaved();
   const { theme, toggle: toggleTheme } = useTheme();
+  usePanelPresence(); // panel closed in any way → unsaved recording is cleared (D15)
 
   // F-003: tabs, save dialog, toast notification.
   const [tab, setTab] = useState<'record' | 'saved'>('record');

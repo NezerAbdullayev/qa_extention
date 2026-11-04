@@ -107,6 +107,9 @@ export type PanelMessage =
   | { type: 'DELETE_SAVED'; id: string }
   | { type: 'DELETE_ALL_SAVED' };
 
+/** Port the panel keeps open while it is visible; disconnect = panel closed (D15). */
+export const PANEL_PORT = 'api-lens-panel';
+
 /** Messages: background → side panel (broadcast) */
 export type BackgroundMessage = { type: 'STATE'; state: RecorderState } | { type: 'SAVED_CHANGED' };
 

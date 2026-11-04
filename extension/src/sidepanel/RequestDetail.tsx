@@ -104,7 +104,7 @@ function DetailContent({ d }: { d: RequestRecord }) {
           needed for HAR export (F-002). */}
 
       {payload && (
-        <Section title={t('detail_payload')}>
+        <Section title={t('detail_payload')} copyText={payloadText(payload)}>
           {payload.query && (
             <>
               {payload.body && <SubTitle>{t('detail_payload_query')}</SubTitle>}
@@ -120,10 +120,91 @@ function DetailContent({ d }: { d: RequestRecord }) {
         </Section>
       )}
 
-      <Section title={t('detail_response')}>
+      <Section title={t('detail_response')} copyText={responseText(d) ?? undefined}>
         <ResponseBody d={d} />
       </Section>
     </div>
+  );
+}
+
+/** Response body as text (base64 text decoded); null when there is nothing to show / copy. */
+function responseText(d: RequestRecord): string | null {
+  if (d.failed !== undefined || d.responseError !== undefined || d.responseBody === undefined)
+    return null;
+  const text = d.responseBase64 ? decodeBase64Text(d.responseBody, d.mimeType) : d.responseBody;
+  return text ? text : null;
+}
+
+/** What 📋 copies for Payload: the body, or the query parameters when there is no body. */
+function payloadText(p: NonNullable<ReturnType<typeof buildPayload>>): string {
+  return p.body ? p.body.text : JSON.stringify(p.query, null, 2);
+}
+
+/** JSON is copied pretty-printed (2 spaces) — readable when pasted; other text as-is. */
+function pretty(text: string): string {
+  try {
+    return JSON.stringify(JSON.parse(text), null, 2);
+  } catch {
+    return text;
+  }
+}
+
+async function copyToClipboard(text: string): Promise<boolean> {
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch {
+    // Fallback when the Clipboard API is not allowed (e.g. panel not focused).
+    const area = document.createElement('textarea');
+    area.value = text;
+    area.style.position = 'fixed';
+    area.style.opacity = '0';
+    document.body.appendChild(area);
+    area.select();
+    const ok = document.execCommand('copy');
+    area.remove();
+    return ok;
+  }
+}
+
+/** Copy icon button; shows ✓ for a moment after copying. */
+function CopyButton({ text }: { text: string }) {
+  const [copied, setCopied] = useState(false);
+  useEffect(() => {
+    if (!copied) return;
+    const id = setTimeout(() => setCopied(false), 1500);
+    return () => clearTimeout(id);
+  }, [copied]);
+
+  const label = copied ? t('detail_copied') : t('detail_copy');
+  return (
+    <button
+      title={label}
+      aria-label={label}
+      onClick={async (e) => {
+        e.stopPropagation();
+        if (await copyToClipboard(pretty(text))) setCopied(true);
+      }}
+      className={`flex h-5 items-center gap-1 rounded px-1 font-sans text-[11px] normal-case tracking-normal ${copied ? 'text-green-600 dark:text-green-400' : 'text-slate-400 hover:bg-slate-200 hover:text-slate-700'}`}
+    >
+      {copied ? (
+        <>✓ {t('detail_copied')}</>
+      ) : (
+        <svg
+          viewBox="0 0 24 24"
+          className="h-3.5 w-3.5"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <rect x="9" y="9" width="13" height="13" rx="2" />
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+        </svg>
+      )}
+    </button>
   );
 }
 
@@ -149,11 +230,21 @@ function ResponseBody({ d }: { d: RequestRecord }) {
   );
 }
 
-function Section({ title, children }: { title: string; children: ReactNode }) {
+function Section({
+  title,
+  copyText,
+  children,
+}: {
+  title: string;
+  /** When set, a copy button is shown next to the title. */
+  copyText?: string;
+  children: ReactNode;
+}) {
   return (
     <section>
-      <h3 className="mb-1 font-sans text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+      <h3 className="mb-1 flex items-center gap-1 font-sans text-[11px] font-semibold uppercase tracking-wide text-slate-500">
         {title}
+        {copyText !== undefined && <CopyButton text={copyText} />}
       </h3>
       {children}
     </section>

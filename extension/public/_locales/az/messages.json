@@ -103,6 +103,12 @@
   "detail_response": {
     "message": "Response"
   },
+  "detail_copy": {
+    "message": "Kopyala"
+  },
+  "detail_copied": {
+    "message": "Kopyalandı"
+  },
   "detail_empty": {
     "message": "(boş)"
   },

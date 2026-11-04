@@ -4,6 +4,20 @@
 
 ---
 
+## 2026-11-04
+**Görülən işlər**
+- ADR-003: React + TypeScript + Vite + Tailwind CSS
+- `extension/` layihə skeleti: manifest (MV3), side panel (kiçilt / bağla), background recorder (Start / Stop, yalnız XHR / Fetch, canlı siyahı), i18n (`_locales/az`), DevTools "Name" qaydası
+
+**Növbəti addım**
+- F-001: IndexedDB, headers, payload, response body
+- F-008: açılan qutu
+
+**Bloklar**
+- —
+
+---
+
 ## 2026-11-03
 **Görülən işlər**
 - Layihə strukturu qurulub (docs, PR şablonu, CONTRIBUTING, .gitignore)

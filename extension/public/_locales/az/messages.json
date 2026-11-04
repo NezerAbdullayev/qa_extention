@@ -1,0 +1,29 @@
+{
+  "ext_name": { "message": "QA Debugger" },
+  "ext_description": { "message": "API request-lərini yazır, yadda saxlayır və müqayisə edir — Inspect açmadan." },
+  "ext_action_title": { "message": "QA Debugger panelini aç" },
+
+  "panel_title": { "message": "QA Debugger" },
+  "panel_collapse": { "message": "Kiçilt" },
+  "panel_expand": { "message": "Böyüt" },
+  "panel_close": { "message": "Bağla" },
+
+  "rec_start": { "message": "Start" },
+  "rec_stop": { "message": "Stop" },
+  "rec_status_recording": { "message": "REC" },
+  "rec_status_idle": { "message": "Dayanıb" },
+  "rec_count": {
+    "message": "$COUNT$ request",
+    "placeholders": { "count": { "content": "$1" } }
+  },
+  "rec_error_attach": {
+    "message": "Tab-a qoşulmaq alınmadı: $REASON$",
+    "placeholders": { "reason": { "content": "$1" } }
+  },
+
+  "list_empty_idle": { "message": "Qeydi başlatmaq üçün Start basın." },
+  "list_empty_recording": { "message": "Request gözlənilir…" },
+  "list_pending": { "message": "(pending)" },
+  "list_failed": { "message": "(failed)" },
+  "list_save": { "message": "Yadda saxla" }
+}

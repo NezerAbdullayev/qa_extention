@@ -15,7 +15,7 @@ Chrome extension (Manifest V3). `chrome.debugger` API vasitəsilə tab-da gedən
 
 ## Kod
 
-Extension kodu `extension/` qovluğunda olacaq (biznes hissəsi təsdiqlənəndən sonra).
+Extension kodu `extension/` qovluğundadır — React + TypeScript + Vite + Tailwind CSS. Quraşdırma və işə salma: [extension/README.md](extension/README.md).
 
 ## Töhfə qaydaları
 

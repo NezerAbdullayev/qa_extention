@@ -34,6 +34,7 @@ export function SavedList({
   const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
   // F-004: two selected APIs (A = selected first, B = second) → comparison screen.
   const [comparing, setComparing] = useState<[string, string] | null>(null);
+  const [confirmDeleteAll, setConfirmDeleteAll] = useState(false);
   const closeCompare = useCallback(() => setComparing(null), []);
 
   // Drop selection / open boxes of items that no longer exist.
@@ -109,7 +110,41 @@ export function SavedList({
   return (
     <div className="flex h-full flex-col">
       <div className="flex items-center gap-2 border-b border-slate-200 px-3 py-1.5 text-xs">
-        <div className="ml-auto flex gap-1">
+        {confirmDeleteAll ? (
+          <span className="flex items-center gap-1">
+            <span className="text-red-600 dark:text-red-400">
+              {t('saved_delete_all_confirm', String(items.length))}
+            </span>
+            <button
+              onClick={async () => {
+                await send({ type: 'DELETE_ALL_SAVED' });
+                setConfirmDeleteAll(false);
+                onToast(t('saved_deleted_all'));
+              }}
+              className="rounded bg-red-600 px-1.5 py-0.5 text-white hover:bg-red-500"
+            >
+              {t('common_yes')}
+            </button>
+            <button
+              onClick={() => setConfirmDeleteAll(false)}
+              className="rounded px-1.5 py-0.5 text-slate-600 hover:bg-slate-200"
+            >
+              {t('common_no')}
+            </button>
+          </span>
+        ) : (
+          <button
+            onClick={() => setConfirmDeleteAll(true)}
+            disabled={items.length === 0}
+            className="rounded px-2 py-1 text-red-600 hover:bg-red-50 disabled:opacity-40 dark:text-red-400"
+          >
+            🗑 {t('saved_delete_all')}
+          </button>
+        )}
+        <div className="ml-auto flex items-center gap-2">
+          {selected.size > 0 && (
+            <span className="text-slate-500">{t('list_checked', String(selected.size))}</span>
+          )}
           <button
             onClick={() => setComparing([...selected] as [string, string])}
             disabled={selected.size !== 2}

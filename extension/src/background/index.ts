@@ -14,7 +14,7 @@
  */
 import { db } from './db';
 import { buildHar } from '../shared/har';
-import { deleteSaved, getSaved, listSaved, renameSaved, saveApi } from './saved';
+import { deleteAllSaved, deleteSaved, getSaved, listSaved, renameSaved, saveApi } from './saved';
 import type {
   BackgroundMessage,
   Headers,
@@ -430,6 +430,10 @@ chrome.runtime.onMessage.addListener((msg: PanelMessage, _sender, sendResponse) 
       }
       case 'DELETE_SAVED':
         await deleteSaved(msg.id);
+        notifySavedChanged();
+        return null;
+      case 'DELETE_ALL_SAVED':
+        await deleteAllSaved();
         notifySavedChanged();
         return null;
     }

@@ -66,4 +66,6 @@ export const savedDb = {
       all.sort((a, b) => b.savedAt - a.savedAt),
     ),
   delete: (id: string) => run('savedApis', 'readwrite', (s) => s.delete(id)).then(() => undefined),
+  /** Only on the user's explicit "Hamısını sil" (confirmed). */
+  clear: () => run('savedApis', 'readwrite', (s) => s.clear()).then(() => undefined),
 };

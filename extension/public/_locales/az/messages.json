@@ -216,6 +216,20 @@
       }
     }
   },
+  "saved_delete_all": {
+    "message": "Hamısını sil"
+  },
+  "saved_delete_all_confirm": {
+    "message": "Bütün saxlanmışlar ($COUNT$) silinsin?",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "saved_deleted_all": {
+    "message": "Bütün saxlanmış API-lər silindi"
+  },
   "theme_light": {
     "message": "İşıqlı rejimə keç"
   },

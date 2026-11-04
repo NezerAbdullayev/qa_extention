@@ -102,7 +102,8 @@ export type PanelMessage =
   | { type: 'LIST_SAVED' }
   | { type: 'GET_SAVED'; id: string }
   | { type: 'RENAME_SAVED'; id: string; name: string }
-  | { type: 'DELETE_SAVED'; id: string };
+  | { type: 'DELETE_SAVED'; id: string }
+  | { type: 'DELETE_ALL_SAVED' };
 
 /** Messages: background → side panel (broadcast) */
 export type BackgroundMessage = { type: 'STATE'; state: RecorderState } | { type: 'SAVED_CHANGED' };

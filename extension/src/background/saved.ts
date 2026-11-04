@@ -63,3 +63,4 @@ export async function listSaved(): Promise<SavedApiSummary[]> {
 
 export const getSaved = (id: string) => savedDb.get(id);
 export const deleteSaved = (id: string) => savedDb.delete(id);
+export const deleteAllSaved = () => savedDb.clear();

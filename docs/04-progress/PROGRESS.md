@@ -21,6 +21,7 @@
 - Dark mode (default), ☀️ / 🌙 keçid (D9)
 - Düzəliş: bütün sətir kliklənir — bölünmüş görünüşdə API-lər arası keçid (D10)
 - F-004: müqayisə — 3 rejim, JSON qarşı-qarşıya (sinxron scroll), siyahı hesabatı, fərqli API və JSON olmayan response xəbərdarlığı, ignore siyahısı, massivləri id-yə görə uyğunlaşdırma
+- F-004: path parametrləri (`objects/{id}`) "fərqli API" sayılmır — ℹ️ fərqli parametr göstərilir (D11)
 
 **Növbəti addım**
 - F-002: HAR export

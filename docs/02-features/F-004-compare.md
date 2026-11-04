@@ -70,6 +70,7 @@ Dəyərlər
 - [x] Saxlanmış API-lərdən ikisi seçilir (A və B)
 - [x] **Fərqli API-lər** də müqayisə oluna bilər (məs. `passports` ↔ `tasks`). Bu halda hesabatın başında xəbərdarlıq: "⚠️ Fərqli API-lər müqayisə olunur: `GET /api/v1/passports` ↔ `GET /api/tasks`" (Sessiya #2, Q7)
 - [x] "Fərqli API" = method və ya path (query-siz) fərqlidir
+- [x] Path parametrləri keçilir: `objects/2908125632-71002` ↔ `objects/1500412371-00015` **eyni API** sayılır (xəbərdarlıq yox), əvəzinə "ℹ️ Eyni API, fərqli path parametri: … ↔ …" göstərilir
 - [x] Yalnız **response body** müqayisə olunur (payload, headers, status, müddət — yox)
 - [x] 3 rejim: key-lərə görə · dəyərlərə görə · key + dəyər
 - [x] İç-içə (nested) obyektlər tam yoxlanılır; yol nöqtə ilə göstərilir (`data.items[0].price`)
@@ -86,6 +87,7 @@ Dəyərlər
 - Görünüş: **Qarşı-qarşıya** (bir scroll konteyneri → sinxron scroll) və **Siyahı** (Key-lər / Dəyərlər)
 - ∅ "dəyər gəlmir" = B-də `null`, `""`, `[]`, `{}` (A-da dolu); key ümumiyyətlə yoxdursa → ➖ (Sessiya #2, Q8 — variant A)
 - Massiv elementləri default olaraq indeksə görə; "id-yə görə" seçimi yalnız bütün elementlərdə unikal `id` olduqda işləyir (yol: `items[id=5]`)
+- "Eyni API" qaydası (`matchApis`): query atılır; path hissə-hissə tutuşdurulur — eyni → OK; fərqli, amma hər ikisi parametr kimi (rəqəm / rəqəm-tire `2908125632-71002` / UUID / uzun hex / ≥20 simvollu token) → eyni API, fərqli parametr; fərqli söz (`objects` ↔ `passports`), fərqli method və ya hissə sayı → fərqli API. Response-dakı parametr dəyərləri (məs. `taxpayerId`) üçün Ignore siyahısı istifadə olunur
 - Ignore: key adı (istənilən dərinlikdə) və ya tam yol, vergüllə ayrılır; rejim, ignore və id seçimi `chrome.storage.local` → `compareOptions`-da yadda qalır
 - Müqayisə yalnız lokal, heç yerə göndərilmir
 

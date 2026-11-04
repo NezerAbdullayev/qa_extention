@@ -1,6 +1,6 @@
 # F-008 — Request siyahısı (açılan qutular)
 
-**Status:** 📝 Spec · **Mərhələ:** MVP · **Tələblər:** FR-13, FR-14
+**Status:** 🔵 Hazırlanır · **Mərhələ:** MVP · **Tələblər:** FR-13, FR-14
 
 ## Niyə
 Start və Stop arasında gedən bütün API request-lərini Inspect açmadan, extension-un öz ekranında rahat görmək.

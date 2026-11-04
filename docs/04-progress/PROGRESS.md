@@ -8,10 +8,12 @@
 **Görülən işlər**
 - ADR-003: React + TypeScript + Vite + Tailwind CSS
 - `extension/` layihə skeleti: manifest (MV3), side panel (kiçilt / bağla), background recorder (Start / Stop, yalnız XHR / Fetch, canlı siyahı), i18n (`_locales/az`), DevTools "Name" qaydası
+- F-001: request / response headers (ExtraInfo), payload, response body (≤ 5 MB), IndexedDB + service worker bərpası
+- F-008: açılan qutu — URL, method, status, Request / Response headers, Payload, Response (JSON, max 500px)
 
 **Növbəti addım**
-- F-001: IndexedDB, headers, payload, response body
-- F-008: açılan qutu
+- F-003: 💾 yadda saxlama (ad popup-u, 6 rəqəmli avtomatik ad)
+- F-001: console error-lar, redirect zənciri
 
 **Bloklar**
 - —

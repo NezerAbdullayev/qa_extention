@@ -1,6 +1,6 @@
 # F-001 — Network Recorder
 
-**Status:** 📝 Spec · **Mərhələ:** MVP · **Tələblər:** FR-01, FR-02, FR-03, FR-04
+**Status:** 🔵 Hazırlanır · **Mərhələ:** MVP · **Tələblər:** FR-01, FR-02, FR-03, FR-04
 
 ## Niyə
 QA və developer Inspect açmadan problemin baş verdiyi andakı bütün API trafikini yazsın.

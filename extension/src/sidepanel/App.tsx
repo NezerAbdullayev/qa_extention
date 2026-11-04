@@ -1,7 +1,8 @@
-import type { ReactNode } from 'react';
+import { useCallback, useEffect, useState, type ReactNode } from 'react';
 import { t } from '../shared/i18n';
 import { requestName } from '../shared/requestName';
 import type { RequestRow } from '../shared/types';
+import { RequestDetail } from './RequestDetail';
 import { usePanelCollapsed } from './usePanelCollapsed';
 import { useRecorder } from './useRecorder';
 
@@ -9,6 +10,21 @@ export function App() {
   const { state, start, stop } = useRecorder();
   const { collapsed, toggle } = usePanelCollapsed();
   const count = state.requests.length;
+
+  // Several boxes can be open at once (Session #2, Q4).
+  const [expanded, setExpanded] = useState<Set<string>>(new Set());
+  const toggleRow = useCallback((id: string) => {
+    setExpanded((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }, []);
+  // New recording (list cleared) → forget open boxes.
+  useEffect(() => {
+    if (count === 0) setExpanded(new Set());
+  }, [count]);
 
   return (
     <div className="flex h-full flex-col text-sm">
@@ -21,10 +37,7 @@ export function App() {
         )}
         <div className="ml-auto flex items-center gap-1">
           {collapsed && <RecButton recording={state.recording} onStart={start} onStop={stop} />}
-          <IconButton
-            label={collapsed ? t('panel_expand') : t('panel_collapse')}
-            onClick={toggle}
-          >
+          <IconButton label={collapsed ? t('panel_expand') : t('panel_collapse')} onClick={toggle}>
             {collapsed ? '▢' : '—'}
           </IconButton>
           <IconButton label={t('panel_close')} onClick={() => window.close()}>
@@ -56,7 +69,12 @@ export function App() {
             ) : (
               <ul className="divide-y divide-slate-100">
                 {state.requests.map((r) => (
-                  <RequestListRow key={r.id} row={r} />
+                  <RequestListRow
+                    key={r.id}
+                    row={r}
+                    open={expanded.has(r.id)}
+                    onToggle={() => toggleRow(r.id)}
+                  />
                 ))}
               </ul>
             )}
@@ -113,11 +131,12 @@ function IconButton(props: { label: string; onClick: () => void; children: React
 }
 
 /**
- * Collapsed row: name (DevTools "Name") · method · status · duration · save.
- * TODO (F-008): expandable box (URL, method, status, headers, payload, response; max 500px).
+ * Row: name (DevTools "Name") · method · status · duration · save.
+ * Click → expands the detail box below (F-008); click again → collapses.
  * TODO (F-003): save button opens the name dialog.
  */
-function RequestListRow({ row }: { row: RequestRow }) {
+function RequestListRow(props: { row: RequestRow; open: boolean; onToggle: () => void }) {
+  const { row, open, onToggle } = props;
   const isError = row.failed !== undefined || (row.status !== undefined && row.status >= 400);
   const statusText =
     row.failed !== undefined
@@ -129,26 +148,35 @@ function RequestListRow({ row }: { row: RequestRow }) {
         : t('list_pending');
 
   return (
-    <li className="flex items-center gap-2 px-3 py-1.5 hover:bg-slate-50" title={row.url}>
-      <span className="text-slate-400">▸</span>
-      <span className="min-w-0 flex-1 truncate font-mono text-xs">{requestName(row.url)}</span>
-      <span className="w-12 shrink-0 text-xs text-slate-500">{row.method}</span>
-      <span
-        className={`w-16 shrink-0 text-xs ${isError ? 'font-semibold text-red-600' : row.status && row.status >= 300 ? 'text-slate-400' : 'text-slate-700'}`}
-      >
-        {statusText}
-      </span>
-      <span className="w-14 shrink-0 text-right text-xs text-slate-500">
-        {row.durationMs !== undefined ? `${row.durationMs} ms` : ''}
-      </span>
-      <button
-        title={t('list_save')}
-        aria-label={t('list_save')}
-        disabled
-        className="shrink-0 rounded px-1 opacity-40"
-      >
-        💾
-      </button>
+    <li className={open ? 'bg-slate-50/60' : ''}>
+      <div className="flex items-center gap-2 px-3 py-1.5 hover:bg-slate-50" title={row.url}>
+        <button
+          onClick={onToggle}
+          aria-expanded={open}
+          className="flex min-w-0 flex-1 items-center gap-2 text-left"
+        >
+          <span className="text-slate-400">{open ? '▾' : '▸'}</span>
+          <span className="min-w-0 flex-1 truncate font-mono text-xs">{requestName(row.url)}</span>
+        </button>
+        <span className="w-12 shrink-0 text-xs text-slate-500">{row.method}</span>
+        <span
+          className={`w-16 shrink-0 text-xs ${isError ? 'font-semibold text-red-600' : row.status && row.status >= 300 ? 'text-slate-400' : 'text-slate-700'}`}
+        >
+          {statusText}
+        </span>
+        <span className="w-14 shrink-0 text-right text-xs text-slate-500">
+          {row.durationMs !== undefined ? `${row.durationMs} ms` : ''}
+        </span>
+        <button
+          title={t('list_save')}
+          aria-label={t('list_save')}
+          disabled
+          className="shrink-0 rounded px-1 opacity-40"
+        >
+          💾
+        </button>
+      </div>
+      {open && <RequestDetail row={row} />}
     </li>
   );
 }

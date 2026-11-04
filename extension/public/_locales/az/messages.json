@@ -25,5 +25,24 @@
   "list_empty_recording": { "message": "Request gözlənilir…" },
   "list_pending": { "message": "(pending)" },
   "list_failed": { "message": "(failed)" },
-  "list_save": { "message": "Yadda saxla" }
+  "list_save": { "message": "Yadda saxla" },
+
+  "detail_loading": { "message": "Yüklənir…" },
+  "detail_request_headers": { "message": "Request headers" },
+  "detail_response_headers": { "message": "Response headers" },
+  "detail_payload": { "message": "Payload" },
+  "detail_payload_query": { "message": "Query parametrləri" },
+  "detail_payload_body": { "message": "Body" },
+  "detail_response": { "message": "Response" },
+  "detail_empty": { "message": "(boş)" },
+  "detail_body_failed": { "message": "Request uğursuz oldu — response yoxdur." },
+  "detail_body_unavailable": {
+    "message": "Response body oxunmadı: $REASON$",
+    "placeholders": { "reason": { "content": "$1" } }
+  },
+  "detail_body_binary": {
+    "message": "Binary response ($MIME$) — göstərilmir.",
+    "placeholders": { "mime": { "content": "$1" } }
+  },
+  "detail_body_truncated": { "message": "⚠️ Response 5 MB-dan böyükdür — kəsilib." }
 }

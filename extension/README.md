@@ -50,9 +50,10 @@ extension/
 - ✅ Side panel: başlıq, — Kiçilt / ▢ Böyüt (yadda qalır), ✕ Bağla
 - ✅ Start / Stop → `chrome.debugger` attach / detach
 - ✅ Yalnız XHR / Fetch, canlı siyahı: ad · method · status · müddət
-- ⬜ Açılan qutu (headers, payload, response) — F-008
+- ✅ Açılan qutu: URL · method · status · Request headers · Response headers · Payload · Response (JSON, max 500px, bir neçəsi eyni anda açıq) — F-008
 - ⬜ 💾 Yadda saxla — F-003
 - ⬜ Müqayisə — F-004
 - ⬜ HAR export — F-002
 - ⬜ Masking — F-005
-- ⬜ IndexedDB-yə yazma (service worker yatanda data itməsin) — F-001
+- ✅ Headers (ExtraInfo ilə, Cookie / Set-Cookie daxil), payload, response body (≤ 5 MB), IndexedDB-yə yazma və service worker yenidən başlayanda bərpa — F-001
+- ⬜ Console error-lar, redirect zənciri — F-001

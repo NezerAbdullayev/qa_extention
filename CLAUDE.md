@@ -48,3 +48,11 @@ fix: fixed the bug that was causing the har export to fail  ← 7 sözdən çox,
 1. `git status` və `git diff` ilə dəyişikliklərə bax.
 2. Lazım olsa `docs/04-progress/PROGRESS.md` və `CHANGELOG.md`-ni yenilə.
 3. Bir commit = bir məntiqi dəyişiklik. Fərqli işləri ayrı commit-lərə böl.
+
+## Versiya — hər dəyişiklikdə +1
+- Versiya `extension/public/manifest.json` və `extension/package.json`-da **eyni** saxlanılır (`chrome://extensions`-da görünən budur).
+- Başlanğıc: **2.4.0** (2026-11-04).
+- Extension-a toxunan hər dəyişiklik commit-i (`feat`, `fix`, `perf`, `refactor`, `style`, `build`) **son rəqəmi +1** artırır: 2.4.0 → 2.4.1 → 2.4.2 …
+- Versiya artımı həmin dəyişikliyin öz commit-inə daxil edilir (ayrıca commit yox).
+- Yalnız sənəd (`docs`) və ya test commit-ləri versiyanı dəyişmir.
+- `CHANGELOG.md`-də bölmə başlığı versiya ilə yazılır: `## [2.4.1] — YYYY-MM-DD`.

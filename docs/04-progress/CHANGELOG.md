@@ -2,7 +2,7 @@
 
 Format: [Keep a Changelog](https://keepachangelog.com/) · Versiya: [SemVer](https://semver.org/)
 
-## [Unreleased]
+## [2.4.0] — 2026-11-04
 ### Added
 - Layihə strukturu və sənədləşmə
 - Extension skeleti: React + TypeScript + Vite + Tailwind, side panel, Start / Stop recorder (XHR / Fetch)

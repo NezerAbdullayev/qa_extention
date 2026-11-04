@@ -55,7 +55,7 @@ extension/
 - ✅ Yalnız XHR / Fetch, canlı siyahı: ad · method · status · müddət
 - ✅ Açılan qutu: URL · method · status · Payload · Response (headers göstərilmir) (JSON, max 300px, bir neçəsi eyni anda açıq) — F-008
 - ✅ JSON görünüşü DevTools Preview kimi açılan ağacdır (`JsonTree.tsx`)
-- ✅ 💾 Yadda saxla: ad popup-u (boş → 6 rəqəmli ad, təkrar ad qadağan), **Qeyd / Saxlanmışlar** tab-ları, adını dəyiş, sil, JSON export (mask-lı) / import — F-003
+- ✅ 💾 Yadda saxla: ad popup-u (boş → 6 rəqəmli ad, təkrar ad qadağan), **Qeyd / Saxlanmışlar** tab-ları, adını dəyiş, sil — F-003
 - ✅ Sabit extension ID (`manifest.json` → `key`): `aihlikhdadfldanjagdcalplpjklijhd`
 - ✅ Müqayisə — F-004 (Saxlanmışlar → 2 API seç → ⇄ Müqayisə et)
 - ✅ HAR export — F-002 (Stop → ⬇ HAR)

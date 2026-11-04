@@ -180,43 +180,6 @@
   "saved_select": {
     "message": "Seç"
   },
-  "saved_select_all": {
-    "message": "Hamısını seç"
-  },
-  "saved_export": {
-    "message": "Export"
-  },
-  "saved_export_selected": {
-    "message": "Seçilmişləri JSON faylı kimi yüklə (həssas sahələr mask olunur)"
-  },
-  "saved_export_all": {
-    "message": "Hamısını JSON faylı kimi yüklə (həssas sahələr mask olunur)"
-  },
-  "saved_exported": {
-    "message": "$COUNT$ API export olundu",
-    "placeholders": {
-      "count": {
-        "content": "$1"
-      }
-    }
-  },
-  "saved_import": {
-    "message": "Import"
-  },
-  "saved_imported": {
-    "message": "$IMPORTED$ API import olundu, $SKIPPED$ ötürüldü",
-    "placeholders": {
-      "imported": {
-        "content": "$1"
-      },
-      "skipped": {
-        "content": "$2"
-      }
-    }
-  },
-  "saved_import_invalid": {
-    "message": "Fayl API Lens export faylı deyil."
-  },
   "saved_rename": {
     "message": "Adını dəyiş"
   },

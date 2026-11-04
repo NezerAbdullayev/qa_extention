@@ -84,14 +84,6 @@ export function toSummary(s: SavedApi): SavedApiSummary {
   return { id: s.id, name: s.name, savedAt: s.savedAt, url, method, status, failed };
 }
 
-/** JSON export file format (F-003, Session #3 Q5). Sensitive fields are masked. */
-export interface SavedApiExport {
-  format: 'api-lens/saved-apis';
-  version: 1;
-  exportedAt: string;
-  items: SavedApi[];
-}
-
 export type SaveResult =
   { ok: true; saved: SavedApiSummary } | { ok: false; error: 'duplicate' | 'not_found' };
 
@@ -103,15 +95,14 @@ export type PanelMessage =
   | { type: 'STOP' }
   /** Open the panel in a separate window (or focus it if already open). */
   | { type: 'POP_OUT' }
+  /** F-002: HAR of the last recording. */
+  | { type: 'EXPORT_HAR' }
   // ---- F-003 saved APIs
   | { type: 'SAVE_API'; requestId: string; name: string }
   | { type: 'LIST_SAVED' }
-  | { type: 'EXPORT_HAR' }
   | { type: 'GET_SAVED'; id: string }
   | { type: 'RENAME_SAVED'; id: string; name: string }
-  | { type: 'DELETE_SAVED'; id: string }
-  | { type: 'EXPORT_SAVED'; ids: string[] }
-  | { type: 'IMPORT_SAVED'; items: SavedApi[] };
+  | { type: 'DELETE_SAVED'; id: string };
 
 /** Messages: background → side panel (broadcast) */
 export type BackgroundMessage = { type: 'STATE'; state: RecorderState } | { type: 'SAVED_CHANGED' };

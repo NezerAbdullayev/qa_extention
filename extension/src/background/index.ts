@@ -14,15 +14,7 @@
  */
 import { db } from './db';
 import { buildHar } from '../shared/har';
-import {
-  deleteSaved,
-  exportSaved,
-  getSaved,
-  importSaved,
-  listSaved,
-  renameSaved,
-  saveApi,
-} from './saved';
+import { deleteSaved, getSaved, listSaved, renameSaved, saveApi } from './saved';
 import type {
   BackgroundMessage,
   Headers,
@@ -440,13 +432,6 @@ chrome.runtime.onMessage.addListener((msg: PanelMessage, _sender, sendResponse) 
         await deleteSaved(msg.id);
         notifySavedChanged();
         return null;
-      case 'EXPORT_SAVED':
-        return exportSaved(msg.ids);
-      case 'IMPORT_SAVED': {
-        const result = await importSaved(msg.items);
-        if (result.imported > 0) notifySavedChanged();
-        return result;
-      }
     }
   };
   handle().then(sendResponse, (err) => {

@@ -1,9 +1,8 @@
-import { useCallback, useEffect, useRef, useState, type ChangeEvent } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { t } from '../shared/i18n';
 import { requestName } from '../shared/requestName';
-import type { PanelMessage, SavedApiExport, SavedApiSummary, SaveResult } from '../shared/types';
+import type { PanelMessage, SavedApiSummary, SaveResult } from '../shared/types';
 import { CompareView } from './CompareView';
-import { download, fileStamp } from './download';
 import { NameDialog } from './NameDialog';
 import { SavedDetail } from './RequestDetail';
 import { useSplitLayout } from './useSplitLayout';
@@ -20,7 +19,7 @@ const dateFmt = new Intl.DateTimeFormat('az', {
 
 /**
  * "Saxlanmışlar" tab (F-003): saved APIs, newest first.
- * Click → details · ✏️ rename · 🗑 delete (confirm) · ☐ select → export · 2 selected → compare (F-004).
+ * Click → details · ✏️ rename · 🗑 delete (confirm) · 2 selected → compare (F-004).
  */
 export function SavedList({
   items,
@@ -33,7 +32,6 @@ export function SavedList({
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
   const [renaming, setRenaming] = useState<SavedApiSummary | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
-  const fileInput = useRef<HTMLInputElement>(null);
   // F-004: two selected APIs (A = selected first, B = second) → comparison screen.
   const [comparing, setComparing] = useState<[string, string] | null>(null);
   const closeCompare = useCallback(() => setComparing(null), []);
@@ -52,31 +50,6 @@ export function SavedList({
     if (next.has(id)) next.delete(id);
     else next.add(id);
     return next;
-  };
-
-  const allSelected = items.length > 0 && selected.size === items.length;
-
-  const exportItems = async () => {
-    const data = await send<SavedApiExport>({ type: 'EXPORT_SAVED', ids: [...selected] });
-    download(`api-lens_saved_${fileStamp()}.json`, JSON.stringify(data, null, 2));
-    onToast(t('saved_exported', String(data.items.length)));
-  };
-
-  const importFile = async (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    e.target.value = ''; // allow re-importing the same file
-    if (!file) return;
-    try {
-      const data = JSON.parse(await file.text()) as Partial<SavedApiExport>;
-      if (data.format !== 'api-lens/saved-apis' || !Array.isArray(data.items)) throw new Error();
-      const r = await send<{ imported: number; skipped: number; invalid: number }>({
-        type: 'IMPORT_SAVED',
-        items: data.items,
-      });
-      onToast(t('saved_imported', [String(r.imported), String(r.skipped + r.invalid)]));
-    } catch {
-      onToast(t('saved_import_invalid'));
-    }
   };
 
   // Wide separate window → DevTools-like split view, same as the "Qeyd" tab (D6).
@@ -136,15 +109,6 @@ export function SavedList({
   return (
     <div className="flex h-full flex-col">
       <div className="flex items-center gap-2 border-b border-slate-200 px-3 py-1.5 text-xs">
-        <label className="flex items-center gap-1.5 text-slate-600">
-          <input
-            type="checkbox"
-            checked={allSelected}
-            disabled={items.length === 0}
-            onChange={() => setSelected(allSelected ? new Set() : new Set(items.map((i) => i.id)))}
-          />
-          {t('saved_select_all')}
-        </label>
         <div className="ml-auto flex gap-1">
           <button
             onClick={() => setComparing([...selected] as [string, string])}
@@ -154,28 +118,6 @@ export function SavedList({
           >
             ⇄ {t('saved_compare')}
           </button>
-          <button
-            onClick={exportItems}
-            disabled={items.length === 0}
-            title={selected.size > 0 ? t('saved_export_selected') : t('saved_export_all')}
-            className="rounded px-2 py-1 text-slate-700 hover:bg-slate-100 disabled:opacity-40"
-          >
-            ⬇ {t('saved_export')}
-            {selected.size > 0 && ` (${selected.size})`}
-          </button>
-          <button
-            onClick={() => fileInput.current?.click()}
-            className="rounded px-2 py-1 text-slate-700 hover:bg-slate-100"
-          >
-            ⬆ {t('saved_import')}
-          </button>
-          <input
-            ref={fileInput}
-            type="file"
-            accept="application/json,.json"
-            className="hidden"
-            onChange={importFile}
-          />
         </div>
       </div>
 

@@ -7,6 +7,12 @@
   "panel_collapse": { "message": "Kiçilt" },
   "panel_expand": { "message": "Böyüt" },
   "panel_close": { "message": "Bağla" },
+  "panel_popout": { "message": "Ayrı pəncərədə aç (başqa monitora daşımaq üçün)" },
+  "panel_dock": { "message": "Side panel-ə qaytar" },
+  "rec_target": {
+    "message": "Yazılır: $HOST$",
+    "placeholders": { "host": { "content": "$1" } }
+  },
 
   "rec_start": { "message": "Start" },
   "rec_stop": { "message": "Stop" },

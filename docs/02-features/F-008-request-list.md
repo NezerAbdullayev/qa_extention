@@ -35,6 +35,20 @@ Tam rejim                                Kompakt rejim
 - Kompakt rejimdə panelin **hündürlüyü** dəyişmir (side panel həmişə tam hündürlükdədir) — kiçiltmə panelin **içindəki məzmunu** yığır.
 - Bağlama: panel səhifəsindən `window.close()` (və ya yeni Chrome-larda `chrome.sidePanel.close()`).
 
+## Ayrı pəncərə rejimi — DevTools "Undock" kimi (test sonrası D5, 2026-11-04)
+**Problem:** side panel saytın enini daraldır → bəzi layihələrdə responsive dizayn pozulur, saytla işləmək çətinləşir.
+**Həll:** panel ayrıca Chrome pəncərəsində açıla bilir — onu ikinci monitora qoyub, saytda noutbukda tam endə işləmək olur.
+
+| Düymə | Harada | Nə edir |
+|---|---|---|
+| **⧉ Ayrı pəncərədə aç** | Side panel başlığında | Eyni UI-ı ayrıca pəncərədə açır, side panel bağlanır. Pəncərə artıq açıqdırsa — sadəcə önə gətirir |
+| **⇥ Side panel-ə qaytar** | Ayrı pəncərənin başlığında | Side panel-i son istifadə olunan brauzer pəncərəsində açır, ayrı pəncərə bağlanır |
+
+- Pəncərənin **yeri və ölçüsü yadda qalır** → növbəti dəfə eyni monitorda, eyni ölçüdə açılır.
+- Ayrı pəncərədə **Start** son istifadə olunan **brauzer pəncərəsinin aktiv tab-ını** yazır (API Lens pəncərəsinin özünü yox).
+- Qeyd zamanı panel hansı saytın yazıldığını göstərir: `Yazılır: site.az — Səhifə başlığı`.
+- Siyahı, açılan qutular, kiçilt / bağla — hər iki rejimdə eyni işləyir; ikisi eyni anda açıq olsa da canlı yenilənir.
+
 ## UI / Axın
 ```
 ┌───────────────────────────────────────────────────────────┐
@@ -132,6 +146,8 @@ QA və developer DevTools → Network-da gördüyü adı burada da eyni görsün
 
 ## Qəbul meyarları
 - [ ] Siyahı side panel-də göstərilir
+- [ ] **⧉** düyməsi ilə panel **ayrı pəncərədə** açılır (ikinci monitor üçün); **⇥** ilə side panel-ə qayıdır; pəncərənin yeri və ölçüsü yadda qalır (D5)
+- [ ] Qeyd zamanı yazılan tab göstərilir: `Yazılır: <host> — <başlıq>` (D5)
 - [ ] Side panel **✕ düyməsi** ilə bağlanır; qeyd davam edirsə dayanmır
 - [ ] **— Kiçilt / ▢ Böyüt** düyməsi: kompakt rejim (yalnız REC statusu, say, Start/Stop) ↔ tam rejim
 - [ ] Panelin eni **əl ilə dartılaraq** dəyişdirilir; en və rejim yadda qalır

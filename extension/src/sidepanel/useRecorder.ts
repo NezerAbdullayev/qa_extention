@@ -22,7 +22,10 @@ export function useRecorder() {
   }, []);
 
   const start = useCallback(async () => {
-    const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+    // Active tab of the last focused *normal* browser window — so Start works the same from
+    // the side panel and from the separate API Lens window (which is a "popup" window).
+    const win = await chrome.windows.getLastFocused({ windowTypes: ['normal'] });
+    const [tab] = await chrome.tabs.query({ active: true, windowId: win.id });
     if (tab?.id !== undefined) setState(await send({ type: 'START', tabId: tab.id }));
   }, []);
 

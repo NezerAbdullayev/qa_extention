@@ -45,6 +45,8 @@ export interface RecorderState {
   tabId: number | null;
   requests: RequestRow[];
   error?: string;
+  /** The tab being recorded — shown in the panel (important in separate-window mode). */
+  target?: { title: string; url: string };
 }
 
 /** Messages: side panel → background */
@@ -52,7 +54,9 @@ export type PanelMessage =
   | { type: 'GET_STATE' }
   | { type: 'GET_DETAIL'; id: string }
   | { type: 'START'; tabId: number }
-  | { type: 'STOP' };
+  | { type: 'STOP' }
+  /** Open the panel in a separate window (or focus it if already open). */
+  | { type: 'POP_OUT' };
 
 /** Messages: background → side panel (broadcast) */
 export type BackgroundMessage = { type: 'STATE'; state: RecorderState };

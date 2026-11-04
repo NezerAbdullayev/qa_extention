@@ -31,6 +31,7 @@ const SESSION_KEY = 'recorder';
 let recording = false;
 let tabId: number | null = null;
 let lastError: string | undefined;
+let target: RecorderState['target'];
 let seq = 0;
 const records = new Map<string, RequestRecord>();
 /** ExtraInfo events can arrive before the main event — keep their headers until then. */
@@ -48,6 +49,7 @@ function snapshot(): RecorderState {
     recording,
     tabId,
     error: lastError,
+    target,
     requests: [...records.values()].map(toRow),
   };
 }
@@ -85,6 +87,7 @@ const ready: Promise<void> = (async () => {
         await chrome.debugger.sendCommand({ tabId: saved.tabId }, 'Network.enable');
         recording = true;
         tabId = saved.tabId;
+        target = await describeTab(saved.tabId);
       } catch {
         recording = false;
         tabId = null;
@@ -98,7 +101,7 @@ const ready: Promise<void> = (async () => {
 
 // ---------------------------------------------------------------- start / stop
 
-async function start(target: number): Promise<void> {
+async function start(targetTab: number): Promise<void> {
   if (recording) await stop();
 
   // New Start clears the previous (unsaved) list — Session #2, Q12.
@@ -107,15 +110,17 @@ async function start(target: number): Promise<void> {
   extraResponseHeaders.clear();
   seq = 0;
   lastError = undefined;
+  target = undefined;
   await db.clear();
 
   try {
-    await chrome.debugger.attach({ tabId: target }, CDP_VERSION);
-    await chrome.debugger.sendCommand({ tabId: target }, 'Network.enable', {
+    await chrome.debugger.attach({ tabId: targetTab }, CDP_VERSION);
+    await chrome.debugger.sendCommand({ tabId: targetTab }, 'Network.enable', {
       maxPostDataSize: BODY_LIMIT,
     });
     recording = true;
-    tabId = target;
+    tabId = targetTab;
+    target = await describeTab(targetTab);
   } catch (err) {
     recording = false;
     tabId = null;
@@ -139,6 +144,67 @@ async function stop(): Promise<void> {
   }
   scheduleBroadcast();
 }
+
+/**
+ * Title + URL of the recorded tab. Uses chrome.debugger.getTargets(), so no extra
+ * "tabs" permission is needed.
+ */
+async function describeTab(id: number): Promise<RecorderState['target']> {
+  try {
+    const t = (await chrome.debugger.getTargets()).find((x) => x.tabId === id);
+    return t ? { title: t.title, url: t.url } : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+// ---------------------------------------------------------------- separate window (pop-out)
+//
+// The panel can be opened in its own window (like DevTools "Undock") so it can live on a
+// second monitor while the site keeps its full width. The window's position and size are
+// remembered, so it reopens on the same monitor.
+
+const POPOUT_ID_KEY = 'popoutWindowId';
+const POPOUT_BOUNDS_KEY = 'popoutBounds';
+const DEFAULT_BOUNDS = { width: 520, height: 820 };
+
+type Bounds = { left?: number; top?: number; width?: number; height?: number };
+
+async function popoutWindowId(): Promise<number | undefined> {
+  return (await chrome.storage.session.get(POPOUT_ID_KEY))[POPOUT_ID_KEY] as number | undefined;
+}
+
+async function popOut(): Promise<void> {
+  const existing = await popoutWindowId();
+  if (existing !== undefined) {
+    try {
+      await chrome.windows.update(existing, { focused: true });
+      return;
+    } catch {
+      // window was closed — create a new one
+    }
+  }
+  const saved = (await chrome.storage.local.get(POPOUT_BOUNDS_KEY))[POPOUT_BOUNDS_KEY] as
+    Bounds | undefined;
+  const win = await chrome.windows.create({
+    url: chrome.runtime.getURL('sidepanel.html?mode=window'),
+    type: 'popup',
+    focused: true,
+    ...DEFAULT_BOUNDS,
+    ...saved,
+  });
+  await chrome.storage.session.set({ [POPOUT_ID_KEY]: win?.id });
+}
+
+chrome.windows.onBoundsChanged.addListener(async (win) => {
+  if (win.id === undefined || win.id !== (await popoutWindowId())) return;
+  const bounds: Bounds = { left: win.left, top: win.top, width: win.width, height: win.height };
+  await chrome.storage.local.set({ [POPOUT_BOUNDS_KEY]: bounds });
+});
+
+chrome.windows.onRemoved.addListener(async (id) => {
+  if (id === (await popoutWindowId())) await chrome.storage.session.remove(POPOUT_ID_KEY);
+});
 
 // ---------------------------------------------------------------- CDP events
 
@@ -307,6 +373,9 @@ chrome.runtime.onMessage.addListener((msg: PanelMessage, _sender, sendResponse) 
       case 'START':
         await start(msg.tabId);
         return snapshot();
+      case 'POP_OUT':
+        await popOut();
+        return null;
       case 'STOP':
         await stop();
         return snapshot();

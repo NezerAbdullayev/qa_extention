@@ -5,10 +5,20 @@ import type { RequestRow } from '../shared/types';
 import { RequestDetail } from './RequestDetail';
 import { usePanelCollapsed } from './usePanelCollapsed';
 import { useRecorder } from './useRecorder';
+import { isWindowMode, useWindowMode } from './useWindowMode';
+
+function hostOf(url: string): string {
+  try {
+    return new URL(url).host;
+  } catch {
+    return url;
+  }
+}
 
 export function App() {
   const { state, start, stop } = useRecorder();
   const { collapsed, toggle } = usePanelCollapsed();
+  const { popOut, dock } = useWindowMode();
   const count = state.requests.length;
 
   // Several boxes can be open at once (Session #2, Q4).
@@ -37,6 +47,15 @@ export function App() {
         )}
         <div className="ml-auto flex items-center gap-1">
           {collapsed && <RecButton recording={state.recording} onStart={start} onStop={stop} />}
+          {isWindowMode ? (
+            <IconButton label={t('panel_dock')} onClick={dock}>
+              ⇥
+            </IconButton>
+          ) : (
+            <IconButton label={t('panel_popout')} onClick={popOut}>
+              ⧉
+            </IconButton>
+          )}
           <IconButton label={collapsed ? t('panel_expand') : t('panel_collapse')} onClick={toggle}>
             {collapsed ? '▢' : '—'}
           </IconButton>
@@ -54,6 +73,19 @@ export function App() {
               <RecButton recording={state.recording} onStart={start} onStop={stop} />
             </div>
           </div>
+
+          {/* Which tab is being recorded — essential when the panel is in its own window. */}
+          {state.recording && state.target && (
+            <p
+              className="truncate border-b border-slate-200 bg-red-50/50 px-3 py-1 text-xs text-slate-600"
+              title={state.target.url}
+            >
+              {t('rec_target', hostOf(state.target.url))}
+              {state.target.title && (
+                <span className="text-slate-400"> — {state.target.title}</span>
+              )}
+            </p>
+          )}
 
           {state.error && (
             <p className="border-b border-red-200 bg-red-50 px-3 py-2 text-red-700">

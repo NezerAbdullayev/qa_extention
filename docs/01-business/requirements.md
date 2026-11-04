@@ -18,6 +18,7 @@
 | FR-13 | Start–Stop arasındakı API-lər ümumi siyahıda **canlı** göstərilir (hər request dərhal əlavə olunur — Sessiya #2, Q2); sətirdə: ad (DevTools "Name" ilə eyni) + method + status + müddət; sətirə klik → qutu açılır (hündürlük məzmuna görə, maksimum 300px; çox olanda daxildə scroll — Sessiya #2, Q15; 2026-11-04 test sonrası 300px) | F-008 | Must |
 | FR-14 | Açılan qutuda JSON DevTools Preview kimi açılan ağac şəklində (D3), alt-alta: tam URL → `method: …` → `status: …` → Payload (göndərilən) → Response (qayıdan); headers göstərilmir (Sessiya #2, Q5, 5a; D4) | F-008 | Must |
 | FR-15 | Hər müqayisə rejimi üçün hesabat: xülasə (saylar) + iki response JSON formasında qarşı-qarşıya (A solda, B sağda), fərqlər rənglə işarələnir (Sessiya #2, Q9) | F-004 | Must |
+| FR-16 | Panel ayrı pəncərədə açıla bilir (DevTools "Undock" kimi) — ikinci monitorda saxlamaq və saytın enini daraltmamaq üçün; yeri və ölçüsü yadda qalır (D5) | F-008 | Must |
 
 ## Qeyri-funksional (NFR)
 | ID | Tələb |

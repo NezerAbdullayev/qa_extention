@@ -28,8 +28,7 @@
   "list_save": { "message": "Yadda saxla" },
 
   "detail_loading": { "message": "Yüklənir…" },
-  "detail_request_headers": { "message": "Request headers" },
-  "detail_response_headers": { "message": "Response headers" },
+  "detail_headers": { "message": "Headers" },
   "detail_payload": { "message": "Payload" },
   "detail_payload_query": { "message": "Query parametrləri" },
   "detail_payload_body": { "message": "Body" },

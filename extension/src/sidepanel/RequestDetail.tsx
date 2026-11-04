@@ -1,11 +1,11 @@
 import { useEffect, useState, type ReactNode } from 'react';
-import { buildPayload, decodeBase64Text, formatJson, formatObject } from '../shared/format';
+import { buildPayload, decodeBase64Text, formatJson, formatObject, header } from '../shared/format';
 import { t } from '../shared/i18n';
 import type { PanelMessage, RequestRecord, RequestRow } from '../shared/types';
 
 /**
  * Expanded box (F-008, Session #2 Q5 / 5a / 5b / 5c / Q15):
- * URL → method → status → Request headers → Response headers → Payload → Response,
+ * URL → method → status → Headers (Referer only) → Payload → Response,
  * JSON formatted, height follows content up to 300px (2026-11-04), then scrolls inside.
  */
 export function RequestDetail({ row }: { row: RequestRow }) {
@@ -36,6 +36,7 @@ export function RequestDetail({ row }: { row: RequestRow }) {
 
 function DetailContent({ d }: { d: RequestRecord }) {
   const payload = buildPayload(d.url, d.postData, d.requestHeaders);
+  const referer = header(d.requestHeaders, 'referer');
   const status =
     d.failed !== undefined
       ? `${t('list_failed')} ${d.failed}`
@@ -58,15 +59,13 @@ function DetailContent({ d }: { d: RequestRecord }) {
         </p>
       </div>
 
-      <Section title={t('detail_request_headers')}>
-        <Code text={formatObject(d.requestHeaders)} />
-      </Section>
-
-      <Section title={t('detail_response_headers')}>
-        {Object.keys(d.responseHeaders).length > 0 ? (
-          <Code text={formatObject(d.responseHeaders)} />
+      {/* Only "Referer" is shown; response headers are not shown (2026-11-04).
+          All headers are still recorded (needed for HAR export, F-002). */}
+      <Section title={t('detail_headers')}>
+        {referer !== undefined ? (
+          <Code text={formatObject({ Referer: referer })} />
         ) : (
-          <Muted>{d.status === undefined ? t('list_pending') : t('detail_empty')}</Muted>
+          <Muted>{t('detail_empty')}</Muted>
         )}
       </Section>
 

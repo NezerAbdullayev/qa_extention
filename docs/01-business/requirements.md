@@ -16,7 +16,7 @@
 | FR-11 | Extension istənilən saytda işləyir (domen məhdudiyyəti yoxdur). İstifadəçi istəsə yalnız seçdiyi host-ları yazmaq üçün filtr qura bilir (Sessiya #1, Q4) | F-006 | Should |
 | FR-12 | Qeyd birbaşa backend-ə göndərilir — **hələlik yox** (Sessiya #1, Q3): fayl yüklənir, istifadəçi özü manual göndərir | F-007 | Won't (indi) |
 | FR-13 | Start–Stop arasındakı API-lər ümumi siyahıda **canlı** göstərilir (hər request dərhal əlavə olunur — Sessiya #2, Q2); sətirdə: ad (DevTools "Name" ilə eyni) + method + status + müddət; sətirə klik → qutu açılır (hündürlük məzmuna görə, maksimum 300px; çox olanda daxildə scroll — Sessiya #2, Q15; 2026-11-04 test sonrası 300px) | F-008 | Must |
-| FR-14 | Açılan qutuda JSON formasında, alt-alta: tam URL → `method: …` → `status: …` → Request headers → Response headers → Payload (göndərilən) → Response (qayıdan) (Sessiya #2, Q5, 5a, 5b) | F-008 | Must |
+| FR-14 | Açılan qutuda JSON formasında, alt-alta: tam URL → `method: …` → `status: …` → Headers (yalnız Referer) → Payload (göndərilən) → Response (qayıdan) (Sessiya #2, Q5, 5a; D2) | F-008 | Must |
 | FR-15 | Hər müqayisə rejimi üçün hesabat: xülasə (saylar) + iki response JSON formasında qarşı-qarşıya (A solda, B sağda), fərqlər rənglə işarələnir (Sessiya #2, Q9) | F-004 | Must |
 
 ## Qeyri-funksional (NFR)

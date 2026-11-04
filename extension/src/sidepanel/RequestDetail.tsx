@@ -6,7 +6,7 @@ import type { PanelMessage, RequestRecord, RequestRow } from '../shared/types';
 /**
  * Expanded box (F-008, Session #2 Q5 / 5a / 5b / 5c / Q15):
  * URL → method → status → Request headers → Response headers → Payload → Response,
- * JSON formatted, height follows content up to 500px, then scrolls inside.
+ * JSON formatted, height follows content up to 300px (2026-11-04), then scrolls inside.
  */
 export function RequestDetail({ row }: { row: RequestRow }) {
   const [detail, setDetail] = useState<RequestRecord | null>(null);
@@ -24,7 +24,7 @@ export function RequestDetail({ row }: { row: RequestRow }) {
   }, [row.id, row.rev]);
 
   return (
-    <div className="mx-3 mb-2 max-h-[500px] overflow-auto rounded border border-slate-200 bg-slate-50 p-3 font-mono text-xs">
+    <div className="mx-3 mb-2 max-h-[300px] overflow-auto rounded border border-slate-200 bg-slate-50 p-3 font-mono text-xs">
       {detail === null ? (
         <p className="text-slate-400">{t('detail_loading')}</p>
       ) : (

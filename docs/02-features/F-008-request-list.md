@@ -48,7 +48,7 @@ Tam rejim                                Kompakt rejim
 │ │ status: 200                                           │ │  │
 │ │                                                       │ │  │
 │ │ Request headers  (göndərilən)                         │ │  │ hündürlük
-│ │ {                                                     │ │  │ max 500px
+│ │ {                                                     │ │  │ max 300px
 │ │   "Accept": "application/json",                       │ │  │ (daxildə scroll)
 │ │   "Authorization": "***"                              │ │  │
 │ │ }                                                     │ │  │
@@ -130,7 +130,7 @@ QA və developer DevTools → Network-da gördüyü adı burada da eyni görsün
 - [ ] Hover → tam URL
 - [ ] Sətirə klik → qutu aşağıya doğru açılır; təkrar klik → bağlanır
 - [ ] **Eyni anda bir neçə qutu açıq ola bilər** — yeni qutu açılanda əvvəlkilər bağlanmır; hər biri öz klik ilə bağlanır (Sessiya #2, Q4)
-- [ ] Açılan qutunun hündürlüyü **məzmuna görədir, maksimum 500px** (CSS `max-height: 500px`): qısa məzmunda qutu kiçik olur, 500px-dən çox olanda qutunun daxilində scroll (Sessiya #2, Q15)
+- [ ] Açılan qutunun hündürlüyü **məzmuna görədir, maksimum 300px** (CSS `max-height: 300px`): qısa məzmunda qutu kiçik olur, 300px-dən çox olanda qutunun daxilində scroll (Sessiya #2, Q15; test sonrası 500 → 300px, 2026-11-04)
 - [ ] Açıq qutuda **JSON formasında**, alt-alta: 1) tam URL · 2) `method: …` + `status: …` · 3) Request headers (JSON) · 4) Response headers (JSON) · 5) Payload — göndərilən (JSON) · 6) Response — qayıdan (formatlanmış JSON) (Sessiya #2, Q5, 5a, 5b)
 - [ ] Hər sətirin **sağ tərəfində "Yadda saxla" düyməsi** (💾) — bax: [F-003](F-003-snapshots.md)
 - [ ] Mətnlər i18n ilə ([ADR-002](../03-architecture/decisions/ADR-002-i18n.md))

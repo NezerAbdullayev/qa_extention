@@ -50,7 +50,7 @@ extension/
 - ✅ Side panel: başlıq, — Kiçilt / ▢ Böyüt (yadda qalır), ✕ Bağla
 - ✅ Start / Stop → `chrome.debugger` attach / detach
 - ✅ Yalnız XHR / Fetch, canlı siyahı: ad · method · status · müddət
-- ✅ Açılan qutu: URL · method · status · Request headers · Response headers · Payload · Response (JSON, max 500px, bir neçəsi eyni anda açıq) — F-008
+- ✅ Açılan qutu: URL · method · status · Request headers · Response headers · Payload · Response (JSON, max 300px, bir neçəsi eyni anda açıq) — F-008
 - ⬜ 💾 Yadda saxla — F-003
 - ⬜ Müqayisə — F-004
 - ⬜ HAR export — F-002

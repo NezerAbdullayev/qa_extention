@@ -9,7 +9,7 @@
 | F-005 | Həssas data masking | MVP | 📝 Spec | [link](F-005-masking.md) |
 | F-006 | Domen filtri (opsional, default: bütün saytlar) | v0.2 | 💡 İdeya | — |
 | F-007 | Backend-ə göndərmə | Sonra | ⏸️ Təxirə salınıb (Sessiya #1, Q3) | — |
-| F-008 | Request siyahısı (açılan qutular, max 500px) | MVP | 🔵 Hazırlanır | [link](F-008-request-list.md) |
+| F-008 | Request siyahısı (açılan qutular, max 300px) | MVP | 🔵 Hazırlanır | [link](F-008-request-list.md) |
 
 Status: 💡 İdeya · ⏸️ Təxirə salınıb · 📝 Spec · 🔵 Hazırlanır · 🧪 Test · ✅ Hazır
 

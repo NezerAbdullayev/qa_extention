@@ -13,6 +13,7 @@ import {
 } from '../shared/compare';
 import { decodeBase64Text, header } from '../shared/format';
 import { t } from '../shared/i18n';
+import { requestName } from '../shared/requestName';
 import type { PanelMessage, RequestRecord, SavedApi } from '../shared/types';
 
 const send = <T,>(msg: PanelMessage) => chrome.runtime.sendMessage(msg) as Promise<T>;
@@ -60,25 +61,49 @@ function responseJson(r: RequestRecord): Body {
   }
 }
 
+/** One side of the comparison: a name and the recorded request. */
+interface CompareItem {
+  name: string;
+  request: RequestRecord;
+}
+
+/** Loads one side: a request of the current recording ("Qeyd") or a saved API. */
+async function loadItem(source: CompareSource, id: string): Promise<CompareItem | null> {
+  if (source === 'saved') return (await send<SavedApi | null>({ type: 'GET_SAVED', id })) ?? null;
+  const request = await send<RequestRecord | null>({ type: 'GET_DETAIL', id });
+  return request ? { name: requestName(request.url), request } : null;
+}
+
+export type CompareSource = 'record' | 'saved';
+
 /**
- * F-004 — compares the response bodies of two saved APIs.
- * A = expected (first selected), B = checked. Opened from the "Saxlanmışlar" tab.
+ * F-004 — compares the response bodies of two APIs of the SAME tab: two requests of the
+ * current recording ("Qeyd") or two saved APIs ("Saxlanmışlar").
+ * A = expected (first selected), B = checked.
  */
-export function CompareView({ ids, onBack }: { ids: [string, string]; onBack: () => void }) {
+export function CompareView({
+  source,
+  ids,
+  onBack,
+}: {
+  source: CompareSource;
+  ids: [string, string];
+  onBack: () => void;
+}) {
   const [order, setOrder] = useState(ids);
-  const [items, setItems] = useState<Record<string, SavedApi | null>>({});
+  const [items, setItems] = useState<Record<string, CompareItem | null>>({});
   const [options, setOptions] = useState<StoredOptions>(DEFAULT_OPTIONS);
   const [view, setView] = useState<'json' | 'list'>('json');
 
   useEffect(() => {
     let alive = true;
-    Promise.all(ids.map((id) => send<SavedApi | null>({ type: 'GET_SAVED', id }))).then((r) => {
+    Promise.all(ids.map((id) => loadItem(source, id))).then((r) => {
       if (alive) setItems({ [ids[0]]: r[0] ?? null, [ids[1]]: r[1] ?? null });
     });
     return () => {
       alive = false;
     };
-  }, [ids]);
+  }, [source, ids]);
 
   // Mode, ignore list and id matching are remembered (Should: "yadda qalır").
   useEffect(() => {
@@ -243,7 +268,7 @@ export function CompareView({ ids, onBack }: { ids: [string, string]; onBack: ()
   );
 }
 
-function SideLabel({ side, item }: { side: 'A' | 'B'; item: SavedApi }) {
+function SideLabel({ side, item }: { side: 'A' | 'B'; item: CompareItem }) {
   return (
     <>
       <span className="font-semibold text-slate-500">{side}</span>

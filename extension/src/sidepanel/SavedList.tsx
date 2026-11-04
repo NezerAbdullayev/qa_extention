@@ -104,7 +104,7 @@ export function SavedList({
     </ul>
   );
 
-  if (comparing) return <CompareView ids={comparing} onBack={closeCompare} />;
+  if (comparing) return <CompareView source="saved" ids={comparing} onBack={closeCompare} />;
 
   return (
     <div className="flex h-full flex-col">

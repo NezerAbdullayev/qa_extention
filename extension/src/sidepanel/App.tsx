@@ -4,6 +4,7 @@ import { requestName } from '../shared/requestName';
 import type { PanelMessage, RequestRow, SaveResult } from '../shared/types';
 import type { Har } from '../shared/har';
 import { download, fileStamp, safeFileName } from './download';
+import { CompareView } from './CompareView';
 import { RequestDetail } from './RequestDetail';
 import { usePanelCollapsed } from './usePanelCollapsed';
 import { useRecorder } from './useRecorder';
@@ -66,17 +67,32 @@ export function App() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const selectedRow = state.requests.find((r) => r.id === selectedId);
 
-  // New recording (list cleared) → forget open boxes / selection.
+  // F-004 in the "Qeyd" tab: compare two requests of the current recording (only these —
+  // the "Saxlanmışlar" tab has its own compare for saved APIs). A = checked first, B = second.
+  const [checked, setChecked] = useState<Set<string>>(new Set());
+  const [comparing, setComparing] = useState<[string, string] | null>(null);
+  const closeCompare = useCallback(() => setComparing(null), []);
+  const toggleChecked = (id: string) =>
+    setChecked((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+
+  // New recording (list cleared) → forget open boxes / selection / checked rows.
   useEffect(() => {
     if (count === 0) {
       setExpanded(new Set());
       setSelectedId(null);
+      setChecked(new Set());
+      setComparing(null);
     }
   }, [count]);
 
   // DevTools-like keys in split layout: ↑ / ↓ change selection, Esc closes the details.
   useEffect(() => {
-    if (!split || !selectedId || tab !== 'record') return;
+    if (!split || !selectedId || tab !== 'record' || comparing) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') return setSelectedId(null);
       if (e.key !== 'ArrowUp' && e.key !== 'ArrowDown') return;
@@ -89,7 +105,24 @@ export function App() {
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [split, selectedId, state.requests, tab]);
+  }, [split, selectedId, state.requests, tab, comparing]);
+
+  // Toolbar above the "Qeyd" list: compare two checked requests.
+  const compareBar = (
+    <div className="flex items-center gap-2 border-b border-slate-200 px-3 py-1.5 text-xs">
+      <span className="text-slate-500">
+        {checked.size > 0 && t('list_checked', String(checked.size))}
+      </span>
+      <button
+        onClick={() => setComparing([...checked] as [string, string])}
+        disabled={checked.size !== 2}
+        title={t('saved_compare_hint')}
+        className="ml-auto rounded px-2 py-1 text-slate-700 hover:bg-slate-100 disabled:opacity-40"
+      >
+        ⇄ {t('saved_compare')}
+      </button>
+    </div>
+  );
 
   return (
     <div className="flex h-full flex-col text-sm">
@@ -187,6 +220,10 @@ export function App() {
             <main className="min-h-0 flex-1">
               <SavedList items={saved.items} onToast={showToast} />
             </main>
+          ) : comparing ? (
+            <main className="min-h-0 flex-1">
+              <CompareView source="record" ids={comparing} onBack={closeCompare} />
+            </main>
           ) : count === 0 ? (
             <main className="flex-1 overflow-y-auto">
               <p className="px-3 py-6 text-center text-slate-400">
@@ -195,62 +232,72 @@ export function App() {
             </main>
           ) : split ? (
             /* Wide separate window (D6): list left, details right — like DevTools Network. */
-            <main className="flex min-h-0 flex-1">
-              <div
-                className="min-w-0 overflow-y-auto"
-                style={selectedRow ? { width: leftWidth, flexShrink: 0 } : { flex: 1 }}
-              >
+            <main className="flex min-h-0 flex-1 flex-col">
+              {compareBar}
+              <div className="flex min-h-0 flex-1">
+                <div
+                  className="min-w-0 overflow-y-auto"
+                  style={selectedRow ? { width: leftWidth, flexShrink: 0 } : { flex: 1 }}
+                >
+                  <ul className="divide-y divide-slate-100">
+                    {state.requests.map((r) => (
+                      <RequestListRow
+                        key={r.id}
+                        row={r}
+                        mode="select"
+                        open={r.id === selectedId}
+                        onToggle={() => setSelectedId(r.id === selectedId ? null : r.id)}
+                        checked={checked.has(r.id)}
+                        onCheck={() => toggleChecked(r.id)}
+                        onSave={() => setSaving(r)}
+                      />
+                    ))}
+                  </ul>
+                </div>
+                {selectedRow && (
+                  <>
+                    <div
+                      role="separator"
+                      aria-orientation="vertical"
+                      onPointerDown={startResize}
+                      className="w-1 shrink-0 cursor-col-resize bg-slate-200 hover:bg-blue-400"
+                    />
+                    <section className="flex min-w-0 flex-1 flex-col">
+                      <div className="flex items-center gap-2 border-b border-slate-200 bg-slate-50 px-3 py-1.5">
+                        <span className="min-w-0 flex-1 truncate font-mono text-xs font-semibold">
+                          {requestName(selectedRow.url)}
+                        </span>
+                        <IconButton label={t('detail_close')} onClick={() => setSelectedId(null)}>
+                          ✕
+                        </IconButton>
+                      </div>
+                      <div className="min-h-0 flex-1">
+                        <RequestDetail key={selectedRow.id} row={selectedRow} variant="pane" />
+                      </div>
+                    </section>
+                  </>
+                )}
+              </div>
+            </main>
+          ) : (
+            <main className="flex min-h-0 flex-1 flex-col">
+              {compareBar}
+              <div className="min-h-0 flex-1 overflow-y-auto">
                 <ul className="divide-y divide-slate-100">
                   {state.requests.map((r) => (
                     <RequestListRow
                       key={r.id}
                       row={r}
-                      mode="select"
-                      open={r.id === selectedId}
-                      onToggle={() => setSelectedId(r.id === selectedId ? null : r.id)}
+                      mode="accordion"
+                      open={expanded.has(r.id)}
+                      onToggle={() => toggleRow(r.id)}
+                      checked={checked.has(r.id)}
+                      onCheck={() => toggleChecked(r.id)}
                       onSave={() => setSaving(r)}
                     />
                   ))}
                 </ul>
               </div>
-              {selectedRow && (
-                <>
-                  <div
-                    role="separator"
-                    aria-orientation="vertical"
-                    onPointerDown={startResize}
-                    className="w-1 shrink-0 cursor-col-resize bg-slate-200 hover:bg-blue-400"
-                  />
-                  <section className="flex min-w-0 flex-1 flex-col">
-                    <div className="flex items-center gap-2 border-b border-slate-200 bg-slate-50 px-3 py-1.5">
-                      <span className="min-w-0 flex-1 truncate font-mono text-xs font-semibold">
-                        {requestName(selectedRow.url)}
-                      </span>
-                      <IconButton label={t('detail_close')} onClick={() => setSelectedId(null)}>
-                        ✕
-                      </IconButton>
-                    </div>
-                    <div className="min-h-0 flex-1">
-                      <RequestDetail key={selectedRow.id} row={selectedRow} variant="pane" />
-                    </div>
-                  </section>
-                </>
-              )}
-            </main>
-          ) : (
-            <main className="flex-1 overflow-y-auto">
-              <ul className="divide-y divide-slate-100">
-                {state.requests.map((r) => (
-                  <RequestListRow
-                    key={r.id}
-                    row={r}
-                    mode="accordion"
-                    open={expanded.has(r.id)}
-                    onToggle={() => toggleRow(r.id)}
-                    onSave={() => setSaving(r)}
-                  />
-                ))}
-              </ul>
             </main>
           )}
         </>
@@ -343,6 +390,8 @@ function RequestListRow(props: {
   mode: 'accordion' | 'select';
   open: boolean;
   onToggle: () => void;
+  checked: boolean;
+  onCheck: () => void;
   onSave: () => void;
 }) {
   const { row, mode, open, onToggle, onSave } = props;
@@ -373,6 +422,13 @@ function RequestListRow(props: {
         className={`flex cursor-pointer items-center gap-2 px-3 py-1.5 ${selected ? '' : 'hover:bg-slate-50'}`}
         title={row.url}
       >
+        <input
+          type="checkbox"
+          aria-label={t('saved_select')}
+          checked={props.checked}
+          onChange={props.onCheck}
+          onClick={(e) => e.stopPropagation()}
+        />
         <button aria-expanded={open} className="flex min-w-0 flex-1 items-center gap-2 text-left">
           {mode === 'accordion' && <span className="text-slate-400">{open ? '▾' : '▸'}</span>}
           <span className="min-w-0 flex-1 truncate font-mono text-xs">{requestName(row.url)}</span>

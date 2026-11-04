@@ -77,6 +77,14 @@
   "list_save": {
     "message": "Yadda saxla"
   },
+  "list_checked": {
+    "message": "Seçilib: $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
   "detail_loading": {
     "message": "Yüklənir…"
   },
@@ -236,7 +244,7 @@
     "message": "A və B-nin yerini dəyiş"
   },
   "compare_item_missing": {
-    "message": "Saxlanmış API tapılmadı — silinmiş ola bilər."
+    "message": "API tapılmadı — silinmiş ola bilər."
   },
   "compare_mode_keys": {
     "message": "Key-lərə görə"

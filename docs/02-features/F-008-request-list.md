@@ -16,7 +16,7 @@ Siyahı brauzerin sağında açılan **side panel**-də göstərilir (`chrome.si
 | **Açmaq** | Extension ikonuna klik → side panel açılır |
 | **Bağlamaq (düymə ilə)** | Panelin yuxarı sağ küncündə **✕ Bağla** düyməsi. Basılanda **qeyd dayanır və saxlanmamış "Qeyd" siyahısı silinir**; Saxlanmışlar qalır (D15, v2.4.8). Eyni qayda Chrome-un öz **"Close side panel"** ✕-i, toolbar ikonu və ayrı pəncərənin ✕-i üçün də (v2.4.9) |
 | ~~**Kiçiltmək (collapse)**~~ | **Çıxarıldı** (D16, v2.4.10): panelin ölçüsü dəyişmirdi, yalnız siyahı gizlənirdi — faydası yox idi. Yer lazım olanda: ✕, kənarı dartmaq və ya ⧉ |
-| **Böyütmək (resize, əl ilə)** | Panelin sol kənarını mouse ilə dartıb enini dəyişmək. Seçilmiş en və kompakt/tam rejim yadda qalır (`chrome.storage.local`) |
+| **Böyütmək (resize, əl ilə)** | Panelin sol kənarını mouse ilə dartıb enini dəyişmək (eni Chrome özü yadda saxlayır) |
 
 ```
 Panel

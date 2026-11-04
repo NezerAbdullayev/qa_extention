@@ -1,145 +1,320 @@
 /**
- * Background service worker — recorder skeleton (F-001).
+ * Background service worker — recorder (F-001).
  *
  * - Clicking the extension icon opens the side panel.
- * - START: attach chrome.debugger to the tab, enable Network domain.
+ * - START: attach chrome.debugger to the tab, enable the Network domain.
  * - Only XHR / Fetch requests are recorded (Session #2, Q11).
- * - Every change is broadcast to the side panel immediately (live list, Session #2, Q2).
+ * - Captured per request: URL, method, status, request/response headers, payload,
+ *   response body (≤ 5 MB, NFR-03), duration, failure reason.
+ * - Every record is written to IndexedDB immediately (service worker may sleep).
+ * - The list is broadcast to the side panel live (Session #2, Q2); full detail is
+ *   fetched on demand (GET_DETAIL) so broadcasts stay small.
  *
- * TODO (F-001): persist to IndexedDB (service worker can sleep), request/response
- * headers, payload, response body, redirects, console errors.
+ * TODO (F-001): console errors / exceptions, redirect chain, masking (F-005).
  */
-import type { BackgroundMessage, PanelMessage, RecorderState, RequestRow } from '../shared/types';
+import { db } from './db';
+import type {
+  BackgroundMessage,
+  Headers,
+  PanelMessage,
+  RecorderState,
+  RequestRecord,
+} from '../shared/types';
+import { toRow } from '../shared/types';
 
 const CDP_VERSION = '1.3';
 const RECORDED_TYPES = new Set(['XHR', 'Fetch']);
+/** NFR-03: response body limit per request (characters). */
+const BODY_LIMIT = 5 * 1024 * 1024;
+const SESSION_KEY = 'recorder';
 
-const state: RecorderState = { recording: false, tabId: null, requests: [] };
-const byId = new Map<string, RequestRow>();
+let recording = false;
+let tabId: number | null = null;
+let lastError: string | undefined;
+let seq = 0;
+const records = new Map<string, RequestRecord>();
+/** ExtraInfo events can arrive before the main event — keep their headers until then. */
+const extraRequestHeaders = new Map<string, Headers>();
+const extraResponseHeaders = new Map<string, Headers>();
 
 chrome.sidePanel
   .setPanelBehavior({ openPanelOnActionClick: true })
   .catch((err) => console.error('[QA Debugger] setPanelBehavior failed', err));
 
-function broadcast(): void {
-  const msg: BackgroundMessage = { type: 'STATE', state };
-  // No listener (side panel closed) is not an error.
-  chrome.runtime.sendMessage(msg).catch(() => {});
+// ---------------------------------------------------------------- state & persistence
+
+function snapshot(): RecorderState {
+  return {
+    recording,
+    tabId,
+    error: lastError,
+    requests: [...records.values()].map(toRow),
+  };
 }
 
-async function start(tabId: number): Promise<void> {
-  if (state.recording) await stop();
+let broadcastTimer: ReturnType<typeof setTimeout> | undefined;
+/** Coalesce bursts of CDP events into one message (~20 fps). */
+function scheduleBroadcast(): void {
+  if (broadcastTimer !== undefined) return;
+  broadcastTimer = setTimeout(() => {
+    broadcastTimer = undefined;
+    const msg: BackgroundMessage = { type: 'STATE', state: snapshot() };
+    chrome.runtime.sendMessage(msg).catch(() => {}); // side panel closed → no listener
+  }, 50);
+}
+
+function persist(record: RequestRecord): void {
+  record.rev++;
+  db.put(record).catch((err) => console.error('[QA Debugger] IndexedDB put failed', err));
+}
+
+function saveSession(): Promise<void> {
+  return chrome.storage.session.set({ [SESSION_KEY]: { recording, tabId, seq } });
+}
+
+/** Restore after a service-worker restart: list from IndexedDB, recording flag from session storage. */
+const ready: Promise<void> = (async () => {
+  try {
+    for (const r of await db.getAll()) records.set(r.id, r);
+    const saved = (await chrome.storage.session.get(SESSION_KEY))[SESSION_KEY] as
+      { recording: boolean; tabId: number | null; seq: number } | undefined;
+    seq = Math.max(saved?.seq ?? 0, ...[...records.values()].map((r) => r.seq + 1), 0);
+    if (saved?.recording && saved.tabId !== null) {
+      try {
+        // Succeeds only if our debugger session is still attached to the tab.
+        await chrome.debugger.sendCommand({ tabId: saved.tabId }, 'Network.enable');
+        recording = true;
+        tabId = saved.tabId;
+      } catch {
+        recording = false;
+        tabId = null;
+        await saveSession();
+      }
+    }
+  } catch (err) {
+    console.error('[QA Debugger] restore failed', err);
+  }
+})();
+
+// ---------------------------------------------------------------- start / stop
+
+async function start(target: number): Promise<void> {
+  if (recording) await stop();
 
   // New Start clears the previous (unsaved) list — Session #2, Q12.
-  state.requests = [];
-  byId.clear();
-  state.error = undefined;
+  records.clear();
+  extraRequestHeaders.clear();
+  extraResponseHeaders.clear();
+  seq = 0;
+  lastError = undefined;
+  await db.clear();
 
   try {
-    await chrome.debugger.attach({ tabId }, CDP_VERSION);
-    await chrome.debugger.sendCommand({ tabId }, 'Network.enable');
-    state.recording = true;
-    state.tabId = tabId;
+    await chrome.debugger.attach({ tabId: target }, CDP_VERSION);
+    await chrome.debugger.sendCommand({ tabId: target }, 'Network.enable', {
+      maxPostDataSize: BODY_LIMIT,
+    });
+    recording = true;
+    tabId = target;
   } catch (err) {
-    state.recording = false;
-    state.tabId = null;
-    state.error = err instanceof Error ? err.message : String(err);
+    recording = false;
+    tabId = null;
+    lastError = err instanceof Error ? err.message : String(err);
   }
-  broadcast();
+  await saveSession();
+  scheduleBroadcast();
 }
 
 async function stop(): Promise<void> {
-  const tabId = state.tabId;
-  state.recording = false;
-  state.tabId = null;
-  if (tabId !== null) {
+  const attached = tabId;
+  recording = false;
+  tabId = null;
+  await saveSession();
+  if (attached !== null) {
     try {
-      await chrome.debugger.detach({ tabId });
+      await chrome.debugger.detach({ tabId: attached });
     } catch {
       // already detached (tab closed or user cancelled the debugging bar)
     }
   }
-  broadcast();
+  scheduleBroadcast();
 }
+
+// ---------------------------------------------------------------- CDP events
 
 type CdpParams = Record<string, any>;
 
+function cdp<T = CdpParams>(method: string, params: object): Promise<T> {
+  return chrome.debugger.sendCommand({ tabId: tabId! }, method, params) as Promise<T>;
+}
+
+async function loadPostData(record: RequestRecord): Promise<void> {
+  try {
+    const res = await cdp<{ postData: string }>('Network.getRequestPostData', {
+      requestId: record.id,
+    });
+    record.postData = res.postData;
+    persist(record);
+    scheduleBroadcast();
+  } catch {
+    // body not available (e.g. streamed upload) — leave undefined
+  }
+}
+
+async function loadResponseBody(record: RequestRecord): Promise<void> {
+  try {
+    const res = await cdp<{ body: string; base64Encoded: boolean }>('Network.getResponseBody', {
+      requestId: record.id,
+    });
+    record.responseBase64 = res.base64Encoded;
+    if (res.body.length > BODY_LIMIT) {
+      record.responseBody = res.body.slice(0, BODY_LIMIT);
+      record.responseTruncated = true;
+    } else {
+      record.responseBody = res.body;
+    }
+  } catch (err) {
+    record.responseError = err instanceof Error ? err.message : String(err);
+  }
+  persist(record);
+  scheduleBroadcast();
+}
+
+function elapsedMs(record: RequestRecord, timestamp: number): number {
+  return Math.round((timestamp - record.startedAt) * 1000);
+}
+
 function onCdpEvent(source: chrome.debugger.Debuggee, method: string, params?: object): void {
-  if (!state.recording || source.tabId !== state.tabId || !params) return;
+  if (!recording || source.tabId !== tabId || !params) return;
   const p = params as CdpParams;
 
   switch (method) {
     case 'Network.requestWillBeSent': {
       if (!RECORDED_TYPES.has(p.type)) return;
-      const existing = byId.get(p.requestId);
+      const existing = records.get(p.requestId);
       if (existing) {
         // Redirect: same requestId, new URL.
         existing.url = p.request.url;
         existing.method = p.request.method;
-      } else {
-        const row: RequestRow = {
-          id: p.requestId,
-          url: p.request.url,
-          method: p.request.method,
-          type: p.type,
-          startedAt: p.timestamp,
-        };
-        byId.set(row.id, row);
-        state.requests.push(row);
+        existing.requestHeaders = { ...p.request.headers, ...extraRequestHeaders.get(p.requestId) };
+        persist(existing);
+        break;
       }
+      const record: RequestRecord = {
+        id: p.requestId,
+        rev: 0,
+        seq: seq++,
+        url: p.request.url,
+        method: p.request.method,
+        type: p.type,
+        startedAt: p.timestamp,
+        requestHeaders: { ...p.request.headers, ...extraRequestHeaders.get(p.requestId) },
+        responseHeaders: {},
+        postData: p.request.postData,
+      };
+      extraRequestHeaders.delete(p.requestId);
+      records.set(record.id, record);
+      persist(record);
+      if (p.request.hasPostData && record.postData === undefined) void loadPostData(record);
+      void saveSession(); // keep seq in sync
       break;
+    }
+    case 'Network.requestWillBeSentExtraInfo': {
+      // Full request headers as sent on the wire (incl. Cookie).
+      const record = records.get(p.requestId);
+      if (record) {
+        record.requestHeaders = { ...record.requestHeaders, ...p.headers };
+        persist(record);
+      } else {
+        extraRequestHeaders.set(p.requestId, p.headers);
+      }
+      return; // nothing visible changed in the list
     }
     case 'Network.responseReceived': {
-      const row = byId.get(p.requestId);
-      if (!row) return;
-      row.status = p.response.status;
+      const record = records.get(p.requestId);
+      if (!record) return;
+      record.status = p.response.status;
+      record.mimeType = p.response.mimeType;
+      record.responseHeaders = {
+        ...p.response.headers,
+        ...record.responseHeaders,
+        ...extraResponseHeaders.get(p.requestId),
+      };
+      extraResponseHeaders.delete(p.requestId);
+      persist(record);
       break;
     }
+    case 'Network.responseReceivedExtraInfo': {
+      // Raw response headers (incl. Set-Cookie).
+      const record = records.get(p.requestId);
+      if (record) {
+        record.responseHeaders = { ...record.responseHeaders, ...p.headers };
+        persist(record);
+      } else {
+        extraResponseHeaders.set(p.requestId, p.headers);
+      }
+      return;
+    }
     case 'Network.loadingFinished': {
-      const row = byId.get(p.requestId);
-      if (!row) return;
-      row.durationMs = Math.round((p.timestamp - row.startedAt) * 1000);
+      const record = records.get(p.requestId);
+      if (!record) return;
+      record.durationMs = elapsedMs(record, p.timestamp);
+      persist(record);
+      void loadResponseBody(record);
       break;
     }
     case 'Network.loadingFailed': {
-      const row = byId.get(p.requestId);
-      if (!row) return;
-      row.failed = p.corsErrorStatus
+      const record = records.get(p.requestId);
+      if (!record) return;
+      record.failed = p.corsErrorStatus
         ? 'CORS'
         : p.blockedReason
           ? `blocked:${p.blockedReason}`
           : p.canceled
             ? 'canceled'
             : p.errorText;
-      row.durationMs = Math.round((p.timestamp - row.startedAt) * 1000);
+      record.durationMs = elapsedMs(record, p.timestamp);
+      persist(record);
       break;
     }
     default:
       return;
   }
-  broadcast();
+  scheduleBroadcast();
 }
 
 chrome.debugger.onEvent.addListener(onCdpEvent);
 
 chrome.debugger.onDetach.addListener((source) => {
-  if (source.tabId === state.tabId) {
-    state.recording = false;
-    state.tabId = null;
-    broadcast();
+  if (source.tabId === tabId) {
+    recording = false;
+    tabId = null;
+    void saveSession();
+    scheduleBroadcast();
   }
 });
 
+// ---------------------------------------------------------------- messages from the side panel
+
 chrome.runtime.onMessage.addListener((msg: PanelMessage, _sender, sendResponse) => {
-  switch (msg.type) {
-    case 'GET_STATE':
-      sendResponse(state);
-      return false;
-    case 'START':
-      start(msg.tabId).then(() => sendResponse(state));
-      return true; // async response
-    case 'STOP':
-      stop().then(() => sendResponse(state));
-      return true;
-  }
+  const handle = async (): Promise<unknown> => {
+    await ready;
+    switch (msg.type) {
+      case 'GET_STATE':
+        return snapshot();
+      case 'GET_DETAIL':
+        return records.get(msg.id) ?? (await db.get(msg.id)) ?? null;
+      case 'START':
+        await start(msg.tabId);
+        return snapshot();
+      case 'STOP':
+        await stop();
+        return snapshot();
+    }
+  };
+  handle().then(sendResponse, (err) => {
+    console.error('[QA Debugger] message failed', msg, err);
+    sendResponse(null);
+  });
+  return true; // async response
 });

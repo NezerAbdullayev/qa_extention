@@ -3,6 +3,7 @@ import { t } from '../shared/i18n';
 import { requestName } from '../shared/requestName';
 import type { PanelMessage, SavedApiExport, SavedApiSummary, SaveResult } from '../shared/types';
 import { CompareView } from './CompareView';
+import { download, fileStamp } from './download';
 import { NameDialog } from './NameDialog';
 import { SavedDetail } from './RequestDetail';
 import { useSplitLayout } from './useSplitLayout';
@@ -16,20 +17,6 @@ const dateFmt = new Intl.DateTimeFormat('az', {
   hour: '2-digit',
   minute: '2-digit',
 });
-
-function fileStamp(d = new Date()): string {
-  const p = (n: number) => String(n).padStart(2, '0');
-  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}_${p(d.getHours())}-${p(d.getMinutes())}`;
-}
-
-function download(filename: string, text: string): void {
-  const url = URL.createObjectURL(new Blob([text], { type: 'application/json' }));
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  a.click();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-}
 
 /**
  * "Saxlanmışlar" tab (F-003): saved APIs, newest first.

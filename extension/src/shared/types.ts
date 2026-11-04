@@ -36,6 +36,11 @@ export interface RequestRecord extends RequestRow {
   responseBase64?: boolean;
   /** True when the body exceeded the size limit (NFR-03) and was cut. */
   responseTruncated?: boolean;
+  /** Epoch seconds when the request started (HAR startedDateTime, F-002). */
+  wallTime?: number;
+  /** HTTP status text and protocol (`h2`, `http/1.1`) — for HAR. */
+  statusText?: string;
+  protocol?: string;
   /** Why the body could not be read (e.g. redirect, evicted from cache). */
   responseError?: string;
 }
@@ -101,6 +106,7 @@ export type PanelMessage =
   // ---- F-003 saved APIs
   | { type: 'SAVE_API'; requestId: string; name: string }
   | { type: 'LIST_SAVED' }
+  | { type: 'EXPORT_HAR' }
   | { type: 'GET_SAVED'; id: string }
   | { type: 'RENAME_SAVED'; id: string; name: string }
   | { type: 'DELETE_SAVED'; id: string }

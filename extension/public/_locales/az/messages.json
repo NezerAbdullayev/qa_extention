@@ -390,5 +390,22 @@
   },
   "compare_root": {
     "message": "(kök)"
+  },
+  "har_export": {
+    "message": "HAR"
+  },
+  "har_hint": {
+    "message": "Qeydi HAR faylı kimi yüklə — DevTools → Network-ə import olunur (həssas sahələr mask olunur)"
+  },
+  "har_hint_recording": {
+    "message": "HAR yükləmək üçün əvvəlcə Stop basın"
+  },
+  "har_exported": {
+    "message": "HAR yükləndi: $COUNT$ request",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
   }
 }

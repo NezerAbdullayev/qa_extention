@@ -13,6 +13,7 @@
  * TODO (F-001): console errors / exceptions, redirect chain, masking (F-005).
  */
 import { db } from './db';
+import { buildHar } from '../shared/har';
 import {
   deleteSaved,
   exportSaved,
@@ -143,6 +144,14 @@ async function start(targetTab: number): Promise<void> {
   }
   await saveSession();
   scheduleBroadcast();
+}
+
+function hostOf(url: string): string {
+  try {
+    return new URL(url).host;
+  } catch {
+    return '';
+  }
 }
 
 async function stop(): Promise<void> {
@@ -289,6 +298,7 @@ function onCdpEvent(source: chrome.debugger.Debuggee, method: string, params?: o
         method: p.request.method,
         type: p.type,
         startedAt: p.timestamp,
+        wallTime: p.wallTime,
         requestHeaders: { ...p.request.headers, ...extraRequestHeaders.get(p.requestId) },
         responseHeaders: {},
         postData: p.request.postData,
@@ -316,6 +326,8 @@ function onCdpEvent(source: chrome.debugger.Debuggee, method: string, params?: o
       if (!record) return;
       record.status = p.response.status;
       record.mimeType = p.response.mimeType;
+      record.statusText = p.response.statusText;
+      record.protocol = p.response.protocol;
       record.responseHeaders = {
         ...p.response.headers,
         ...record.responseHeaders,
@@ -394,6 +406,18 @@ chrome.runtime.onMessage.addListener((msg: PanelMessage, _sender, sendResponse) 
       case 'STOP':
         await stop();
         return snapshot();
+
+      // ---- F-002 HAR export (masked, F-005)
+      case 'EXPORT_HAR': {
+        const list = [...records.values()].sort((a, b) => a.seq - b.seq);
+        const har = buildHar(list, {
+          creatorVersion: chrome.runtime.getManifest().version,
+          page: target,
+        });
+        // File name host: the recorded tab, or the first request when the tab is unknown.
+        const host = hostOf(target?.url ?? list[0]?.url ?? '') || 'api-lens';
+        return { har, host };
+      }
 
       // ---- F-003 saved APIs
       case 'SAVE_API': {

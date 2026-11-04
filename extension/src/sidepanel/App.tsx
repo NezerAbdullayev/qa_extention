@@ -2,6 +2,8 @@ import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
 import { t } from '../shared/i18n';
 import { requestName } from '../shared/requestName';
 import type { PanelMessage, RequestRow, SaveResult } from '../shared/types';
+import type { Har } from '../shared/har';
+import { download, fileStamp, safeFileName } from './download';
 import { RequestDetail } from './RequestDetail';
 import { usePanelCollapsed } from './usePanelCollapsed';
 import { useRecorder } from './useRecorder';
@@ -38,6 +40,14 @@ export function App() {
     toastTimer.current = setTimeout(() => setToast(null), 2500);
   }, []);
   const count = state.requests.length;
+
+  // F-002: HAR file of the last recording (after Stop), masked (F-005).
+  const exportHar = async () => {
+    const msg: PanelMessage = { type: 'EXPORT_HAR' };
+    const { har, host } = (await chrome.runtime.sendMessage(msg)) as { har: Har; host: string };
+    download(`${safeFileName(host)}_${fileStamp()}.har`, JSON.stringify(har, null, 2));
+    showToast(t('har_exported', String(har.log.entries.length)));
+  };
 
   // Side panel: several boxes can be open at once (Session #2, Q4).
   // Separate window: only one box — clicking another row opens it and closes the previous (D7).
@@ -120,7 +130,15 @@ export function App() {
         <>
           <div className="flex items-center gap-2 border-b border-slate-200 px-3 py-2">
             <RecStatus recording={state.recording} count={count} />
-            <div className="ml-auto">
+            <div className="ml-auto flex items-center gap-1.5">
+              <button
+                onClick={exportHar}
+                disabled={state.recording || count === 0}
+                title={state.recording ? t('har_hint_recording') : t('har_hint')}
+                className="rounded px-2 py-1 text-xs text-slate-700 hover:bg-slate-100 disabled:opacity-40"
+              >
+                ⬇ {t('har_export')}
+              </button>
               <RecButton recording={state.recording} onStart={start} onStop={stop} />
             </div>
           </div>

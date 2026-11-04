@@ -2,6 +2,10 @@
 
 Format: [Keep a Changelog](https://keepachangelog.com/) · Versiya: [SemVer](https://semver.org/)
 
+## [2.4.9] — 2026-11-04
+### Changed
+- Panel istənilən yolla bağlananda (Chrome-un öz "Close side panel" ✕-i, ikon, ayrı pəncərənin ✕-i) saxlanmamış Qeyd silinir və qeyd dayanır; ⧉ / ⇥ keçidində data qalır
+
 ## [2.4.8] — 2026-11-04
 ### Changed
 - ✕ Bağla: qeyd dayanır və saxlanmamış "Qeyd" siyahısı silinir (Saxlanmışlar qalır)

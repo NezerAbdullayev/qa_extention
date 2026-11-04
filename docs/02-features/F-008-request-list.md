@@ -14,7 +14,7 @@ Siyahı brauzerin sağında açılan **side panel**-də göstərilir (`chrome.si
 | Tələb | Necə |
 |---|---|
 | **Açmaq** | Extension ikonuna klik → side panel açılır |
-| **Bağlamaq (düymə ilə)** | Panelin yuxarı sağ küncündə **✕ Bağla** düyməsi. Basılanda **qeyd dayanır və saxlanmamış "Qeyd" siyahısı silinir**; Saxlanmışlar qalır (D15, v2.4.8) |
+| **Bağlamaq (düymə ilə)** | Panelin yuxarı sağ küncündə **✕ Bağla** düyməsi. Basılanda **qeyd dayanır və saxlanmamış "Qeyd" siyahısı silinir**; Saxlanmışlar qalır (D15, v2.4.8). Eyni qayda Chrome-un öz **"Close side panel"** ✕-i, toolbar ikonu və ayrı pəncərənin ✕-i üçün də (v2.4.9) |
 | **Kiçiltmək (collapse)** | Yuxarıda **— Kiçilt** düyməsi → panel **kompakt rejimə** keçir: yalnız başlıq zolağı qalır (● REC, request sayı, Start/Stop, ▢ Böyüt). Siyahı gizlənir |
 | **Böyütmək (resize, əl ilə)** | Panelin sol kənarını mouse ilə dartıb enini dəyişmək. Seçilmiş en və kompakt/tam rejim yadda qalır (`chrome.storage.local`) |
 
@@ -33,7 +33,7 @@ Tam rejim                                Kompakt rejim
 **Texniki məhdudiyyətlər (Chrome side panel):**
 - Panelin enini istifadəçi Chrome-un özündə sol kənarı dartmaqla dəyişir; extension kodu eni birbaşa təyin edə bilmir. Chrome-un minimum eni var (~320px), daha dar etmək olmur.
 - Kompakt rejimdə panelin **hündürlüyü** dəyişmir (side panel həmişə tam hündürlükdədir) — kiçiltmə panelin **içindəki məzmunu** yığır.
-- Bağlama: əvvəl `CLEAR_RECORDING` (Stop + `requests` təmizlənir), cavabdan sonra `window.close()`. Chrome-un öz side panel bağlama düyməsi və ya ikon ilə bağlamaq datanı silmir — yalnız bizim ✕ (D15).
+- Bağlama: əvvəl `CLEAR_RECORDING` (Stop + `requests` təmizlənir), cavabdan sonra `window.close()`. Panel necə bağlanırsa bağlansın (Chrome-un öz ✕-i, ikon, ayrı pəncərənin ✕-i): panel açıq olduqca background ilə port (`api-lens-panel`) saxlayır; sonuncu port kəsiləndə 3 san gözlənilir (⧉ / ⇥ keçidində yeni panel qoşulur və silinmə ləğv olunur), sonra Stop + `requests` təmizlənir (D15, v2.4.9).
 
 ## Ayrı pəncərə rejimi — DevTools "Undock" kimi (test sonrası D5, 2026-11-04)
 **Problem:** side panel saytın enini daraldır → bəzi layihələrdə responsive dizayn pozulur, saytla işləmək çətinləşir.

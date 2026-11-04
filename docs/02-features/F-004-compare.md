@@ -1,6 +1,6 @@
 # F-004 — API müqayisəsi və hesabat
 
-**Status:** 📝 Spec · **Mərhələ:** MVP · **Tələblər:** FR-08, FR-09, FR-15
+**Status:** 🔵 Hazırlanır · **Mərhələ:** MVP · **Tələblər:** FR-08, FR-09, FR-15
 
 ## Niyə
 Eyni API-nin iki cəhdi arasında hansı key-lərin olmadığını, hansı dəyərlərin səhv olduğunu və ya gəlmədiyini dərhal görmək.
@@ -67,21 +67,26 @@ Dəyərlər
 ```
 
 ## Qəbul meyarları
-- [ ] Saxlanmış API-lərdən ikisi seçilir (A və B)
-- [ ] **Fərqli API-lər** də müqayisə oluna bilər (məs. `passports` ↔ `tasks`). Bu halda hesabatın başında xəbərdarlıq: "⚠️ Fərqli API-lər müqayisə olunur: `GET /api/v1/passports` ↔ `GET /api/tasks`" (Sessiya #2, Q7)
-- [ ] "Fərqli API" = method və ya path (query-siz) fərqlidir
-- [ ] Yalnız **response body** müqayisə olunur (payload, headers, status, müddət — yox)
-- [ ] 3 rejim: key-lərə görə · dəyərlərə görə · key + dəyər
-- [ ] İç-içə (nested) obyektlər tam yoxlanılır; yol nöqtə ilə göstərilir (`data.items[0].price`)
-- [ ] Hər rejim üçün hesabat: xülasə (saylar) + ətraflı siyahı
-- [ ] İki response **JSON formasında qarşı-qarşıya** göstərilir (A solda, B sağda), fərqlər rənglə işarələnir, sinxron scroll (Sessiya #2, Q9)
-- [ ] Response body JSON deyilsə (HTML, mətn, boş və ya parse olunmayan JSON) → **müqayisə olunmur**, xəbərdarlıq göstərilir: "⚠️ Response JSON formatında deyil — müqayisə mümkün deyil" (Sessiya #2, Q14)
-- [ ] Xəbərdarlıqda hansı API-nin (A və ya B, ya hər ikisi) JSON olmadığı və onun Content-Type-ı göstərilir
-- [ ] Ignore siyahısı (məs. `timestamp`, `createdAt`, `requestId`) — yadda qalır (Should)
-- [ ] Massivlər üçün "id-yə görə uyğunlaşdır" seçimi (Should)
+- [x] Saxlanmış API-lərdən ikisi seçilir (A və B)
+- [x] **Fərqli API-lər** də müqayisə oluna bilər (məs. `passports` ↔ `tasks`). Bu halda hesabatın başında xəbərdarlıq: "⚠️ Fərqli API-lər müqayisə olunur: `GET /api/v1/passports` ↔ `GET /api/tasks`" (Sessiya #2, Q7)
+- [x] "Fərqli API" = method və ya path (query-siz) fərqlidir
+- [x] Yalnız **response body** müqayisə olunur (payload, headers, status, müddət — yox)
+- [x] 3 rejim: key-lərə görə · dəyərlərə görə · key + dəyər
+- [x] İç-içə (nested) obyektlər tam yoxlanılır; yol nöqtə ilə göstərilir (`data.items[0].price`)
+- [x] Hər rejim üçün hesabat: xülasə (saylar) + ətraflı siyahı
+- [x] İki response **JSON formasında qarşı-qarşıya** göstərilir (A solda, B sağda), fərqlər rənglə işarələnir, sinxron scroll (Sessiya #2, Q9)
+- [x] Response body JSON deyilsə (HTML, mətn, boş və ya parse olunmayan JSON) → **müqayisə olunmur**, xəbərdarlıq göstərilir: "⚠️ Response JSON formatında deyil — müqayisə mümkün deyil" (Sessiya #2, Q14)
+- [x] Xəbərdarlıqda hansı API-nin (A və ya B, ya hər ikisi) JSON olmadığı və onun Content-Type-ı göstərilir
+- [x] Ignore siyahısı (məs. `timestamp`, `createdAt`, `requestId`) — yadda qalır (Should)
+- [x] Massivlər üçün "id-yə görə uyğunlaşdır" seçimi (Should)
 
 ## Texniki qeydlər
-- Diff kitabxanası: `jsondiffpatch` (extension-un içinə daxil edilir) və ya öz yüngül diff funksiyamız
+- Diff: öz yüngül funksiyamız — `extension/src/shared/compare.ts` (kitabxana yoxdur); UI — `CompareView.tsx`
+- Açılış: Saxlanmışlar → 2 API seç (ilk seçilən **A**, ikinci **B**) → **⇄ Müqayisə et**; ⇆ A/B yerini dəyişir; Esc / ← Geri siyahıya qaytarır
+- Görünüş: **Qarşı-qarşıya** (bir scroll konteyneri → sinxron scroll) və **Siyahı** (Key-lər / Dəyərlər)
+- ∅ "dəyər gəlmir" = B-də `null`, `""`, `[]`, `{}` (A-da dolu); key ümumiyyətlə yoxdursa → ➖ (Sessiya #2, Q8 — variant A)
+- Massiv elementləri default olaraq indeksə görə; "id-yə görə" seçimi yalnız bütün elementlərdə unikal `id` olduqda işləyir (yol: `items[id=5]`)
+- Ignore: key adı (istənilən dərinlikdə) və ya tam yol, vergüllə ayrılır; rejim, ignore və id seçimi `chrome.storage.local` → `compareOptions`-da yadda qalır
 - Müqayisə yalnız lokal, heç yerə göndərilmir
 
 ## Açıq suallar

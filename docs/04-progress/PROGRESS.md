@@ -20,9 +20,10 @@
 - Saxlanmışlar tab-ında da geniş pəncərədə bölünmüş görünüş (D8)
 - Dark mode (default), ☀️ / 🌙 keçid (D9)
 - Düzəliş: bütün sətir kliklənir — bölünmüş görünüşdə API-lər arası keçid (D10)
+- F-004: müqayisə — 3 rejim, JSON qarşı-qarşıya (sinxron scroll), siyahı hesabatı, fərqli API və JSON olmayan response xəbərdarlığı, ignore siyahısı, massivləri id-yə görə uyğunlaşdırma
 
 **Növbəti addım**
-- F-004: müqayisə (key / dəyər / key + dəyər, JSON qarşı-qarşıya)
+- F-002: HAR export
 - F-001: console error-lar, redirect zənciri
 
 **Bloklar**

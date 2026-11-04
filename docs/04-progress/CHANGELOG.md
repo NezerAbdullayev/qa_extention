@@ -14,6 +14,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/) · Versiya: [SemVer](htt
 - Sabit extension ID
 - Saxlanmışlar tab-ında geniş pəncərədə bölünmüş görünüş
 - Dark mode (default) və ☀️ / 🌙 keçid
+- API müqayisəsi (F-004): key / dəyər / key + dəyər, JSON qarşı-qarşıya, siyahı hesabatı, ignore siyahısı, id-yə görə uyğunlaşdırma
 
 ### Fixed
 - Bölünmüş görünüşdə yalnız ad kliklənirdi — indi bütün sətir kliklənir

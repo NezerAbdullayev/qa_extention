@@ -18,7 +18,7 @@
 - [ ] F-002 HAR export
 - [ ] F-008 Request siyahısı (side panel)
 - [ ] F-003 API yadda saxlama
-- [ ] F-004 API müqayisəsi və hesabat
+- [x] F-004 API müqayisəsi və hesabat
 - [ ] Daxili test (QA)
 
 ## Mərhələ 2 — v0.2

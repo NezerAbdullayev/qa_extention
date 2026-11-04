@@ -51,6 +51,7 @@ extension/
 - ✅ Start / Stop → `chrome.debugger` attach / detach
 - ✅ Yalnız XHR / Fetch, canlı siyahı: ad · method · status · müddət
 - ✅ Açılan qutu: URL · method · status · Headers (yalnız Referer) · Payload · Response (JSON, max 300px, bir neçəsi eyni anda açıq) — F-008
+- ✅ JSON görünüşü DevTools Preview kimi açılan ağacdır (`JsonTree.tsx`)
 - ⬜ 💾 Yadda saxla — F-003
 - ⬜ Müqayisə — F-004
 - ⬜ HAR export — F-002

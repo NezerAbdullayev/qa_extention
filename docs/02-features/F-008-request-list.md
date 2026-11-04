@@ -81,6 +81,34 @@ Bölmələr **alt-alta**, bu sıra ilə:
 | 4 | **Payload** (göndərilən) | Request-in göndərdiyi data, **formatlanmış JSON**. DevTools "Payload" tab-ı kimi: POST/PUT/PATCH body + query string parametrləri (`?page=1` → `{ "page": "1" }`). Həssas sahələr mask olunur |
 | 5 | **Response** (qayıdan) | Response body **formatlanmış JSON** (pretty-print, 2 boşluq girinti) |
 
+### JSON görünüşü — DevTools "Preview" kimi açılan ağac (test sonrası D3, 2026-11-04)
+Uzun JSON tam açıq göstərilmir. Qaydalar DevTools → Network → **Preview** ilə eynidir:
+
+```
+▾ {countries: Array(250), total: 250}
+  ▸ countries: (250) [{…}, {…}, {…}, {…}, …]
+    total: 250
+```
+`countries`-ə klik →
+```
+  ▾ countries: (250) [{…}, {…}, {…}, …]
+    ▸ [0 … 99]
+    ▸ [100 … 199]
+    ▸ [200 … 249]
+```
+`[0 … 99]` → `0`-a klik →
+```
+      ▾ 0: {id: "AZE", nameAz: "Azərbaycan Respublikası", nameEn: "Azerbaijan (Republic of)", …}
+          id: "AZE"
+          nameAz: "Azərbaycan Respublikası"
+          …
+```
+- Yalnız **kök** açıq gəlir; iç-içə obyekt və massivlər bağlıdır.
+- Bağlı obyekt bir sətirlik önizləmə göstərir: `{id: "AZE", nameAz: "…", …}`; massiv — uzunluq + önizləmə: `(250) [{…}, {…}, …]`.
+- 100-dən çox elementli massivlər `[0 … 99]`, `[100 … 199]` qruplarına bölünür.
+- Rənglər: key — bənövşəyi, string — qırmızı, number / boolean — göy, null — boz.
+- Headers, Payload və Response bölmələrinin hamısında istifadə olunur. JSON olmayan mətn olduğu kimi göstərilir.
+
 - Payload yoxdursa (məs. query-siz GET) → Payload bölməsi göstərilmir.
 - Payload və ya Response JSON deyilsə (form-data, HTML, mətn) → olduğu kimi mətn göstərilir.
 - Response boşdursa → `(boş)`.
@@ -123,6 +151,7 @@ QA və developer DevTools → Network-da gördüyü adı burada da eyni görsün
 - [ ] Sətirə klik → qutu aşağıya doğru açılır; təkrar klik → bağlanır
 - [ ] **Eyni anda bir neçə qutu açıq ola bilər** — yeni qutu açılanda əvvəlkilər bağlanmır; hər biri öz klik ilə bağlanır (Sessiya #2, Q4)
 - [ ] Açılan qutunun hündürlüyü **məzmuna görədir, maksimum 300px** (CSS `max-height: 300px`): qısa məzmunda qutu kiçik olur, 300px-dən çox olanda qutunun daxilində scroll (Sessiya #2, Q15; test sonrası 500 → 300px, 2026-11-04)
+- [ ] JSON **DevTools Preview kimi açılan ağac** şəklində göstərilir: yalnız kök açıq, iç-içə obyekt/massivlər bağlı + önizləmə, böyük massivlər `[0 … 99]` qruplarında (D3)
 - [ ] Açıq qutuda **JSON formasında**, alt-alta: 1) tam URL · 2) `method: …` + `status: …` · 3) Headers — yalnız `Referer` (JSON) · 4) Payload — göndərilən (JSON) · 5) Response — qayıdan (formatlanmış JSON) (Sessiya #2, Q5, 5a; D2)
 - [ ] Hər sətirin **sağ tərəfində "Yadda saxla" düyməsi** (💾) — bax: [F-003](F-003-snapshots.md)
 - [ ] Mətnlər i18n ilə ([ADR-002](../03-architecture/decisions/ADR-002-i18n.md))

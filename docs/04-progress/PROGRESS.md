@@ -10,6 +10,7 @@
 - `extension/` layihə skeleti: manifest (MV3), side panel (kiçilt / bağla), background recorder (Start / Stop, yalnız XHR / Fetch, canlı siyahı), i18n (`_locales/az`), DevTools "Name" qaydası
 - F-001: request / response headers (ExtraInfo), payload, response body (≤ 5 MB), IndexedDB + service worker bərpası
 - F-008: açılan qutu — URL, method, status, Headers (yalnız Referer), Payload, Response (JSON, max 300px)
+- F-008: JSON DevTools Preview kimi açılan ağac (D3); Headers yalnız Referer (D2); max 300px (D1)
 
 **Növbəti addım**
 - F-003: 💾 yadda saxlama (ad popup-u, 6 rəqəmli avtomatik ad)

@@ -1,12 +1,13 @@
 import { useEffect, useState, type ReactNode } from 'react';
-import { buildPayload, decodeBase64Text, formatJson, formatObject, header } from '../shared/format';
+import { buildPayload, decodeBase64Text, header } from '../shared/format';
 import { t } from '../shared/i18n';
+import { JsonTree } from './JsonTree';
 import type { PanelMessage, RequestRecord, RequestRow } from '../shared/types';
 
 /**
  * Expanded box (F-008, Session #2 Q5 / 5a / 5b / 5c / Q15):
  * URL → method → status → Headers (Referer only) → Payload → Response,
- * JSON formatted, height follows content up to 300px (2026-11-04), then scrolls inside.
+ * JSON shown as a collapsible tree like DevTools Preview (D3); height follows content up to 300px (2026-11-04), then scrolls inside.
  */
 export function RequestDetail({ row }: { row: RequestRow }) {
   const [detail, setDetail] = useState<RequestRecord | null>(null);
@@ -63,7 +64,7 @@ function DetailContent({ d }: { d: RequestRecord }) {
           All headers are still recorded (needed for HAR export, F-002). */}
       <Section title={t('detail_headers')}>
         {referer !== undefined ? (
-          <Code text={formatObject({ Referer: referer })} />
+          <JsonTree value={{ Referer: referer }} />
         ) : (
           <Muted>{t('detail_empty')}</Muted>
         )}
@@ -74,13 +75,13 @@ function DetailContent({ d }: { d: RequestRecord }) {
           {payload.query && (
             <>
               {payload.body && <SubTitle>{t('detail_payload_query')}</SubTitle>}
-              <Code text={formatObject(payload.query)} />
+              <JsonTree value={payload.query} />
             </>
           )}
           {payload.body && (
             <>
               {payload.query && <SubTitle>{t('detail_payload_body')}</SubTitle>}
-              <Code text={payload.body.text} />
+              <JsonOrText text={payload.body.text} />
             </>
           )}
         </Section>
@@ -110,7 +111,7 @@ function ResponseBody({ d }: { d: RequestRecord }) {
   return (
     <>
       {d.responseTruncated && <p className="mb-1 text-amber-700">{t('detail_body_truncated')}</p>}
-      <Code text={formatJson(text).text} />
+      <JsonOrText text={text} />
     </>
   );
 }
@@ -136,4 +137,13 @@ function Code({ text }: { text: string }) {
 
 function Muted({ children }: { children: ReactNode }) {
   return <p className="text-slate-400">{children}</p>;
+}
+
+/** JSON → collapsible tree (DevTools Preview style); anything else → plain text. */
+function JsonOrText({ text }: { text: string }) {
+  try {
+    return <JsonTree value={JSON.parse(text)} />;
+  } catch {
+    return <Code text={text} />;
+  }
 }

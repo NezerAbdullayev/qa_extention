@@ -15,14 +15,14 @@ Siyahı brauzerin sağında açılan **side panel**-də göstərilir (`chrome.si
 |---|---|
 | **Açmaq** | Extension ikonuna klik → side panel açılır |
 | **Bağlamaq (düymə ilə)** | Panelin yuxarı sağ küncündə **✕ Bağla** düyməsi. Basılanda **qeyd dayanır və saxlanmamış "Qeyd" siyahısı silinir**; Saxlanmışlar qalır (D15, v2.4.8). Eyni qayda Chrome-un öz **"Close side panel"** ✕-i, toolbar ikonu və ayrı pəncərənin ✕-i üçün də (v2.4.9) |
-| **Kiçiltmək (collapse)** | Yuxarıda **— Kiçilt** düyməsi → panel **kompakt rejimə** keçir: yalnız başlıq zolağı qalır (● REC, request sayı, Start/Stop, ▢ Böyüt). Siyahı gizlənir |
+| ~~**Kiçiltmək (collapse)**~~ | **Çıxarıldı** (D16, v2.4.10): panelin ölçüsü dəyişmirdi, yalnız siyahı gizlənirdi — faydası yox idi. Yer lazım olanda: ✕, kənarı dartmaq və ya ⧉ |
 | **Böyütmək (resize, əl ilə)** | Panelin sol kənarını mouse ilə dartıb enini dəyişmək. Seçilmiş en və kompakt/tam rejim yadda qalır (`chrome.storage.local`) |
 
 ```
-Tam rejim                                Kompakt rejim
-┌────────────────────────────┐           ┌────────────────────────────┐
-│ Debugger    [— Kiçilt] [✕] │           │ ● REC 14  [Stop] [▢] [✕]   │
-├────────────────────────────┤           └────────────────────────────┘
+Panel
+┌────────────────────────────┐
+│ API Lens       ☀ ⧉ ✕       │
+├────────────────────────────┤
 │ ● REC 14 request  [Stop]   │
 │ ▸ POST /api/orders 200 ... │
 │ ▸ GET  /api/users  200 ... │
@@ -32,7 +32,6 @@ Tam rejim                                Kompakt rejim
 
 **Texniki məhdudiyyətlər (Chrome side panel):**
 - Panelin enini istifadəçi Chrome-un özündə sol kənarı dartmaqla dəyişir; extension kodu eni birbaşa təyin edə bilmir. Chrome-un minimum eni var (~320px), daha dar etmək olmur.
-- Kompakt rejimdə panelin **hündürlüyü** dəyişmir (side panel həmişə tam hündürlükdədir) — kiçiltmə panelin **içindəki məzmunu** yığır.
 - Bağlama: əvvəl `CLEAR_RECORDING` (Stop + `requests` təmizlənir), cavabdan sonra `window.close()`. Panel necə bağlanırsa bağlansın (Chrome-un öz ✕-i, ikon, ayrı pəncərənin ✕-i): panel açıq olduqca background ilə port (`api-lens-panel`) saxlayır; sonuncu port kəsiləndə 3 san gözlənilir (⧉ / ⇥ keçidində yeni panel qoşulur və silinmə ləğv olunur), sonra Stop + `requests` təmizlənir (D15, v2.4.9).
 
 ## Ayrı pəncərə rejimi — DevTools "Undock" kimi (test sonrası D5, 2026-11-04)
@@ -47,7 +46,7 @@ Tam rejim                                Kompakt rejim
 - Pəncərənin **yeri və ölçüsü yadda qalır** → növbəti dəfə eyni monitorda, eyni ölçüdə açılır.
 - Ayrı pəncərədə **Start** son istifadə olunan **brauzer pəncərəsinin aktiv tab-ını** yazır (API Lens pəncərəsinin özünü yox).
 - Qeyd zamanı panel hansı saytın yazıldığını göstərir: `Yazılır: site.az — Səhifə başlığı`.
-- Siyahı, açılan qutular, kiçilt / bağla — hər iki rejimdə eyni işləyir; ikisi eyni anda açıq olsa da canlı yenilənir.
+- Siyahı, açılan qutular, bağla — hər iki rejimdə eyni işləyir; ikisi eyni anda açıq olsa da canlı yenilənir.
 
 ### Geniş pəncərədə DevTools kimi bölünmüş görünüş (test sonrası D6, 2026-11-04)
 Ayrı pəncərə **geniş** olanda (≥ 900px — məs. ikinci monitorda tam ekran) görünüş avtomatik DevTools → Network kimi olur:
@@ -172,7 +171,7 @@ QA və developer DevTools → Network-da gördüyü adı burada da eyni görsün
 - [ ] Qeyd zamanı yazılan tab göstərilir: `Yazılır: <host> — <başlıq>` (D5)
 - [ ] Ayrı pəncərə ≥ 900px olanda **bölünmüş görünüş**: siyahı solda, seçilmiş request-in detalları sağda tam hündürlükdə; ✕ / Esc bağlayır; ↑ / ↓ seçimi dəyişir; ara xətt dartılır (D6)
 - [ ] Side panel **✕ düyməsi** ilə bağlanır; qeyd davam edirsə dayanmır
-- [ ] **— Kiçilt / ▢ Böyüt** düyməsi: kompakt rejim (yalnız REC statusu, say, Start/Stop) ↔ tam rejim
+- ~~**— Kiçilt / ▢ Böyüt** düyməsi~~ — çıxarıldı (D16)
 - [ ] Panelin eni **əl ilə dartılaraq** dəyişdirilir; en və rejim yadda qalır
 - [ ] Start → Stop arasındakı bütün API request-ləri (**yalnız XHR / Fetch**) ümumi siyahıda (box) göstərilir
 - [ ] Siyahı **canlı** yenilənir: hər request baş verən kimi dərhal siyahıya əlavə olunur (DevTools → Network kimi). Status və müddət cavab gələndə sətirdə yenilənir (gözləyəndə `(pending)`) (Sessiya #2, Q2)

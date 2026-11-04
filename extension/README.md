@@ -37,7 +37,6 @@ extension/
 │   ├── sidepanel/                 ← React UI (F-008)
 │   │   ├── App.tsx
 │   │   ├── useRecorder.ts         ← background ilə canlı əlaqə
-│   │   └── usePanelCollapsed.ts   ← kompakt / tam rejim
 │   └── shared/
 │       ├── types.ts               ← RequestRow, mesaj protokolu
 │       ├── i18n.ts                ← t("key")
@@ -47,7 +46,7 @@ extension/
 ```
 
 ## Hazırkı vəziyyət (skelet)
-- ✅ Side panel: başlıq, — Kiçilt / ▢ Böyüt (yadda qalır), ✕ Bağla
+- ✅ Side panel: başlıq, ✕ Bağla (saxlanmamış qeyd silinir)
 - ✅ Dark mode (default) — ☀️ / 🌙 ilə işıqlı rejim, yadda qalır
 - ✅ Ayrı pəncərə rejimi: ⧉ → ayrıca pəncərə (ikinci monitor), ⇥ → side panel-ə qaytar; yer və ölçü yadda qalır
 - ✅ Geniş ayrı pəncərədə (≥ 900px) DevTools kimi bölünmüş görünüş: siyahı solda, detallar sağda (↑ / ↓, Esc, dartılan ara xətt)

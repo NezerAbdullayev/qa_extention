@@ -415,5 +415,32 @@
   },
   "watch_not_local": {
     "message": "İzləmə yalnız local səhifədə işləyir (localhost, 127.x.x.x)."
+  },
+  "watch_help_title": {
+    "message": "Necə istifadə etməli?"
+  },
+  "watch_help_method": {
+    "message": "İstənilən dəyişən (obyekt, massiv, string…), istənilən yerdə — hook, funksiya, komponent. İlk ?. mütləqdir (dəyər undefined ola bilər)."
+  },
+  "watch_help_window": {
+    "message": "Eyni, funksiya forması."
+  },
+  "watch_help_component": {
+    "message": "Komponentin props-u və bütün useState / useReducer dəyərləri."
+  },
+  "watch_help_form": {
+    "message": "react-hook-form: bütün values, errors, isDirty, isValid… — input-a yazanda dərhal yenilənir."
+  },
+  "watch_help_value": {
+    "message": "JSX-dən istənilən dəyər (komponent render olanda yenilənir)."
+  },
+  "watch_help_note_local": {
+    "message": "Yalnız local səhifədə işləyir (localhost, 127.x.x.x). Record lazım deyil."
+  },
+  "watch_help_note_reload": {
+    "message": "İlk (başlanğıc) dəyərləri görmək üçün Watch basdıqdan sonra səhifəni yeniləyin."
+  },
+  "watch_help_note_update": {
+    "message": "Yeni dəyər dərhal, obyektin içində dəyişiklik (obj.name = …) ən gec 1 saniyəyə görünür. Unwatch hər şeyi səhifədən silir; ?. sayəsində kod xəta vermir."
   }
 }

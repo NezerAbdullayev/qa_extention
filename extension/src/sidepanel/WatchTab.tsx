@@ -52,6 +52,7 @@ export function WatchTab(props: { active: boolean; items: WatchItem[] }) {
           </span>
         )}
       </div>
+      <WatchHelp />
       {error && (
         <p className="border-b border-red-200 bg-red-50 px-3 py-1.5 text-xs text-red-700">{error}</p>
       )}
@@ -85,5 +86,46 @@ export function WatchTab(props: { active: boolean; items: WatchItem[] }) {
         )}
       </div>
     </div>
+  );
+}
+
+/** How to mark values in the app code — the ways the watcher understands (F-010). */
+const HELP_USAGES: { code: string; text: string }[] = [
+  { code: "value?.$watch?.('name', value)", text: 'watch_help_method' },
+  { code: "window.$watch?.('name', value)", text: 'watch_help_window' },
+  { code: '<Profile data-watch="profile" />', text: 'watch_help_component' },
+  { code: '<FormProvider {...methods} data-watch="form">', text: 'watch_help_form' },
+  { code: '<div data-watch="step" data-watch-value={step} />', text: 'watch_help_value' },
+];
+const HELP_NOTES = ['watch_help_note_local', 'watch_help_note_reload', 'watch_help_note_update'];
+
+/** Collapsible usage guide under the toolbar — closed by default, opens downwards. */
+function WatchHelp() {
+  return (
+    <details className="group border-b border-slate-200 text-xs">
+      <summary className="flex cursor-pointer select-none list-none items-center gap-1 px-3 py-1.5 text-slate-500 hover:text-slate-800 [&::-webkit-details-marker]:hidden">
+        <span className="inline-block w-3 text-[10px] transition-transform group-open:rotate-90">
+          ▸
+        </span>
+        {t('watch_help_title')}
+      </summary>
+      <div className="space-y-2 px-3 pb-3">
+        <ul className="space-y-1.5">
+          {HELP_USAGES.map((u) => (
+            <li key={u.code}>
+              <code className="block rounded bg-slate-100 px-1.5 py-0.5 font-mono text-[11px] break-all">
+                {u.code}
+              </code>
+              <span className="text-slate-500">{t(u.text)}</span>
+            </li>
+          ))}
+        </ul>
+        <ul className="list-disc space-y-0.5 pl-4 text-slate-500">
+          {HELP_NOTES.map((k) => (
+            <li key={k}>{t(k)}</li>
+          ))}
+        </ul>
+      </div>
+    </details>
   );
 }

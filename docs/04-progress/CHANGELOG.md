@@ -2,6 +2,10 @@
 
 Format: [Keep a Changelog](https://keepachangelog.com/) · Versiya: [SemVer](https://semver.org/)
 
+## [2.5.9] — 2026-11-05
+### Added
+- State tab-ında Watch düyməsinin altında açılıb-bağlanan **"Necə istifadə etməli?"** bələdçisi (default bağlı, aşağıya açılır): `$watch`, `data-watch`, `data-watch-value`, react-hook-form nümunələri və qeydlər
+
 ## [2.5.8] — 2026-11-05
 ### Changed
 - State tab-ının düyməsi: **İzləməyə başla / İzləməni dayandır** → **Watch / Unwatch**

@@ -41,7 +41,7 @@ export function WatchTab(props: { active: boolean; items: WatchItem[] }) {
         <button
           onClick={toggle}
           disabled={busy}
-          className="rounded bg-slate-500 px-3 py-1 font-medium text-white hover:bg-slate-600 disabled:opacity-40"
+          className="rounded border border-[oklch(0.18_0.08_263.35)] bg-[oklch(0.27_0.11_263.35)] px-3 py-1 font-medium text-white hover:bg-[oklch(0.4_0.17_263.22)] disabled:opacity-40"
         >
           {active ? t('watch_stop') : t('watch_start')}
         </button>

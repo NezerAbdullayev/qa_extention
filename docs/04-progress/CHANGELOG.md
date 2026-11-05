@@ -2,6 +2,10 @@
 
 Format: [Keep a Changelog](https://keepachangelog.com/) · Versiya: [SemVer](https://semver.org/)
 
+## [2.5.12] — 2026-11-05
+### Changed
+- Watch / Unwatch düyməsi Record ilə eyni rəngdə (`oklch(0.27 0.11 263.35)`, hover `oklch(0.4 0.17 263.22)`), bir az tünd border ilə (`oklch(0.18 0.08 263.35)`)
+
 ## [2.5.11] — 2026-11-05
 ### Added
 - "İstifadə qaydası" bələdçisinin altında kiçik **Nümunə** kodu (`useState` + `user?.$watch?.('user', user)`)

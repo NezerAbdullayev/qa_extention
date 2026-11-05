@@ -383,7 +383,7 @@ function RecButton(props: { recording: boolean; onStart: () => void; onStop: () 
   ) : (
     <button
       onClick={props.onStart}
-      className="rounded bg-[oklch(0.27_0.11_263.35)] px-3 py-1 text-xs font-medium text-white hover:bg-[oklch(0.34_0.11_263.35)]"
+      className="rounded bg-[oklch(0.27_0.11_263.35)] px-3 py-1 text-xs font-medium text-white hover:bg-[oklch(0.4_0.17_263.22)]"
     >
       {t('rec_start')}
     </button>

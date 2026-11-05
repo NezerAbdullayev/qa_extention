@@ -2,6 +2,10 @@
 
 Format: [Keep a Changelog](https://keepachangelog.com/) · Versiya: [SemVer](https://semver.org/)
 
+## [2.4.18] — 2026-11-05
+### Changed
+- Record düyməsinin hover rəngi: `oklch(0.4 0.17 263.22)`
+
 ## [2.4.17] — 2026-11-05
 ### Changed
 - Record düyməsinin fonu: `oklch(0.27 0.11 263.35)` (tünd göy)

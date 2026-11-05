@@ -417,10 +417,10 @@
     "message": "İzləmə yalnız local səhifədə işləyir (localhost, 127.x.x.x)."
   },
   "watch_help_title": {
-    "message": "Necə istifadə etməli?"
+    "message": "İstifadə qaydası"
   },
   "watch_help_method": {
-    "message": "İstənilən dəyişən (obyekt, massiv, string…), istənilən yerdə — hook, funksiya, komponent. İlk ?. mütləqdir (dəyər undefined ola bilər)."
+    "message": "İstənilən variable (obyekt, massiv, string…), istənilən yerdə — hook, funksiya, komponent. İlk ?. mütləqdir (dəyər undefined ola bilər)."
   },
   "watch_help_window": {
     "message": "Eyni, funksiya forması."

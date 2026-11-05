@@ -19,6 +19,7 @@ API request-lərinin yanında **tətbiqin daxili vəziyyətini** (komponent stat
 ```ts
 window.$watch?.('defaultState', defaultState);   // hook, funksiya, React-dən kənar — fərq etmir
 ```
+- **Metod forması** (2.5.5): `address?.$watch?.('address', address)` — istənilən dəyərdə (obyekt, massiv, string, rəqəm). Aktivləşdir basılanda `Object.prototype`-a **görünməz** (`enumerable: false`) və **üzərinə yazıla bilən** `$watch` əlavə olunur; `Object.keys` / `JSON` / `for…in` onu görmür. `null` / `undefined` üçün ilk `?.` mütləqdir. TS: `declare global { interface Object { $watch?<T>(name: string, value?: T): T } }`.
 - Extension aktiv deyilsə `?.` sayəsində heç nə olmur (production-da zərərsiz). Dəyəri geri qaytarır.
 - Yeni dəyər (`setState` → render → yenidən çağırılır) **dərhal**, yerində mutasiya (`obj.name = 'x'`) **≤ 1 san** (istinad yadda saxlanılır, hər skanda JSON müqayisə olunur).
 - Aktivləşdir-dən **əvvəl** edilən çağırışlar itir — dəyər növbəti render-də və ya səhifə yeniləndikdən sonra görünür.

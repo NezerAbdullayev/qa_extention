@@ -326,6 +326,21 @@
     return value;
   };
 
+  // value.$watch('name') / value.$watch('name', value) on ANY value (object, array, string…).
+  // Non-enumerable (for…in / Object.keys / JSON never see it) and writable (an app object
+  // can still have its own $watch). Use `value?.$watch?.(…)` — null / undefined have no methods.
+  try {
+    Object.defineProperty(Object.prototype, '$watch', {
+      configurable: true,
+      enumerable: false,
+      writable: true,
+      value: function (name, value) {
+        'use strict';
+        return window.$watch(name, arguments.length > 1 ? value : this);
+      },
+    });
+  } catch (e) {}
+
   window.__apiLensWatch = {
     resync: () => {
       last.clear();

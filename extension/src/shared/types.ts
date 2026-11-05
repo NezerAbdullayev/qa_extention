@@ -52,27 +52,23 @@ export interface RecorderState {
   error?: string;
   /** The tab being recorded — shown in the panel (important in separate-window mode). */
   target?: { title: string; url: string };
-  /** F-009: a Redux store was found in the current page (false → reload the page). */
-  reduxReady: boolean;
-  reduxActions: ReduxActionRow[];
+  /** F-010: values of everything with a `data-watch` prop in the page, sorted by name. */
+  watched: WatchItem[];
 }
 
-/** F-009: one Redux action, as shown in the "Redux" tab list. Light — no payload / state. */
-export interface ReduxActionRow {
-  id: number;
-  /** Epoch ms (page clock). */
-  time: number;
-  type: string;
+/** F-010 State Watcher: one `data-watch` item of the page. */
+export interface WatchItem {
+  /** `data-watch` value (" #2", " #3" … appended when repeated). */
+  name: string;
+  kind: 'value' | 'form' | 'field' | 'element' | 'component' | 'component+form' | 'error';
+  /** Component name (component kinds). */
+  component?: string;
+  value: unknown;
+  /** `folder/File.tsx:12` when React provides it (dev builds). */
+  source?: string;
+  /** Epoch ms of the last change. */
+  ts: number;
 }
-
-/** F-009: full action — payload + state of the user's scopes after the action. */
-export interface ReduxActionRecord extends ReduxActionRow {
-  payload?: unknown;
-  state: Record<string, unknown>;
-}
-
-/** F-009: chrome.storage.local key — the state paths the user watches (e.g. `taxpayerSlice`). */
-export const REDUX_SCOPES_KEY = 'reduxScopes';
 
 /** A request saved with 💾 (F-003). Stored in IndexedDB → `savedApis`; never auto-deleted. */
 export interface SavedApi {
@@ -111,8 +107,6 @@ export type SaveResult =
 export type PanelMessage =
   | { type: 'GET_STATE' }
   | { type: 'GET_DETAIL'; id: string }
-  /** F-009: payload + state of one Redux action. */
-  | { type: 'GET_REDUX_DETAIL'; id: number }
   | { type: 'START'; tabId: number }
   | { type: 'STOP' }
   /** Open the panel in a separate window (or focus it if already open). */

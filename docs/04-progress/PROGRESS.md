@@ -7,9 +7,10 @@
 ## 2026-11-05
 **Görülən işlər**
 - F-009 Redux Action Tracker: spec + qərarlar (R1–R5), 3-cü Redux tab-ı, scope-lar (2.4.19)
+- F-010 State Watcher: 3-cü tab Redux əvəzinə `data-watch` (state-watcher prototipinin məntiqi), F-009 silindi (2.4.20)
 
 **Növbəti addım**
-- F-009-u real Redux (RTK) saytında yoxlamaq
+- F-010-u real React + react-hook-form layihəsində yoxlamaq
 
 ---
 

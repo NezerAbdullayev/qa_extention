@@ -22,9 +22,8 @@ import type {
   RecorderState,
   RequestRecord,
 } from '../shared/types';
-import type { ReduxActionRecord } from '../shared/types';
-import { PANEL_PORT, REDUX_SCOPES_KEY, toRow } from '../shared/types';
-import { REDUX_BINDING, reduxInjectSource, reduxScopesUpdateSource } from './reduxInject';
+import type { WatchItem } from '../shared/types';
+import { PANEL_PORT, toRow } from '../shared/types';
 
 const CDP_VERSION = '1.3';
 const RECORDED_TYPES = new Set(['XHR', 'Fetch']);
@@ -42,13 +41,9 @@ const records = new Map<string, RequestRecord>();
 const extraRequestHeaders = new Map<string, Headers>();
 const extraResponseHeaders = new Map<string, Headers>();
 
-// F-009 Redux actions — memory only (not in HAR / saved APIs, decision R4).
-const REDUX_LIMIT = 1000;
-let reduxReady = false;
-let reduxSeq = 0;
-let reduxActions: ReduxActionRecord[] = [];
-/** Identifier of the injected script, so it can be replaced when the scopes change. */
-let reduxScriptId: string | undefined;
+// F-010 State Watcher — `data-watch` values of the recorded page, by name. Memory only.
+const WATCH_BINDING = '__apiLensEmit';
+const watched = new Map<string, WatchItem>();
 
 chrome.sidePanel
   .setPanelBehavior({ openPanelOnActionClick: true })
@@ -63,8 +58,7 @@ function snapshot(): RecorderState {
     error: lastError,
     target,
     requests: [...records.values()].map(toRow),
-    reduxReady,
-    reduxActions: reduxActions.map(({ id, time, type }) => ({ id, time, type })),
+    watched: [...watched.values()].sort((x, y) => x.name.localeCompare(y.name)),
   };
 }
 
@@ -124,8 +118,7 @@ const ready: Promise<void> = (async () => {
 /** Forgets the current (unsaved) recording: memory + IndexedDB `requests`. Saved APIs stay. */
 async function clearRecords(): Promise<void> {
   records.clear();
-  reduxActions = [];
-  reduxReady = false;
+  watched.clear();
   extraRequestHeaders.clear();
   extraResponseHeaders.clear();
   seq = 0;
@@ -137,7 +130,6 @@ async function clearRecords(): Promise<void> {
 /** "Təmizlə": empty the "Qeyd" list like DevTools 🚫 — recording (if on) keeps going. */
 async function resetList(): Promise<void> {
   records.clear();
-  reduxActions = [];
   extraRequestHeaders.clear();
   extraResponseHeaders.clear();
   seq = 0;
@@ -169,7 +161,7 @@ async function start(targetTab: number): Promise<void> {
     recording = true;
     tabId = targetTab;
     target = await describeTab(targetTab);
-    await startRedux(targetTab);
+    await startWatch(targetTab);
   } catch (err) {
     recording = false;
     tabId = null;
@@ -187,73 +179,36 @@ function hostOf(url: string): string {
   }
 }
 
-// ---------------------------------------------------------------- F-009 Redux
-
-async function reduxScopes(): Promise<string[]> {
-  const v = (await chrome.storage.local.get(REDUX_SCOPES_KEY))[REDUX_SCOPES_KEY];
-  return Array.isArray(v) ? v : [];
-}
+// ---------------------------------------------------------------- F-010 State Watcher
 
 /**
- * Binding + script that runs before the app's code on every page load. The page that is
- * already open was loaded without it → "reload the page" until its store reports `init`.
+ * Binding + watcher script (public/watch-inject.js): on every future page load (before the
+ * app's code) and right now in the already open page — fiber scanning works there too.
  */
-async function startRedux(id: number): Promise<void> {
-  reduxScriptId = undefined;
+async function startWatch(id: number): Promise<void> {
   try {
     const debuggee = { tabId: id };
+    const source = await (await fetch(chrome.runtime.getURL('watch-inject.js'))).text();
     await chrome.debugger.sendCommand(debuggee, 'Runtime.enable');
-    await chrome.debugger.sendCommand(debuggee, 'Runtime.addBinding', { name: REDUX_BINDING });
+    await chrome.debugger.sendCommand(debuggee, 'Runtime.addBinding', { name: WATCH_BINDING });
     await chrome.debugger.sendCommand(debuggee, 'Page.enable');
-    const res = (await chrome.debugger.sendCommand(
-      debuggee,
-      'Page.addScriptToEvaluateOnNewDocument',
-      { source: reduxInjectSource(await reduxScopes()) },
-    )) as { identifier: string };
-    reduxScriptId = res.identifier;
+    await chrome.debugger.sendCommand(debuggee, 'Page.addScriptToEvaluateOnNewDocument', { source });
+    await chrome.debugger.sendCommand(debuggee, 'Runtime.evaluate', { expression: source });
   } catch (err) {
-    console.error('[API Lens] Redux inject failed', err);
+    console.error('[API Lens] state watcher inject failed', err);
   }
 }
 
-/** Scopes edited in the panel → the open page and future page loads use the new list. */
-chrome.storage.onChanged.addListener(async (changes, area) => {
-  if (area !== 'local' || !(REDUX_SCOPES_KEY in changes) || !recording || tabId === null) return;
-  const v = changes[REDUX_SCOPES_KEY].newValue;
-  const scopes: string[] = Array.isArray(v) ? v : [];
-  try {
-    if (reduxScriptId) {
-      await cdp('Page.removeScriptToEvaluateOnNewDocument', { identifier: reduxScriptId });
-    }
-    const res = await cdp<{ identifier: string }>('Page.addScriptToEvaluateOnNewDocument', {
-      source: reduxInjectSource(scopes),
-    });
-    reduxScriptId = res.identifier;
-    await cdp('Runtime.evaluate', { expression: reduxScopesUpdateSource(scopes) });
-  } catch (err) {
-    console.error('[API Lens] Redux scope update failed', err);
-  }
-});
-
-function onReduxMessage(payload: string): void {
-  let msg: { kind: string; time?: number; type?: string; payload?: unknown; state?: object };
+function onWatchMessage(payload: string): void {
+  let msg: { changed?: Record<string, Omit<WatchItem, 'name'>>; removed?: string[]; reset?: boolean };
   try {
     msg = JSON.parse(payload);
   } catch {
     return;
   }
-  if (msg.kind === 'init') {
-    reduxReady = true;
-  } else if (msg.kind === 'action' && typeof msg.type === 'string') {
-    reduxActions.push({
-      id: reduxSeq++,
-      time: msg.time ?? Date.now(),
-      type: msg.type,
-      payload: msg.payload,
-      state: (msg.state ?? {}) as Record<string, unknown>,
-    });
-    if (reduxActions.length > REDUX_LIMIT) reduxActions.shift();
-  }
+  if (msg.reset) watched.clear();
+  for (const [name, data] of Object.entries(msg.changed ?? {})) watched.set(name, { ...data, name });
+  for (const name of msg.removed ?? []) watched.delete(name);
   scheduleBroadcast();
 }
 
@@ -261,7 +216,6 @@ async function stop(): Promise<void> {
   const attached = tabId;
   recording = false;
   tabId = null;
-  reduxScriptId = undefined;
   await saveSession();
   if (attached !== null) {
     try {
@@ -384,15 +338,13 @@ function onCdpEvent(source: chrome.debugger.Debuggee, method: string, params?: o
 
   switch (method) {
     case 'Runtime.bindingCalled':
-      if (p.name === REDUX_BINDING) onReduxMessage(p.payload);
+      if (p.name === WATCH_BINDING) onWatchMessage(p.payload);
       return;
     case 'Runtime.executionContextsCleared':
-      // Page navigated / reloaded — the new page reports `init` if it has a Redux store.
-      if (reduxReady) {
-        reduxReady = false;
-        break;
-      }
-      return;
+      // Page navigated / reloaded — the new page sends its own values.
+      if (watched.size === 0) return;
+      watched.clear();
+      break;
     case 'Network.requestWillBeSent': {
       if (!RECORDED_TYPES.has(p.type)) return;
       const existing = records.get(p.requestId);
@@ -537,8 +489,6 @@ chrome.runtime.onMessage.addListener((msg: PanelMessage, _sender, sendResponse) 
         return snapshot();
       case 'GET_DETAIL':
         return records.get(msg.id) ?? (await db.get(msg.id)) ?? null;
-      case 'GET_REDUX_DETAIL':
-        return reduxActions.find((a) => a.id === msg.id) ?? null;
       case 'START':
         await start(msg.tabId);
         return snapshot();

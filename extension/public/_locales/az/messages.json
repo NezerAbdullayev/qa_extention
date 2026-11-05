@@ -390,30 +390,15 @@
       }
     }
   },
-  "tab_redux": {
-    "message": "Redux ($COUNT$)",
+  "tab_state": {
+    "message": "State ($COUNT$)",
     "placeholders": {
       "count": {
         "content": "$1"
       }
     }
   },
-  "redux_reload_hint": {
-    "message": "Redux store tapılmadı. Action-ları görmək üçün səhifəni yeniləyin (tətbiqdə Redux DevTools aktiv olmalıdır)."
-  },
-  "redux_empty_recording": {
-    "message": "Redux action gözlənilir…"
-  },
-  "redux_scope_placeholder": {
-    "message": "State yolu, məs. taxpayerSlice"
-  },
-  "redux_scope_add": {
-    "message": "Əlavə et"
-  },
-  "redux_scope_remove": {
-    "message": "Scope-u sil"
-  },
-  "redux_scope_none": {
-    "message": "Scope yoxdur — yalnız action (type + payload) göstərilir."
+  "watch_empty_recording": {
+    "message": "data-watch tapılmadı. Koda data-watch=\"ad\" prop-u əlavə edin."
   }
 }

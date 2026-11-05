@@ -5,8 +5,7 @@ const INITIAL: RecorderState = {
   recording: false,
   tabId: null,
   requests: [],
-  reduxReady: false,
-  reduxActions: [],
+  watched: [],
 };
 
 function send(msg: PanelMessage): Promise<RecorderState> {

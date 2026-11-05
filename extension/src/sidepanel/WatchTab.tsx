@@ -41,7 +41,13 @@ export function WatchTab(props: { active: boolean; items: WatchItem[] }) {
         <button
           onClick={toggle}
           disabled={busy}
-          className="rounded border border-[oklch(0.18_0.08_263.35)] bg-[oklch(0.27_0.11_263.35)] px-3 py-1 font-medium text-white hover:bg-[oklch(0.4_0.17_263.22)] disabled:opacity-40"
+          className={`rounded border px-3 py-1 font-medium text-white disabled:opacity-40 ${
+            active
+              ? // Unwatch — grey, like the recorder's Stop
+                'border-gray-900 bg-gray-800 hover:bg-gray-700 dark:border-gray-700 dark:bg-gray-600 dark:hover:bg-gray-500'
+              : // Watch — same colour as Record, slightly darker border
+                'border-[oklch(0.18_0.08_263.35)] bg-[oklch(0.27_0.11_263.35)] hover:bg-[oklch(0.4_0.17_263.22)]'
+          }`}
         >
           {active ? t('watch_stop') : t('watch_start')}
         </button>

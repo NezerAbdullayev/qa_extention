@@ -23,13 +23,14 @@ API request-lərinin yanında **tətbiqin daxili vəziyyətini** (komponent stat
 ## Texniki qeydlər
 - Inject **CDP ilə** (F-009 R1 kimi): `Runtime.addBinding('__apiLensEmit')` + `Page.addScriptToEvaluateOnNewDocument` (sonrakı yükləmələr) + `Runtime.evaluate` (açıq səhifə — **yeniləmək lazım deyil**). Yeni icazə yoxdur.
 - **Yalnız local** (2.5.1): qeyd olunan tab `localhost` / `127.0.0.1` deyilsə, watcher inject olunmur və State tab-ı **gizlənir** (başqa saytlarda xəta verirdi).
+- **Aktivləşdir düyməsi** (2.5.3): watcher Record ilə avtomatik başlamır; State tab-ında düymə basılanda (Record aktiv olmalıdır) inject olunur. Stop / yeni Record / debugger ayrılması onu söndürür.
 - Skript: `extension/public/watch-inject.js` (prototipin `inject.js`-i; `postMessage` relay əvəzinə binding).
 - React fiber ağacı: React DevTools hook-u varsa `getFiberRoots`, yoxdursa DOM-dakı `__reactContainer$`.
 - Yeniləmə: React DevTools varsa hər commit-də (`onCommitFiberRoot`), RHF subject-lərinə abunə, ehtiyat olaraq hər 1 san skan.
 - Yalnız yaddaşda; HAR / Saxlanmışlara düşmür. Record / Təmizlə / ✕ / səhifə naviqasiyası siyahını sıfırlayır.
 
 ## Qəbul meyarları
-- [ ] Record → açıq səhifədəki `data-watch` elementləri State tab-ında görünür
+- [ ] Record → State → **Aktivləşdir** → açıq səhifədəki `data-watch` elementləri görünür
 - [ ] Dəyər dəyişəndə kart yenilənir (≤ 1 san)
 - [ ] RHF input-a yazanda dəyər dərhal yenilənir
 - [ ] `data-watch` olmayan saytda heç nə sınmır — "data-watch tapılmadı" yazılır

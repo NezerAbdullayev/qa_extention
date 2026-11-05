@@ -400,5 +400,14 @@
   },
   "watch_empty_recording": {
     "message": "data-watch tapılmadı. Koda data-watch=\"ad\" prop-u əlavə edin."
+  },
+  "watch_activate": {
+    "message": "Aktivləşdir"
+  },
+  "watch_activate_hint": {
+    "message": "data-watch dəyərlərini izləməyə başlamaq üçün basın."
+  },
+  "watch_need_recording": {
+    "message": "Əvvəlcə Record basın."
   }
 }

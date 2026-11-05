@@ -45,6 +45,8 @@ const extraResponseHeaders = new Map<string, Headers>();
 // F-010 State Watcher — `data-watch` values of the recorded page, by name. Memory only.
 const WATCH_BINDING = '__apiLensEmit';
 const watched = new Map<string, WatchItem>();
+/** Turned on only by the "Aktivləşdir" button in the State tab; off again on Stop / new Record. */
+let watchActive = false;
 
 chrome.sidePanel
   .setPanelBehavior({ openPanelOnActionClick: true })
@@ -59,6 +61,7 @@ function snapshot(): RecorderState {
     error: lastError,
     target,
     requests: [...records.values()].map(toRow),
+    watchActive,
     watched: [...watched.values()].sort((x, y) => x.name.localeCompare(y.name)),
   };
 }
@@ -162,7 +165,6 @@ async function start(targetTab: number): Promise<void> {
     recording = true;
     tabId = targetTab;
     target = await describeTab(targetTab);
-    if (isLocalUrl(target?.url)) await startWatch(targetTab); // F-010: local only
   } catch (err) {
     recording = false;
     tabId = null;
@@ -186,7 +188,10 @@ function hostOf(url: string): string {
  * Binding + watcher script (public/watch-inject.js): on every future page load (before the
  * app's code) and right now in the already open page — fiber scanning works there too.
  */
-async function startWatch(id: number): Promise<void> {
+async function startWatch(): Promise<void> {
+  // F-010: only while recording a local page (the debugger session is needed).
+  if (!recording || tabId === null || watchActive || !isLocalUrl(target?.url)) return;
+  const id = tabId;
   try {
     const debuggee = { tabId: id };
     const source = await (await fetch(chrome.runtime.getURL('watch-inject.js'))).text();
@@ -195,6 +200,7 @@ async function startWatch(id: number): Promise<void> {
     await chrome.debugger.sendCommand(debuggee, 'Page.enable');
     await chrome.debugger.sendCommand(debuggee, 'Page.addScriptToEvaluateOnNewDocument', { source });
     await chrome.debugger.sendCommand(debuggee, 'Runtime.evaluate', { expression: source });
+    watchActive = true;
   } catch (err) {
     console.error('[API Lens] state watcher inject failed', err);
   }
@@ -216,6 +222,7 @@ function onWatchMessage(payload: string): void {
 async function stop(): Promise<void> {
   const attached = tabId;
   recording = false;
+  watchActive = false;
   tabId = null;
   await saveSession();
   if (attached !== null) {
@@ -448,6 +455,7 @@ chrome.debugger.onEvent.addListener(onCdpEvent);
 chrome.debugger.onDetach.addListener((source) => {
   if (source.tabId === tabId) {
     recording = false;
+    watchActive = false;
     tabId = null;
     void saveSession();
     scheduleBroadcast();
@@ -505,6 +513,10 @@ chrome.runtime.onMessage.addListener((msg: PanelMessage, _sender, sendResponse) 
       case 'RESET_LIST':
         await resetList();
         return null;
+      case 'START_WATCH':
+        await startWatch();
+        scheduleBroadcast();
+        return snapshot();
 
       // ---- F-002 HAR export (masked, F-005)
       case 'EXPORT_HAR': {

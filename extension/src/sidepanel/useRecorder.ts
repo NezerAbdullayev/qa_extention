@@ -6,6 +6,7 @@ const INITIAL: RecorderState = {
   tabId: null,
   requests: [],
   watched: [],
+  watchActive: false,
 };
 
 function send(msg: PanelMessage): Promise<RecorderState> {

@@ -251,7 +251,7 @@ export function App() {
 
         {tab === 'state' && showState ? (
           <main className="min-h-0 flex-1">
-            <WatchTab recording={state.recording} items={state.watched} />
+            <WatchTab recording={state.recording} active={state.watchActive} items={state.watched} />
           </main>
         ) : tab === 'saved' ? (
           <main className="min-h-0 flex-1">

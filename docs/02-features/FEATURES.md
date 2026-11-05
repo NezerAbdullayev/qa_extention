@@ -10,7 +10,7 @@
 | F-006 | Domen filtri (opsional, default: bütün saytlar) | v0.2 | 💡 İdeya | — |
 | F-007 | Backend-ə göndərmə | Sonra | ⏸️ Təxirə salınıb (Sessiya #1, Q3) | — |
 | F-008 | Request siyahısı (açılan qutular, max 300px) | MVP | 🔵 Hazırlanır | [link](F-008-request-list.md) |
-| F-009 | Redux Action Tracker (action + state) | v0.2 | 📝 Spec | [link](F-009-redux-action-tracker.md) |
+| F-009 | Redux Action Tracker (action + state) | v0.2 | 🔵 Hazırlanır | [link](F-009-redux-action-tracker.md) |
 
 Status: 💡 İdeya · ⏸️ Təxirə salınıb · 📝 Spec · 🔵 Hazırlanır · 🧪 Test · ✅ Hazır
 

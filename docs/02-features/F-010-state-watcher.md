@@ -15,6 +15,19 @@ API request-lərinin yanında **tətbiqin daxili vəziyyətini** (komponent stat
 <form data-watch="loginForm">…</form>                // RHF formu (FormProvider daxilində)
 <div data-watch="step" data-watch-value={step} />    // istənilən dəyər
 ```
+### İstənilən dəyişən — `window.$watch` (2.5.4)
+```ts
+window.$watch?.('defaultState', defaultState);   // hook, funksiya, React-dən kənar — fərq etmir
+```
+- Extension aktiv deyilsə `?.` sayəsində heç nə olmur (production-da zərərsiz). Dəyəri geri qaytarır.
+- Yeni dəyər (`setState` → render → yenidən çağırılır) **dərhal**, yerində mutasiya (`obj.name = 'x'`) **≤ 1 san** (istinad yadda saxlanılır, hər skanda JSON müqayisə olunur).
+- Aktivləşdir-dən **əvvəl** edilən çağırışlar itir — dəyər növbəti render-də və ya səhifə yeniləndikdən sonra görünür.
+- TypeScript üçün bir dəfə (`.d.ts`):
+  ```ts
+  declare global { interface Window { $watch?: <T>(name: string, value: T) => T } }
+  export {};
+  ```
+
 `data-watch` (və ya `data-watch={true}` — komponentin adı götürülür). Eyni ad təkrarlananda `#2`, `#3` əlavə olunur.
 
 ## UI

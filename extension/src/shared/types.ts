@@ -62,7 +62,8 @@ export interface RecorderState {
 export interface WatchItem {
   /** `data-watch` value (" #2", " #3" … appended when repeated). */
   name: string;
-  kind: 'value' | 'form' | 'field' | 'element' | 'component' | 'component+form' | 'error';
+  /** 'watch' = registered from code with window.$watch('name', value). */
+  kind: 'value' | 'form' | 'field' | 'element' | 'component' | 'component+form' | 'watch' | 'error';
   /** Component name (component kinds). */
   component?: string;
   value: unknown;

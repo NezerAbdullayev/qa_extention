@@ -15,6 +15,10 @@
   const POLL_MS = 1000;
 
   const last = new Map(); // name -> JSON (to detect changes)
+  // window.$watch('name', value) — any value from anywhere in the app code (hooks, plain
+  // functions, outside React). Keeps the latest reference, so in-place mutations
+  // (obj.name = 'x') are caught by the next scan (≤ 1 s); a new value shows at once.
+  const tracked = new Map(); // name -> value
 
   const emit = (msg) => {
     try {
@@ -244,6 +248,14 @@
         if (f.child) stack.push(f.child);
       }
     }
+    for (const [name, v] of tracked) {
+      const key = found.has(name) ? name + ' ($watch)' : name;
+      try {
+        found.set(key, { kind: 'watch', value: safe(v) });
+      } catch (e) {
+        found.set(key, { kind: 'error', value: String(e) });
+      }
+    }
     return found;
   }
 
@@ -307,6 +319,12 @@
     tryWrapHook();
     flush(false);
   }, POLL_MS);
+
+  window.$watch = (name, value) => {
+    tracked.set(String(name), value);
+    schedule();
+    return value;
+  };
 
   window.__apiLensWatch = {
     resync: () => {

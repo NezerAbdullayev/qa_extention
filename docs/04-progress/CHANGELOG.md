@@ -2,6 +2,10 @@
 
 Format: [Keep a Changelog](https://keepachangelog.com/) · Versiya: [SemVer](https://semver.org/)
 
+## [2.5.4] — 2026-11-05
+### Added
+- `window.$watch?.('ad', dəyər)` — koddan istənilən dəyişəni (obyekt, massiv, primitiv; hook, funksiya, React-dən kənar) State tab-ında izləmək; yeni dəyər dərhal, yerində mutasiya (`obj.name = …`) ≤ 1 san ərzində görünür
+
 ## [2.5.3] — 2026-11-05
 ### Changed
 - State watcher artıq Record ilə avtomatik başlamır — yalnız State tab-ındakı **Aktivləşdir** düyməsi ilə inject olunur (Record aktiv olmalıdır); Stop / yeni Record onu söndürür

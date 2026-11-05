@@ -2,6 +2,10 @@
 
 Format: [Keep a Changelog](https://keepachangelog.com/) · Versiya: [SemVer](https://semver.org/)
 
+## [2.5.7] — 2026-11-05
+### Changed
+- 3-cü tab-ın adı yenidən **State** (İzləmə → State); funksionallıq dəyişmir
+
 ## [2.5.6] — 2026-11-05
 ### Changed
 - 3-cü tab **State** → **İzləmə**

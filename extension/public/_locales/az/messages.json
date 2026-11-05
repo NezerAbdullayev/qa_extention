@@ -391,7 +391,7 @@
     }
   },
   "tab_state": {
-    "message": "İzləmə ($COUNT$)",
+    "message": "State ($COUNT$)",
     "placeholders": {
       "count": {
         "content": "$1"

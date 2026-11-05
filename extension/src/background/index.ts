@@ -42,7 +42,7 @@ const records = new Map<string, RequestRecord>();
 const extraRequestHeaders = new Map<string, Headers>();
 const extraResponseHeaders = new Map<string, Headers>();
 
-// F-010 Watcher ("İzləmə" tab) — `data-watch` / `$watch` values of a local page, by name.
+// F-010 Watcher ("State" tab) — `data-watch` / `$watch` values of a local page, by name.
 // Independent of the recorder: turned on / off ONLY by the button in its own tab. It shares
 // the chrome.debugger session when recording the same tab, otherwise attaches its own.
 const WATCH_BINDING = '__apiLensEmit';

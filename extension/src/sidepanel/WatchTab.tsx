@@ -5,7 +5,7 @@ import { activeTabId } from './activeTab';
 import { JsonTree } from './JsonTree';
 
 /**
- * F-010 "İzləmə" tab: live values of everything with a `data-watch` prop or registered with
+ * F-010 "State" tab: live values of everything with a `data-watch` prop or registered with
  * `$watch` in a local page. Turned on / off ONLY by the button on the left of its toolbar —
  * Record / Stop do not touch it.
  */

@@ -45,7 +45,7 @@ export function App() {
   }, []);
   const count = state.requests.length;
   // F-010: State tab only for a local page (localhost / 127.0.0.1); otherwise hidden.
-  // F-010: "İzləmə" tab only for a local page — the active tab, the recorded one, or the one
+  // F-010: "State" tab only for a local page — the active tab, the recorded one, or the one
   // already being watched (so it can always be turned off); otherwise hidden.
   const activeLocal = useActiveTabLocal();
   const showState = state.watchActive || activeLocal || isLocalUrl(state.target?.url);

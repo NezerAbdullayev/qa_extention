@@ -32,7 +32,7 @@ window.$watch?.('defaultState', defaultState);   // hook, funksiya, React-dən k
 `data-watch` (və ya `data-watch={true}` — komponentin adı götürülür). Eyni ad təkrarlananda `#2`, `#3` əlavə olunur.
 
 ## UI
-3-cü tab **"State (N)"** (Qeyd · Saxlanmışlar · State; 2.5.6-da qısa müddət "İzləmə" adlanıb) — aktiv tab (və ya qeyd olunan / izlənən tab) local olanda görünür. Toolbar-ın solunda boz keçid düyməsi: **Watch** ⇄ **Unwatch** (2.5.8). Altında açılıb-bağlanan **"İstifadə qaydası"** bələdçisi (2.5.9, default bağlı): istifadə üsulları + qeydlər, yanında "● İzlənir". Hər element kart: ad, növ (`component · Profile`, `field`, `form`, `value`…), mənbə (`File.tsx:12`, dev build-də), son dəyişiklik vaxtı, dəyər (JsonTree, max 300px).
+3-cü tab **"State (N)"** (Qeyd · Saxlanmışlar · State; 2.5.6-da qısa müddət "İzləmə" adlanıb) — aktiv tab (və ya qeyd olunan / izlənən tab) local olanda görünür. Toolbar-ın solunda boz keçid düyməsi: **Watch** ⇄ **Unwatch** (2.5.8). Altında açılıb-bağlanan **"İstifadə qaydası"** bələdçisi (2.5.9, default bağlı): istifadə üsulları + qeydlər + altında kiçik **Nümunə** kodu (2.5.11), yanında "● İzlənir". Hər element kart: ad, növ (`component · Profile`, `field`, `form`, `value`…), mənbə (`File.tsx:12`, dev build-də), son dəyişiklik vaxtı, dəyər (JsonTree, max 300px).
 
 ## Texniki qeydlər
 - Inject **CDP ilə** (F-009 R1 kimi): `Runtime.addBinding('__apiLensEmit')` + `Page.addScriptToEvaluateOnNewDocument` (sonrakı yükləmələr) + `Runtime.evaluate` (açıq səhifə — **yeniləmək lazım deyil**). Yeni icazə yoxdur.

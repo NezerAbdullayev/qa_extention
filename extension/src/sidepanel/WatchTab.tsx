@@ -99,6 +99,22 @@ const HELP_USAGES: { code: string; text: string }[] = [
 ];
 const HELP_NOTES = ['watch_help_note_local', 'watch_help_note_reload', 'watch_help_note_update'];
 
+/** Short end-to-end example shown at the bottom of the guide. */
+const HELP_EXAMPLE = `function Profile() {
+  const [user, setUser] = useState({ name: 'Həsən' });
+
+  user?.$watch?.('user', user);   // ← one line
+
+  return (
+    <button onClick={() => setUser({ name: 'Əli' })}>
+      Change
+    </button>
+  );
+}
+
+// State → "user" card: { name: "Həsən" }
+// click → { name: "Əli" }  (instantly)`;
+
 /** Collapsible usage guide under the toolbar — closed by default, opens downwards. */
 function WatchHelp() {
   return (
@@ -125,6 +141,12 @@ function WatchHelp() {
             <li key={k}>{t(k)}</li>
           ))}
         </ul>
+        <div>
+          <p className="mb-1 font-semibold text-slate-600">{t('watch_help_example')}</p>
+          <pre className="overflow-x-auto rounded bg-slate-100 p-2 font-mono text-[11px] leading-4">
+            {HELP_EXAMPLE}
+          </pre>
+        </div>
       </div>
     </details>
   );

@@ -442,5 +442,8 @@
   },
   "watch_help_note_update": {
     "message": "Yeni dəyər dərhal, obyektin içində dəyişiklik (obj.name = …) ən gec 1 saniyəyə görünür. Unwatch hər şeyi səhifədən silir; ?. sayəsində kod xəta vermir."
+  },
+  "watch_help_example": {
+    "message": "Nümunə"
   }
 }

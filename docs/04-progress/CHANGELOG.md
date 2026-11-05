@@ -2,6 +2,10 @@
 
 Format: [Keep a Changelog](https://keepachangelog.com/) · Versiya: [SemVer](https://semver.org/)
 
+## [2.5.11] — 2026-11-05
+### Added
+- "İstifadə qaydası" bələdçisinin altında kiçik **Nümunə** kodu (`useState` + `user?.$watch?.('user', user)`)
+
 ## [2.5.10] — 2026-11-05
 ### Changed
 - State bələdçisi: başlıq **"Necə istifadə etməli?"** → **"İstifadə qaydası"**; "dəyişən" → "variable"

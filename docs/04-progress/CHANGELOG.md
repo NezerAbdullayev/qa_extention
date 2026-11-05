@@ -2,6 +2,10 @@
 
 Format: [Keep a Changelog](https://keepachangelog.com/) · Versiya: [SemVer](https://semver.org/)
 
+## [2.5.8] — 2026-11-05
+### Changed
+- State tab-ının düyməsi: **İzləməyə başla / İzləməni dayandır** → **Watch / Unwatch**
+
 ## [2.5.7] — 2026-11-05
 ### Changed
 - 3-cü tab-ın adı yenidən **State** (İzləmə → State); funksionallıq dəyişmir

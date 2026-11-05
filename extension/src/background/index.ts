@@ -205,7 +205,7 @@ async function isLocalTab(id: number): Promise<boolean> {
 }
 
 /**
- * "İzləməyə başla": binding + watcher script (public/watch-inject.js) — on every future
+ * "Watch": binding + watcher script (public/watch-inject.js) — on every future
  * page load (before the app's code) and right now in the already open page.
  */
 async function startWatch(id: number): Promise<{ ok: boolean; error?: string }> {
@@ -239,7 +239,7 @@ async function startWatch(id: number): Promise<{ ok: boolean; error?: string }> 
   }
 }
 
-/** "İzləməni dayandır": remove the watcher from the page; detach unless the recorder uses the tab. */
+/** "Unwatch": remove the watcher from the page; detach unless the recorder uses the tab. */
 async function stopWatch(): Promise<void> {
   if (watchTabId === null) return;
   const id = watchTabId;

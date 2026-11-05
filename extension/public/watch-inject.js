@@ -15,7 +15,7 @@
   const POLL_MS = 1000;
 
   const last = new Map(); // name -> JSON (to detect changes)
-  let stopped = false; // "İzləməni dayandır" — scanning and sending become no-ops
+  let stopped = false; // "Unwatch" — scanning and sending become no-ops
   // window.$watch('name', value) — any value from anywhere in the app code (hooks, plain
   // functions, outside React). Keeps the latest reference, so in-place mutations
   // (obj.name = 'x') are caught by the next scan (≤ 1 s); a new value shows at once.

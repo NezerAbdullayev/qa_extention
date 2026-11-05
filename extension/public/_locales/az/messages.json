@@ -402,16 +402,16 @@
     "message": "Dəyər tapılmadı. Koda data-watch=\"ad\" və ya dəyər?.$watch?.(\"ad\") əlavə edin."
   },
   "watch_start": {
-    "message": "İzləməyə başla"
+    "message": "Watch"
   },
   "watch_stop": {
-    "message": "İzləməni dayandır"
+    "message": "Unwatch"
   },
   "watch_status_on": {
     "message": "İzlənir"
   },
   "watch_off_hint": {
-    "message": "Səhifədəki data-watch və $watch dəyərlərini canlı görmək üçün \"İzləməyə başla\" basın. Record lazım deyil."
+    "message": "Səhifədəki data-watch və $watch dəyərlərini canlı görmək üçün \"Watch\" basın. Record lazım deyil."
   },
   "watch_not_local": {
     "message": "İzləmə yalnız local səhifədə işləyir (localhost, 127.x.x.x)."

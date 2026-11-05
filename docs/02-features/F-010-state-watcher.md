@@ -32,20 +32,20 @@ window.$watch?.('defaultState', defaultState);   // hook, funksiya, React-dən k
 `data-watch` (və ya `data-watch={true}` — komponentin adı götürülür). Eyni ad təkrarlananda `#2`, `#3` əlavə olunur.
 
 ## UI
-3-cü tab **"State (N)"** (Qeyd · Saxlanmışlar · State; 2.5.6-da qısa müddət "İzləmə" adlanıb) — aktiv tab (və ya qeyd olunan / izlənən tab) local olanda görünür. Toolbar-ın solunda boz keçid düyməsi: **İzləməyə başla** ⇄ **İzləməni dayandır**, yanında "● İzlənir". Hər element kart: ad, növ (`component · Profile`, `field`, `form`, `value`…), mənbə (`File.tsx:12`, dev build-də), son dəyişiklik vaxtı, dəyər (JsonTree, max 300px).
+3-cü tab **"State (N)"** (Qeyd · Saxlanmışlar · State; 2.5.6-da qısa müddət "İzləmə" adlanıb) — aktiv tab (və ya qeyd olunan / izlənən tab) local olanda görünür. Toolbar-ın solunda boz keçid düyməsi: **Watch** ⇄ **Unwatch** (2.5.8), yanında "● İzlənir". Hər element kart: ad, növ (`component · Profile`, `field`, `form`, `value`…), mənbə (`File.tsx:12`, dev build-də), son dəyişiklik vaxtı, dəyər (JsonTree, max 300px).
 
 ## Texniki qeydlər
 - Inject **CDP ilə** (F-009 R1 kimi): `Runtime.addBinding('__apiLensEmit')` + `Page.addScriptToEvaluateOnNewDocument` (sonrakı yükləmələr) + `Runtime.evaluate` (açıq səhifə — **yeniləmək lazım deyil**). Yeni icazə yoxdur.
 - **Yalnız local** (2.5.1): qeyd olunan tab `localhost` / `127.0.0.1` deyilsə, watcher inject olunmur və State tab-ı **gizlənir** (başqa saytlarda xəta verirdi).
-- **Yalnız öz düyməsi** (2.5.6): izləmə Record-dan tam ayrıdır — Record lazım deyil, Stop / yeni Record onu söndürmür. Qeyd eyni tabdadırsa debugger sessiyası paylaşılır, deyilsə izləmə debugger-i özü qoşur. **İzləməni dayandır**: səhifədə `__apiLensWatch.stop()` (skan, `$watch`, `Object.prototype.$watch` silinir), skript və binding götürülür, qeyd həmin tabda getmirsə debugger ayrılır. Panel bağlananda (✕) və debugger ayrılanda da dayanır.
+- **Yalnız öz düyməsi** (2.5.6): izləmə Record-dan tam ayrıdır — Record lazım deyil, Stop / yeni Record onu söndürmür. Qeyd eyni tabdadırsa debugger sessiyası paylaşılır, deyilsə izləmə debugger-i özü qoşur. **Unwatch**: səhifədə `__apiLensWatch.stop()` (skan, `$watch`, `Object.prototype.$watch` silinir), skript və binding götürülür, qeyd həmin tabda getmirsə debugger ayrılır. Panel bağlananda (✕) və debugger ayrılanda da dayanır.
 - Skript: `extension/public/watch-inject.js` (prototipin `inject.js`-i; `postMessage` relay əvəzinə binding).
 - React fiber ağacı: React DevTools hook-u varsa `getFiberRoots`, yoxdursa DOM-dakı `__reactContainer$`.
 - Yeniləmə: React DevTools varsa hər commit-də (`onCommitFiberRoot`), RHF subject-lərinə abunə, ehtiyat olaraq hər 1 san skan.
 - Yalnız yaddaşda; HAR / Saxlanmışlara düşmür. Record / Təmizlə / ✕ / səhifə naviqasiyası siyahını sıfırlayır.
 
 ## Qəbul meyarları
-- [ ] İzləmə → **İzləməyə başla** (Record-suz) → açıq səhifədəki `data-watch` / `$watch` dəyərləri görünür
-- [ ] **İzləməni dayandır** → kartlar silinir, debugger (qeyd getmirsə) ayrılır; Stop izləməni söndürmür
+- [ ] İzləmə → **Watch** (Record-suz) → açıq səhifədəki `data-watch` / `$watch` dəyərləri görünür
+- [ ] **Unwatch** → kartlar silinir, debugger (qeyd getmirsə) ayrılır; Stop izləməni söndürmür
 - [ ] Dəyər dəyişəndə kart yenilənir (≤ 1 san)
 - [ ] RHF input-a yazanda dəyər dərhal yenilənir
 - [ ] `data-watch` olmayan saytda heç nə sınmır — "data-watch tapılmadı" yazılır

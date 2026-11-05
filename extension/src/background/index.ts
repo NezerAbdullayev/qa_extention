@@ -24,6 +24,7 @@ import type {
 } from '../shared/types';
 import type { WatchItem } from '../shared/types';
 import { PANEL_PORT, toRow } from '../shared/types';
+import { isLocalUrl } from '../shared/isLocalUrl';
 
 const CDP_VERSION = '1.3';
 const RECORDED_TYPES = new Set(['XHR', 'Fetch']);
@@ -161,7 +162,7 @@ async function start(targetTab: number): Promise<void> {
     recording = true;
     tabId = targetTab;
     target = await describeTab(targetTab);
-    await startWatch(targetTab);
+    if (isLocalUrl(target?.url)) await startWatch(targetTab); // F-010: local only
   } catch (err) {
     recording = false;
     tabId = null;

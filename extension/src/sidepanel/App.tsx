@@ -10,6 +10,7 @@ import { useRecorder } from './useRecorder';
 import { NameDialog } from './NameDialog';
 import { SavedList } from './SavedList';
 import { WatchTab } from './WatchTab';
+import { isLocalUrl } from '../shared/isLocalUrl';
 import { useSaved } from './useSaved';
 import { usePanelPresence } from './usePanelPresence';
 import { useTheme } from './useTheme';
@@ -42,6 +43,11 @@ export function App() {
     toastTimer.current = setTimeout(() => setToast(null), 2500);
   }, []);
   const count = state.requests.length;
+  // F-010: State tab only for a local page (localhost / 127.0.0.1); otherwise hidden.
+  const showState = isLocalUrl(state.target?.url);
+  useEffect(() => {
+    if (!showState && tab === 'state') setTab('record');
+  }, [showState, tab]);
 
   // ✕: the unsaved "Qeyd" list is deleted (recording stops); saved APIs stay (D15).
   const closePanel = async () => {
@@ -222,7 +228,7 @@ export function App() {
 
         {/* Tabs (F-003, Session #3 Q1; F-010): current recording | saved APIs | data-watch state */}
         <nav className="flex border-b border-slate-200 px-2 text-xs" role="tablist">
-          {(['record', 'saved', 'state'] as const).map((id) => (
+          {(showState ? (['record', 'saved', 'state'] as const) : (['record', 'saved'] as const)).map((id) => (
             <button
               key={id}
               role="tab"
@@ -243,7 +249,7 @@ export function App() {
           ))}
         </nav>
 
-        {tab === 'state' ? (
+        {tab === 'state' && showState ? (
           <main className="min-h-0 flex-1">
             <WatchTab recording={state.recording} items={state.watched} />
           </main>

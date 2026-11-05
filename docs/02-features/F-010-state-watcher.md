@@ -18,10 +18,11 @@ API request-lərinin yanında **tətbiqin daxili vəziyyətini** (komponent stat
 `data-watch` (və ya `data-watch={true}` — komponentin adı götürülür). Eyni ad təkrarlananda `#2`, `#3` əlavə olunur.
 
 ## UI
-3-cü tab **"State (N)"** (Qeyd · Saxlanmışlar · State). Hər element kart: ad, növ (`component · Profile`, `field`, `form`, `value`…), mənbə (`File.tsx:12`, dev build-də), son dəyişiklik vaxtı, dəyər (JsonTree, max 300px).
+3-cü tab **"State (N)"** (Qeyd · Saxlanmışlar · State) — yalnız local səhifə qeyd olunanda görünür. Hər element kart: ad, növ (`component · Profile`, `field`, `form`, `value`…), mənbə (`File.tsx:12`, dev build-də), son dəyişiklik vaxtı, dəyər (JsonTree, max 300px).
 
 ## Texniki qeydlər
-- Inject **CDP ilə** (F-009 R1 kimi): `Runtime.addBinding('__apiLensEmit')` + `Page.addScriptToEvaluateOnNewDocument` (sonrakı yükləmələr) + `Runtime.evaluate` (açıq səhifə — **yeniləmək lazım deyil**). Yeni icazə yoxdur, localhost məhdudiyyəti yoxdur.
+- Inject **CDP ilə** (F-009 R1 kimi): `Runtime.addBinding('__apiLensEmit')` + `Page.addScriptToEvaluateOnNewDocument` (sonrakı yükləmələr) + `Runtime.evaluate` (açıq səhifə — **yeniləmək lazım deyil**). Yeni icazə yoxdur.
+- **Yalnız local** (2.5.1): qeyd olunan tab `localhost` / `127.0.0.1` deyilsə, watcher inject olunmur və State tab-ı **gizlənir** (başqa saytlarda xəta verirdi).
 - Skript: `extension/public/watch-inject.js` (prototipin `inject.js`-i; `postMessage` relay əvəzinə binding).
 - React fiber ağacı: React DevTools hook-u varsa `getFiberRoots`, yoxdursa DOM-dakı `__reactContainer$`.
 - Yeniləmə: React DevTools varsa hər commit-də (`onCommitFiberRoot`), RHF subject-lərinə abunə, ehtiyat olaraq hər 1 san skan.

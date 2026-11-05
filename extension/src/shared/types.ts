@@ -54,7 +54,7 @@ export interface RecorderState {
   target?: { title: string; url: string };
   /** F-010: values of everything with a `data-watch` prop in the page, sorted by name. */
   watched: WatchItem[];
-  /** F-010: the watcher was turned on with the State tab's button (recording a local page). */
+  /** F-010: the watcher is on (turned on / off only by the "İzləmə" tab's button). */
   watchActive: boolean;
 }
 
@@ -118,8 +118,11 @@ export type PanelMessage =
   | { type: 'CLEAR_RECORDING' }
   /** 🚫 Təmizlə: empty the "Qeyd" list only; recording state and saved APIs untouched. */
   | { type: 'RESET_LIST' }
-  /** F-010: State tab button — inject the data-watch watcher into the recorded local page. */
-  | { type: 'START_WATCH' }
+  // ---- F-010 watcher ("İzləmə" tab) — only its own button turns it on / off
+  | { type: 'START_WATCH'; tabId: number }
+  | { type: 'STOP_WATCH' }
+  /** Is this tab a local page (localhost …)? Decides whether the "İzləmə" tab is shown. */
+  | { type: 'IS_LOCAL_TAB'; tabId: number }
   /** F-002: HAR of the last recording. */
   | { type: 'EXPORT_HAR' }
   // ---- F-003 saved APIs

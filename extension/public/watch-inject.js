@@ -15,6 +15,7 @@
   const POLL_MS = 1000;
 
   const last = new Map(); // name -> JSON (to detect changes)
+  let stopped = false; // "İzləməni dayandır" — scanning and sending become no-ops
   // window.$watch('name', value) — any value from anywhere in the app code (hooks, plain
   // functions, outside React). Keeps the latest reference, so in-place mutations
   // (obj.name = 'x') are caught by the next scan (≤ 1 s); a new value shows at once.
@@ -260,6 +261,7 @@
   }
 
   function flush(force) {
+    if (stopped) return;
     let found;
     try {
       found = scan();
@@ -290,7 +292,7 @@
   // Merge several commits into one scan
   let timer = null;
   const schedule = () => {
-    if (timer) return;
+    if (timer || stopped) return;
     timer = setTimeout(() => {
       timer = null;
       flush(false);
@@ -315,7 +317,7 @@
   document.addEventListener('DOMContentLoaded', tryWrapHook);
 
   // Fallback: poll every second (no hook, or ref / mutable changes)
-  setInterval(() => {
+  const poll = setInterval(() => {
     tryWrapHook();
     flush(false);
   }, POLL_MS);
@@ -345,6 +347,17 @@
     resync: () => {
       last.clear();
       flush(true);
+    },
+    // Turned off from the panel: stop scanning and remove everything we added to the page.
+    // (The React DevTools hook wrapper / RHF subscriptions stay, but schedule() is a no-op.)
+    stop: () => {
+      stopped = true;
+      clearInterval(poll);
+      clearTimeout(timer);
+      tracked.clear();
+      delete window.$watch;
+      delete Object.prototype.$watch;
+      delete window.__apiLensWatch;
     },
   };
   window.__apiLensWatch.resync();

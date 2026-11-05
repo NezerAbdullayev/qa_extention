@@ -391,7 +391,7 @@
     }
   },
   "tab_state": {
-    "message": "State ($COUNT$)",
+    "message": "İzləmə ($COUNT$)",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -399,15 +399,21 @@
     }
   },
   "watch_empty_recording": {
-    "message": "data-watch tapılmadı. Koda data-watch=\"ad\" prop-u əlavə edin."
+    "message": "Dəyər tapılmadı. Koda data-watch=\"ad\" və ya dəyər?.$watch?.(\"ad\") əlavə edin."
   },
-  "watch_activate": {
-    "message": "Aktivləşdir"
+  "watch_start": {
+    "message": "İzləməyə başla"
   },
-  "watch_activate_hint": {
-    "message": "data-watch dəyərlərini izləməyə başlamaq üçün basın."
+  "watch_stop": {
+    "message": "İzləməni dayandır"
   },
-  "watch_need_recording": {
-    "message": "Əvvəlcə Record basın."
+  "watch_status_on": {
+    "message": "İzlənir"
+  },
+  "watch_off_hint": {
+    "message": "Səhifədəki data-watch və $watch dəyərlərini canlı görmək üçün \"İzləməyə başla\" basın. Record lazım deyil."
+  },
+  "watch_not_local": {
+    "message": "İzləmə yalnız local səhifədə işləyir (localhost, 127.x.x.x)."
   }
 }

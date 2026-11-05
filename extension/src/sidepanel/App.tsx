@@ -11,6 +11,7 @@ import { NameDialog } from './NameDialog';
 import { SavedList } from './SavedList';
 import { WatchTab } from './WatchTab';
 import { isLocalUrl } from '../shared/isLocalUrl';
+import { useActiveTabLocal } from './activeTab';
 import { useSaved } from './useSaved';
 import { usePanelPresence } from './usePanelPresence';
 import { useTheme } from './useTheme';
@@ -44,7 +45,10 @@ export function App() {
   }, []);
   const count = state.requests.length;
   // F-010: State tab only for a local page (localhost / 127.0.0.1); otherwise hidden.
-  const showState = isLocalUrl(state.target?.url);
+  // F-010: "İzləmə" tab only for a local page — the active tab, the recorded one, or the one
+  // already being watched (so it can always be turned off); otherwise hidden.
+  const activeLocal = useActiveTabLocal();
+  const showState = state.watchActive || activeLocal || isLocalUrl(state.target?.url);
   useEffect(() => {
     if (!showState && tab === 'state') setTab('record');
   }, [showState, tab]);
@@ -251,7 +255,7 @@ export function App() {
 
         {tab === 'state' && showState ? (
           <main className="min-h-0 flex-1">
-            <WatchTab recording={state.recording} active={state.watchActive} items={state.watched} />
+            <WatchTab active={state.watchActive} items={state.watched} />
           </main>
         ) : tab === 'saved' ? (
           <main className="min-h-0 flex-1">

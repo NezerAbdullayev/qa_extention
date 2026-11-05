@@ -42,11 +42,15 @@ const records = new Map<string, RequestRecord>();
 const extraRequestHeaders = new Map<string, Headers>();
 const extraResponseHeaders = new Map<string, Headers>();
 
-// F-010 State Watcher — `data-watch` values of the recorded page, by name. Memory only.
+// F-010 Watcher ("İzləmə" tab) — `data-watch` / `$watch` values of a local page, by name.
+// Independent of the recorder: turned on / off ONLY by the button in its own tab. It shares
+// the chrome.debugger session when recording the same tab, otherwise attaches its own.
 const WATCH_BINDING = '__apiLensEmit';
 const watched = new Map<string, WatchItem>();
-/** Turned on only by the "Aktivləşdir" button in the State tab; off again on Stop / new Record. */
-let watchActive = false;
+/** Tab being watched; null = watcher off. */
+let watchTabId: number | null = null;
+/** Page.addScriptToEvaluateOnNewDocument id — removed when the watcher is turned off. */
+let watchScriptId: string | undefined;
 
 chrome.sidePanel
   .setPanelBehavior({ openPanelOnActionClick: true })
@@ -61,7 +65,7 @@ function snapshot(): RecorderState {
     error: lastError,
     target,
     requests: [...records.values()].map(toRow),
-    watchActive,
+    watchActive: watchTabId !== null,
     watched: [...watched.values()].sort((x, y) => x.name.localeCompare(y.name)),
   };
 }
@@ -89,7 +93,7 @@ function persist(record: RequestRecord): void {
 }
 
 function saveSession(): Promise<void> {
-  return chrome.storage.session.set({ [SESSION_KEY]: { recording, tabId, seq } });
+  return chrome.storage.session.set({ [SESSION_KEY]: { recording, tabId, seq, watchTabId } });
 }
 
 /** Restore after a service-worker restart: list from IndexedDB, recording flag from session storage. */
@@ -97,8 +101,18 @@ const ready: Promise<void> = (async () => {
   try {
     for (const r of await db.getAll()) records.set(r.id, r);
     const saved = (await chrome.storage.session.get(SESSION_KEY))[SESSION_KEY] as
-      { recording: boolean; tabId: number | null; seq: number } | undefined;
+      | { recording: boolean; tabId: number | null; seq: number; watchTabId?: number | null }
+      | undefined;
     seq = Math.max(saved?.seq ?? 0, ...[...records.values()].map((r) => r.seq + 1), 0);
+    if (saved?.watchTabId != null) {
+      try {
+        // Still attached → the watcher keeps running in the page; just reconnect to it.
+        await chrome.debugger.sendCommand({ tabId: saved.watchTabId }, 'Runtime.enable');
+        watchTabId = saved.watchTabId;
+      } catch {
+        watchTabId = null;
+      }
+    }
     if (saved?.recording && saved.tabId !== null) {
       try {
         // Succeeds only if our debugger session is still attached to the tab.
@@ -122,7 +136,6 @@ const ready: Promise<void> = (async () => {
 /** Forgets the current (unsaved) recording: memory + IndexedDB `requests`. Saved APIs stay. */
 async function clearRecords(): Promise<void> {
   records.clear();
-  watched.clear();
   extraRequestHeaders.clear();
   extraResponseHeaders.clear();
   seq = 0;
@@ -146,6 +159,7 @@ async function resetList(): Promise<void> {
 /** ✕ in the panel header: stop recording and delete the unsaved "Qeyd" list (D15). */
 async function closeAndClear(): Promise<void> {
   if (recording) await stop();
+  await stopWatch(); // nobody can see or turn it off once the panel is gone
   await clearRecords();
   await saveSession();
   scheduleBroadcast();
@@ -158,7 +172,8 @@ async function start(targetTab: number): Promise<void> {
   await clearRecords();
 
   try {
-    await chrome.debugger.attach({ tabId: targetTab }, CDP_VERSION);
+    // The watcher may already hold the debugger session of this tab.
+    if (watchTabId !== targetTab) await chrome.debugger.attach({ tabId: targetTab }, CDP_VERSION);
     await chrome.debugger.sendCommand({ tabId: targetTab }, 'Network.enable', {
       maxPostDataSize: BODY_LIMIT,
     });
@@ -184,26 +199,70 @@ function hostOf(url: string): string {
 
 // ---------------------------------------------------------------- F-010 State Watcher
 
+/** Does this tab hold a local page (tab visible, watcher allowed)? */
+async function isLocalTab(id: number): Promise<boolean> {
+  return isLocalUrl((await describeTab(id))?.url);
+}
+
 /**
- * Binding + watcher script (public/watch-inject.js): on every future page load (before the
- * app's code) and right now in the already open page — fiber scanning works there too.
+ * "İzləməyə başla": binding + watcher script (public/watch-inject.js) — on every future
+ * page load (before the app's code) and right now in the already open page.
  */
-async function startWatch(): Promise<void> {
-  // F-010: only while recording a local page (the debugger session is needed).
-  if (!recording || tabId === null || watchActive || !isLocalUrl(target?.url)) return;
-  const id = tabId;
+async function startWatch(id: number): Promise<{ ok: boolean; error?: string }> {
+  if (watchTabId !== null) return { ok: true };
+  if (!(await isLocalTab(id))) return { ok: false, error: 'not_local' };
+  const debuggee = { tabId: id };
+  const shared = recording && tabId === id;
   try {
-    const debuggee = { tabId: id };
+    if (!shared) await chrome.debugger.attach(debuggee, CDP_VERSION);
     const source = await (await fetch(chrome.runtime.getURL('watch-inject.js'))).text();
     await chrome.debugger.sendCommand(debuggee, 'Runtime.enable');
     await chrome.debugger.sendCommand(debuggee, 'Runtime.addBinding', { name: WATCH_BINDING });
     await chrome.debugger.sendCommand(debuggee, 'Page.enable');
-    await chrome.debugger.sendCommand(debuggee, 'Page.addScriptToEvaluateOnNewDocument', { source });
+    const res = (await chrome.debugger.sendCommand(
+      debuggee,
+      'Page.addScriptToEvaluateOnNewDocument',
+      { source },
+    )) as { identifier: string };
+    watchScriptId = res.identifier;
+    watched.clear();
+    watchTabId = id;
     await chrome.debugger.sendCommand(debuggee, 'Runtime.evaluate', { expression: source });
-    watchActive = true;
+    return { ok: true };
   } catch (err) {
-    console.error('[API Lens] state watcher inject failed', err);
+    console.error('[API Lens] watcher start failed', err);
+    if (watchTabId === null && !shared) await chrome.debugger.detach(debuggee).catch(() => {});
+    return { ok: false, error: err instanceof Error ? err.message : String(err) };
+  } finally {
+    await saveSession();
+    scheduleBroadcast();
   }
+}
+
+/** "İzləməni dayandır": remove the watcher from the page; detach unless the recorder uses the tab. */
+async function stopWatch(): Promise<void> {
+  if (watchTabId === null) return;
+  const id = watchTabId;
+  const debuggee = { tabId: id };
+  watchTabId = null;
+  watched.clear();
+  try {
+    await chrome.debugger.sendCommand(debuggee, 'Runtime.evaluate', {
+      expression: 'window.__apiLensWatch && window.__apiLensWatch.stop()',
+    });
+    if (watchScriptId) {
+      await chrome.debugger.sendCommand(debuggee, 'Page.removeScriptToEvaluateOnNewDocument', {
+        identifier: watchScriptId,
+      });
+    }
+    await chrome.debugger.sendCommand(debuggee, 'Runtime.removeBinding', { name: WATCH_BINDING });
+  } catch {
+    // tab closed / already detached
+  }
+  watchScriptId = undefined;
+  if (!(recording && tabId === id)) await chrome.debugger.detach(debuggee).catch(() => {});
+  await saveSession();
+  scheduleBroadcast();
 }
 
 function onWatchMessage(payload: string): void {
@@ -222,10 +281,10 @@ function onWatchMessage(payload: string): void {
 async function stop(): Promise<void> {
   const attached = tabId;
   recording = false;
-  watchActive = false;
   tabId = null;
   await saveSession();
-  if (attached !== null) {
+  // The watcher keeps running on its own — keep the session if it uses this tab.
+  if (attached !== null && attached !== watchTabId) {
     try {
       await chrome.debugger.detach({ tabId: attached });
     } catch {
@@ -341,18 +400,26 @@ function elapsedMs(record: RequestRecord, timestamp: number): number {
 }
 
 function onCdpEvent(source: chrome.debugger.Debuggee, method: string, params?: object): void {
+  // F-010 watcher events — independent of recording.
+  if (watchTabId !== null && source.tabId === watchTabId) {
+    if (method === 'Runtime.bindingCalled') {
+      const b = params as CdpParams;
+      if (b.name === WATCH_BINDING) onWatchMessage(b.payload);
+      return;
+    }
+    if (method === 'Runtime.executionContextsCleared') {
+      // Page navigated / reloaded — the new page sends its own values.
+      if (watched.size > 0) {
+        watched.clear();
+        scheduleBroadcast();
+      }
+      return;
+    }
+  }
   if (!recording || source.tabId !== tabId || !params) return;
   const p = params as CdpParams;
 
   switch (method) {
-    case 'Runtime.bindingCalled':
-      if (p.name === WATCH_BINDING) onWatchMessage(p.payload);
-      return;
-    case 'Runtime.executionContextsCleared':
-      // Page navigated / reloaded — the new page sends its own values.
-      if (watched.size === 0) return;
-      watched.clear();
-      break;
     case 'Network.requestWillBeSent': {
       if (!RECORDED_TYPES.has(p.type)) return;
       const existing = records.get(p.requestId);
@@ -453,9 +520,15 @@ function onCdpEvent(source: chrome.debugger.Debuggee, method: string, params?: o
 chrome.debugger.onEvent.addListener(onCdpEvent);
 
 chrome.debugger.onDetach.addListener((source) => {
+  if (source.tabId === watchTabId) {
+    watchTabId = null;
+    watchScriptId = undefined;
+    watched.clear();
+    void saveSession();
+    scheduleBroadcast();
+  }
   if (source.tabId === tabId) {
     recording = false;
-    watchActive = false;
     tabId = null;
     void saveSession();
     scheduleBroadcast();
@@ -514,9 +587,12 @@ chrome.runtime.onMessage.addListener((msg: PanelMessage, _sender, sendResponse) 
         await resetList();
         return null;
       case 'START_WATCH':
-        await startWatch();
-        scheduleBroadcast();
-        return snapshot();
+        return startWatch(msg.tabId);
+      case 'STOP_WATCH':
+        await stopWatch();
+        return null;
+      case 'IS_LOCAL_TAB':
+        return isLocalTab(msg.tabId);
 
       // ---- F-002 HAR export (masked, F-005)
       case 'EXPORT_HAR': {

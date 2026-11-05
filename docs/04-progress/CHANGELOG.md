@@ -2,6 +2,13 @@
 
 Format: [Keep a Changelog](https://keepachangelog.com/) · Versiya: [SemVer](https://semver.org/)
 
+## [2.5.6] — 2026-11-05
+### Changed
+- 3-cü tab **State** → **İzləmə**
+- İzləmə Record-dan tam ayrıldı: yalnız tab-ın öz düyməsi ilə açılır / bağlanır (Record lazım deyil, Stop onu söndürmür; lazım olanda debugger-i özü qoşur)
+- Düymə solda, boz rəngdə və keçidlidir: **İzləməyə başla** ⇄ **İzləməni dayandır**; dayandıranda səhifədən hər şey (`$watch`, skan, skript) silinir
+- Tab aktiv tab local olanda görünür (Record-dan asılı deyil); panel bağlananda izləmə də dayanır
+
 ## [2.5.5] — 2026-11-05
 ### Added
 - `dəyər?.$watch?.('ad', dəyər)` — istənilən dəyərin öz metodu kimi (Aktivləşdir basılanda `Object.prototype`-a görünməz, üzərinə yazıla bilən metod əlavə olunur; `Object.keys` / `JSON` / `for…in` onu görmür)

@@ -185,6 +185,7 @@ QA və developer DevTools → Network-da gördüyü adı burada da eyni görsün
 - [ ] **Side panel-də** eyni anda bir neçə qutu açıq ola bilər — yeni qutu açılanda əvvəlkilər bağlanmır (Sessiya #2, Q4)
 - [ ] **Ayrı pəncərədə** yalnız bir qutu açıq olur: başqa sətirə klik → o açılır, əvvəlki avtomatik bağlanır; yeni açılan sətir görünən yerə scroll olunur (D7)
 - [ ] Açılan qutunun hündürlüyü **məzmuna görədir, maksimum 300px** (CSS `max-height: 300px`): qısa məzmunda qutu kiçik olur, 300px-dən çox olanda qutunun daxilində scroll (Sessiya #2, Q15; test sonrası 500 → 300px, 2026-11-04)
+- [ ] **Əl ilə hündürlük** (2.5.15, hər 3 tab — Qeyd, Saxlanmışlar, State; bölünmüş görünüşə aid deyil): qutunun alt kənarını dartıb hündürlüyü dəyişmək olur (300px-dən çox da; min 60px), iki klik → yenidən 300px
 - [ ] JSON **DevTools Preview kimi açılan ağac** şəklində göstərilir: yalnız kök açıq, iç-içə obyekt/massivlər bağlı + önizləmə, böyük massivlər `[0 … 99]` qruplarında (D3)
 - [ ] Açıq qutuda **JSON formasında**, alt-alta: 1) tam URL · 2) `method: …` + `status: …` · 3) Payload — göndərilən (JSON) · 4) Response — qayıdan (JSON); headers göstərilmir (Sessiya #2, Q5, 5a; D4)
 - [ ] Hər sətirin **sağ tərəfində "Yadda saxla" düyməsi** (💾) — bax: [F-003](F-003-snapshots.md)

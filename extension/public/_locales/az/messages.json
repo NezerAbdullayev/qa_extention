@@ -445,5 +445,8 @@
   },
   "watch_help_example": {
     "message": "Nümunə"
+  },
+  "box_resize_hint": {
+    "message": "Hündürlüyü dəyişmək üçün dartın · iki klik: əvvəlki ölçü (300px)"
   }
 }

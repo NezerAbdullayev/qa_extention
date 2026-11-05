@@ -2,6 +2,10 @@
 
 Format: [Keep a Changelog](https://keepachangelog.com/) · Versiya: [SemVer](https://semver.org/)
 
+## [2.5.15] — 2026-11-06
+### Added
+- Hər 3 tab-da (Qeyd, Saxlanmışlar, State) açılan qutunun hündürlüyü əl ilə dəyişir: alt kənarı dartmaq (300px-dən çox da, min 60px), iki klik → yenidən 300px. Bölünmüş (geniş pəncərə) görünüşə aid deyil
+
 ## [2.5.14] — 2026-11-06
 ### Fixed
 - Watch aktiv olan tab local olmayan sayta keçəndə skript orada da işə düşürdü (hər saniyə skan); indi skript host-u özü yoxlayır və local deyilsə heç nə etmir

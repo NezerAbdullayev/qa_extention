@@ -3,6 +3,7 @@ import { t } from '../shared/i18n';
 import type { PanelMessage, WatchItem } from '../shared/types';
 import { activeTabId } from './activeTab';
 import { JsonTree } from './JsonTree';
+import { ResizableBox } from './ResizableBox';
 
 /**
  * F-010 "State" tab: live values of everything with a `data-watch` prop or registered with
@@ -83,9 +84,9 @@ export function WatchTab(props: { active: boolean; items: WatchItem[] }) {
                       .join(' · ')}
                   </span>
                 </header>
-                <div className="max-h-[300px] overflow-auto p-2.5">
+                <ResizableBox className="p-2.5">
                   <JsonTree value={item.value} />
-                </div>
+                </ResizableBox>
               </section>
             ))}
           </div>

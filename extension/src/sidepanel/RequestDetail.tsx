@@ -2,6 +2,7 @@ import { useEffect, useState, type ReactNode } from 'react';
 import { buildPayload, decodeBase64Text } from '../shared/format';
 import { t } from '../shared/i18n';
 import { JsonTree } from './JsonTree';
+import { ResizableBox } from './ResizableBox';
 import type { PanelMessage, RequestRecord, RequestRow, SavedApi } from '../shared/types';
 
 /**
@@ -53,20 +54,22 @@ export function SavedDetail({ id, variant = 'inline' }: { id: string; variant?: 
 }
 
 function DetailBox({ detail, variant }: { detail: RequestRecord | null; variant: Variant }) {
-  return (
-    <div
-      className={
-        variant === 'pane'
-          ? 'h-full overflow-auto p-4 font-mono text-xs'
-          : 'mx-3 mb-2 max-h-[300px] overflow-auto rounded border border-slate-200 bg-slate-50 p-3 font-mono text-xs'
-      }
+  const content =
+    detail === null ? (
+      <p className="text-slate-400">{t('detail_loading')}</p>
+    ) : (
+      <DetailContent d={detail} />
+    );
+  // Split pane (wide window) fills its column; the inline box is 300px and resizable by hand.
+  return variant === 'pane' ? (
+    <div className="h-full overflow-auto p-4 font-mono text-xs">{content}</div>
+  ) : (
+    <ResizableBox
+      outerClassName="mx-3 mb-2"
+      className="rounded border border-slate-200 bg-slate-50 p-3 font-mono text-xs"
     >
-      {detail === null ? (
-        <p className="text-slate-400">{t('detail_loading')}</p>
-      ) : (
-        <DetailContent d={detail} />
-      )}
-    </div>
+      {content}
+    </ResizableBox>
   );
 }
 

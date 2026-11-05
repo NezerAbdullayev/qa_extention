@@ -10,6 +10,8 @@ import { useRecorder } from './useRecorder';
 import { NameDialog } from './NameDialog';
 import { SavedList } from './SavedList';
 import { WatchTab } from './WatchTab';
+import { PostmanTab } from './PostmanTab';
+import { PostmanButton } from './PostmanButton';
 import { isLocalUrl } from '../shared/isLocalUrl';
 import { useActiveTabLocal } from './activeTab';
 import { useSaved } from './useSaved';
@@ -34,7 +36,7 @@ export function App() {
   usePanelPresence(); // panel closed in any way → unsaved recording is cleared (D15)
 
   // F-003: tabs, save dialog, toast notification.
-  const [tab, setTab] = useState<'record' | 'saved' | 'state'>('record');
+  const [tab, setTab] = useState<'record' | 'saved' | 'state' | 'postman'>('record');
   const [saving, setSaving] = useState<RequestRow | null>(null);
   const [toast, setToast] = useState<string | null>(null);
   const toastTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
@@ -44,6 +46,9 @@ export function App() {
     toastTimer.current = setTimeout(() => setToast(null), 2500);
   }, []);
   const count = state.requests.length;
+  // F-011: ✈ "Postman-a göndər" in "Qeyd" rows — only while the Postman tab is enabled.
+  const postmanBtn = (id: string) =>
+    state.postmanEnabled ? <PostmanButton from="record" id={id} onToast={showToast} /> : null;
   // F-010: State tab only for a local page (localhost / 127.0.0.1); otherwise hidden.
   // F-010: "State" tab only for a local page — the active tab, the recorded one, or the one
   // already being watched (so it can always be turned off); otherwise hidden.
@@ -232,7 +237,10 @@ export function App() {
 
         {/* Tabs (F-003, Session #3 Q1; F-010): current recording | saved APIs | data-watch state */}
         <nav className="flex border-b border-slate-200 px-2 text-xs" role="tablist">
-          {(showState ? (['record', 'saved', 'state'] as const) : (['record', 'saved'] as const)).map((id) => (
+          {(showState
+            ? (['record', 'saved', 'state', 'postman'] as const)
+            : (['record', 'saved', 'postman'] as const)
+          ).map((id) => (
             <button
               key={id}
               role="tab"
@@ -248,18 +256,28 @@ export function App() {
                 ? t('tab_record', String(count))
                 : id === 'saved'
                   ? t('tab_saved', String(saved.items.length))
-                  : t('tab_state', String(state.watched.length))}
+                  : id === 'state'
+                    ? t('tab_state', String(state.watched.length))
+                    : t('tab_postman', String(state.postman.length))}
             </button>
           ))}
         </nav>
 
-        {tab === 'state' && showState ? (
+        {tab === 'postman' ? (
+          <main className="min-h-0 flex-1">
+            <PostmanTab enabled={state.postmanEnabled} rows={state.postman} />
+          </main>
+        ) : tab === 'state' && showState ? (
           <main className="min-h-0 flex-1">
             <WatchTab active={state.watchActive} items={state.watched} />
           </main>
         ) : tab === 'saved' ? (
           <main className="min-h-0 flex-1">
-            <SavedList items={saved.items} onToast={showToast} />
+            <SavedList
+              items={saved.items}
+              onToast={showToast}
+              postmanEnabled={state.postmanEnabled}
+            />
           </main>
         ) : comparing ? (
           <main className="min-h-0 flex-1">
@@ -292,6 +310,7 @@ export function App() {
                       checked={checked.has(r.id)}
                       onCheck={() => toggleChecked(r.id)}
                       onSave={() => setSaving(r)}
+                      postman={postmanBtn(r.id)}
                     />
                   ))}
                 </ul>
@@ -336,6 +355,7 @@ export function App() {
                     checked={checked.has(r.id)}
                     onCheck={() => toggleChecked(r.id)}
                     onSave={() => setSaving(r)}
+                    postman={postmanBtn(r.id)}
                   />
                 ))}
               </ul>
@@ -434,6 +454,8 @@ function RequestListRow(props: {
   checked: boolean;
   onCheck: () => void;
   onSave: () => void;
+  /** F-011 ✈ button (null while the Postman tab is disabled). */
+  postman: ReactNode;
 }) {
   const { row, mode, open, onToggle, onSave } = props;
   const selected = mode === 'select' && open;
@@ -483,6 +505,7 @@ function RequestListRow(props: {
         <span className="w-14 shrink-0 text-right text-xs text-slate-500">
           {row.durationMs !== undefined ? `${row.durationMs} ms` : ''}
         </span>
+        {props.postman}
         <button
           title={t('list_save')}
           aria-label={t('list_save')}

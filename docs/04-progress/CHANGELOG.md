@@ -2,6 +2,12 @@
 
 Format: [Keep a Changelog](https://keepachangelog.com/) · Versiya: [SemVer](https://semver.org/)
 
+## [2.5.16] — 2026-11-06
+### Added
+- F-011 **Postman** (4-cü tab): Qeyd / Saxlanmışlar-da ✈ ilə request-i bura göndərmək, method / URL / header / body-ni redaktə edib **Send** — sorğu aktiv tab-ın içindən (saytdakı login / cookie ilə) gedir; status, müddət və response görünür
+- Tab-ın öz **Enable ⇄ Disable** düyməsi (State kimi); ✈ yalnız aktiv ikən görünür; siyahı yalnız yaddaşda — Disable / panel bağlananda silinir
+- Redaktə yadda qalır, **Orijinala qaytar**; altında açılıb-bağlanan "İstifadə qaydası"
+
 ## [2.5.15] — 2026-11-06
 ### Added
 - Hər 3 tab-da (Qeyd, Saxlanmışlar, State) açılan qutunun hündürlüyü əl ilə dəyişir: alt kənarı dartmaq (300px-dən çox da, min 60px), iki klik → yenidən 300px. Bölünmüş (geniş pəncərə) görünüşə aid deyil

@@ -56,6 +56,51 @@ export interface RecorderState {
   watched: WatchItem[];
   /** F-010: the watcher is on (turned on / off only by the "State" tab's button). */
   watchActive: boolean;
+  /** F-011: the "Postman" tab is enabled (its own Enable / Disable button). */
+  postmanEnabled: boolean;
+  /** F-011: requests sent to the "Postman" tab (memory only). */
+  postman: PostmanRow[];
+}
+
+/** F-011: an editable request in the "Postman" tab. Header values are single-line. */
+export interface PostmanRequest {
+  method: string;
+  url: string;
+  headers: [string, string][];
+  body: string;
+}
+
+/** F-011: result of the last Send (fetch run inside the page). */
+export interface PostmanResponse {
+  status?: number;
+  statusText?: string;
+  headers?: Record<string, string>;
+  body?: string;
+  /** Network / CORS / script error — no HTTP response. */
+  error?: string;
+  ms: number;
+  /** Epoch ms. */
+  at: number;
+}
+
+/** F-011: one item of the "Postman" tab — memory only, gone on Disable / panel close (R5). */
+export interface PostmanItem {
+  id: string;
+  name: string;
+  /** As recorded / saved — "Orijinala qaytar" goes back to this (R3). */
+  original: PostmanRequest;
+  edited: PostmanRequest;
+  last?: PostmanResponse;
+}
+
+/** F-011: light list row of the "Postman" tab. */
+export interface PostmanRow {
+  id: string;
+  name: string;
+  method: string;
+  url: string;
+  status?: number;
+  failed?: boolean;
 }
 
 /** F-010 State Watcher: one `data-watch` item of the page. */
@@ -123,6 +168,17 @@ export type PanelMessage =
   | { type: 'STOP_WATCH' }
   /** Is this tab a local page (localhost …)? Decides whether the "State" tab is shown. */
   | { type: 'IS_LOCAL_TAB'; tabId: number }
+  // ---- F-011 Postman tab — only its own button enables / disables it
+  | { type: 'POSTMAN_ENABLE' }
+  | { type: 'POSTMAN_DISABLE' }
+  /** ✈ in "Qeyd" (request id) or "Saxlanmışlar" (saved API id). */
+  | { type: 'POSTMAN_ADD'; from: 'record' | 'saved'; id: string }
+  | { type: 'POSTMAN_GET'; id: string }
+  | { type: 'POSTMAN_UPDATE'; id: string; request: PostmanRequest }
+  | { type: 'POSTMAN_RESET'; id: string }
+  | { type: 'POSTMAN_DELETE'; id: string }
+  /** Send from inside the page of this tab (fetch with the page's cookies, R1). */
+  | { type: 'POSTMAN_SEND'; id: string; tabId: number }
   /** F-002: HAR of the last recording. */
   | { type: 'EXPORT_HAR' }
   // ---- F-003 saved APIs

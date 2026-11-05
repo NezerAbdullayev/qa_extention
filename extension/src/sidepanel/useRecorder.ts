@@ -8,6 +8,8 @@ const INITIAL: RecorderState = {
   requests: [],
   watched: [],
   watchActive: false,
+  postmanEnabled: false,
+  postman: [],
 };
 
 function send(msg: PanelMessage): Promise<RecorderState> {

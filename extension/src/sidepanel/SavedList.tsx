@@ -1,9 +1,10 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import { t } from '../shared/i18n';
 import { requestName } from '../shared/requestName';
 import type { PanelMessage, SavedApiSummary, SaveResult } from '../shared/types';
 import { CompareView } from './CompareView';
 import { NameDialog } from './NameDialog';
+import { PostmanButton } from './PostmanButton';
 import { SavedDetail } from './RequestDetail';
 import { useSplitLayout } from './useSplitLayout';
 import { isWindowMode } from './useWindowMode';
@@ -24,9 +25,12 @@ const dateFmt = new Intl.DateTimeFormat('az', {
 export function SavedList({
   items,
   onToast,
+  postmanEnabled,
 }: {
   items: SavedApiSummary[];
   onToast: (text: string) => void;
+  /** F-011: show ✈ "Postman-a göndər" on each row. */
+  postmanEnabled: boolean;
 }) {
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
@@ -91,6 +95,7 @@ export function SavedList({
           }
           onCheck={() => setSelected((p) => toggle(p, s.id))}
           onRename={() => setRenaming(s)}
+          postman={postmanEnabled ? <PostmanButton from="saved" id={s.id} onToast={onToast} /> : null}
           onDelete={async () => {
             await send({ type: 'DELETE_SAVED', id: s.id });
             onToast(t('saved_deleted', s.name));
@@ -228,6 +233,8 @@ function SavedRow(props: {
   onCheck: () => void;
   onRename: () => void;
   onDelete: () => void;
+  /** F-011 ✈ button (null while the Postman tab is disabled). */
+  postman: ReactNode;
 }) {
   const { s, mode, open } = props;
   const selected = mode === 'select' && open;
@@ -276,6 +283,7 @@ function SavedRow(props: {
           {dateFmt.format(s.savedAt)}
         </span>
         <>
+          {props.postman}
           <button
             title={t('saved_rename')}
             aria-label={t('saved_rename')}

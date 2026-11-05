@@ -448,5 +448,85 @@
   },
   "box_resize_hint": {
     "message": "Hündürlüyü dəyişmək üçün dartın · iki klik: əvvəlki ölçü (300px)"
+  },
+  "tab_postman": {
+    "message": "Postman ($COUNT$)",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "postman_enable": {
+    "message": "Enable"
+  },
+  "postman_disable": {
+    "message": "Disable"
+  },
+  "postman_status_on": {
+    "message": "Aktiv"
+  },
+  "postman_off_hint": {
+    "message": "Request-ləri redaktə edib yenidən göndərmək üçün \"Enable\" basın. Sonra Qeyd və ya Saxlanmışlar-da ✈ ilə request-i bura göndərin."
+  },
+  "postman_empty": {
+    "message": "Siyahı boşdur. Qeyd və ya Saxlanmışlar-da ✈ basın."
+  },
+  "postman_add": {
+    "message": "Postman-a göndər"
+  },
+  "postman_added": {
+    "message": "Postman-a əlavə olundu"
+  },
+  "postman_delete": {
+    "message": "Siyahıdan sil"
+  },
+  "postman_headers": {
+    "message": "Headers"
+  },
+  "postman_add_header": {
+    "message": "header"
+  },
+  "postman_remove_header": {
+    "message": "Header-i sil"
+  },
+  "postman_body": {
+    "message": "Body"
+  },
+  "postman_invalid_json": {
+    "message": "JSON formatı səhvdir — yenə də olduğu kimi göndəriləcək."
+  },
+  "postman_send": {
+    "message": "Send"
+  },
+  "postman_sending": {
+    "message": "Göndərilir…"
+  },
+  "postman_reset": {
+    "message": "Orijinala qaytar"
+  },
+  "postman_no_tab": {
+    "message": "Aktiv brauzer tab-ı tapılmadı."
+  },
+  "postman_error": {
+    "message": "Sorğu göndərilmədi"
+  },
+  "postman_error_hint": {
+    "message": "Sorğu aktiv tab-ın içindən gedir: həmin tab-da bu API-ni çağıran sayt açıq olmalıdır (CORS / login üçün)."
+  },
+  "postman_help_1": {
+    "message": "\"Enable\" basın — Qeyd və Saxlanmışlar-da hər sətirdə ✈ düyməsi görünəcək."
+  },
+  "postman_help_2": {
+    "message": "✈ basın — request bu siyahıya düşür."
+  },
+  "postman_help_3": {
+    "message": "Sətrə klikləyin: method, URL, header-ləri və body-ni dəyişin. Dəyişikliklər yadda qalır; \"Orijinala qaytar\" ilkin request-ə qaytarır."
+  },
+  "postman_help_4": {
+    "message": "Send — sorğu aktiv brauzer tab-ının içindən gedir (saytdakı login / cookie ilə). Həmin tab-da API-ni çağıran sayt açıq olmalıdır."
+  },
+  "postman_help_5": {
+    "message": "Siyahı yalnız yaddaşdadır: \"Disable\" və ya panel bağlananda silinir."
   }
 }

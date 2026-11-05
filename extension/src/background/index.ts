@@ -22,7 +22,8 @@ import type {
   RecorderState,
   RequestRecord,
 } from '../shared/types';
-import type { WatchItem } from '../shared/types';
+import type { PostmanItem, WatchItem } from '../shared/types';
+import { postmanName, sendInTab, toPostmanRequest } from './postman';
 import { PANEL_PORT, toRow } from '../shared/types';
 import { isLocalUrl } from '../shared/isLocalUrl';
 
@@ -52,6 +53,10 @@ let watchTabId: number | null = null;
 /** Page.addScriptToEvaluateOnNewDocument id — removed when the watcher is turned off. */
 let watchScriptId: string | undefined;
 
+// F-011 "Postman" tab — memory only (R5): gone on Disable and when the panel closes.
+let postmanEnabled = false;
+const postman = new Map<string, PostmanItem>();
+
 chrome.sidePanel
   .setPanelBehavior({ openPanelOnActionClick: true })
   .catch((err) => console.error('[API Lens] setPanelBehavior failed', err));
@@ -66,6 +71,15 @@ function snapshot(): RecorderState {
     target,
     requests: [...records.values()].map(toRow),
     watchActive: watchTabId !== null,
+    postmanEnabled,
+    postman: [...postman.values()].map((i) => ({
+      id: i.id,
+      name: i.name,
+      method: i.edited.method,
+      url: i.edited.url,
+      status: i.last?.status,
+      failed: i.last?.error !== undefined,
+    })),
     watched: [...watched.values()].sort((x, y) => x.name.localeCompare(y.name)),
   };
 }
@@ -160,6 +174,8 @@ async function resetList(): Promise<void> {
 async function closeAndClear(): Promise<void> {
   if (recording) await stop();
   await stopWatch(); // nobody can see or turn it off once the panel is gone
+  postmanEnabled = false; // F-011 R5: the Postman list is gone with the panel
+  postman.clear();
   await clearRecords();
   await saveSession();
   scheduleBroadcast();
@@ -593,6 +609,66 @@ chrome.runtime.onMessage.addListener((msg: PanelMessage, _sender, sendResponse) 
         return null;
       case 'IS_LOCAL_TAB':
         return isLocalTab(msg.tabId);
+
+      // ---- F-011 Postman tab
+      case 'POSTMAN_ENABLE':
+        postmanEnabled = true;
+        scheduleBroadcast();
+        return null;
+      case 'POSTMAN_DISABLE':
+        postmanEnabled = false;
+        postman.clear();
+        scheduleBroadcast();
+        return null;
+      case 'POSTMAN_ADD': {
+        if (!postmanEnabled) return { ok: false };
+        const record =
+          msg.from === 'record'
+            ? (records.get(msg.id) ?? (await db.get(msg.id)))
+            : (await getSaved(msg.id))?.request;
+        if (!record) return { ok: false };
+        const request = toPostmanRequest(record);
+        const item: PostmanItem = {
+          id: crypto.randomUUID(),
+          name: postmanName(request),
+          original: request,
+          edited: structuredClone(request),
+        };
+        postman.set(item.id, item);
+        scheduleBroadcast();
+        return { ok: true };
+      }
+      case 'POSTMAN_GET':
+        return postman.get(msg.id) ?? null;
+      case 'POSTMAN_UPDATE': {
+        const item = postman.get(msg.id);
+        if (item) {
+          item.edited = msg.request;
+          scheduleBroadcast();
+        }
+        return null;
+      }
+      case 'POSTMAN_RESET': {
+        const item = postman.get(msg.id);
+        if (!item) return null;
+        item.edited = structuredClone(item.original);
+        scheduleBroadcast();
+        return item;
+      }
+      case 'POSTMAN_DELETE':
+        postman.delete(msg.id);
+        scheduleBroadcast();
+        return null;
+      case 'POSTMAN_SEND': {
+        const item = postman.get(msg.id);
+        if (!item) return null;
+        // Reuse the recorder's / watcher's debugger session of this tab, if any.
+        const shared = (recording && tabId === msg.tabId) || watchTabId === msg.tabId;
+        const last = await sendInTab(msg.tabId, item.edited, shared);
+        if (postman.get(msg.id) === item) item.last = last; // not deleted meanwhile
+        scheduleBroadcast();
+        return last;
+      }
 
       // ---- F-002 HAR export (masked, F-005)
       case 'EXPORT_HAR': {

@@ -4,6 +4,17 @@
 
 ---
 
+## 2026-11-06
+**Görülən işlər**
+- Watch / Unwatch düymələri, İstifadə qaydası, host qoruması (2.5.8 – 2.5.14)
+- Hər 3 tab-da qutuların hündürlüyü əl ilə dəyişir (2.5.15)
+- F-011 Postman: spec + 4-cü tab (2.5.16)
+
+**Növbəti addım**
+- F-011-i real layihədə yoxlamaq (login olan sayt, başqa domendəki API)
+
+---
+
 ## 2026-11-05
 **Görülən işlər**
 - F-009 Redux Action Tracker: spec + qərarlar (R1–R5), 3-cü Redux tab-ı, scope-lar (2.4.19)

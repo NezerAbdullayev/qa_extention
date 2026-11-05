@@ -12,6 +12,7 @@
 | F-008 | Request siyahısı (açılan qutular, max 300px) | MVP | 🔵 Hazırlanır | [link](F-008-request-list.md) |
 | F-009 | Redux Action Tracker (action + state) | v0.2 | ❌ Əvəz olundu (F-010) | [link](F-009-redux-action-tracker.md) |
 | F-010 | State Watcher (`data-watch`, 3-cü tab) | v0.2 | 🔵 Hazırlanır | [link](F-010-state-watcher.md) |
+| F-011 | Postman — request-i redaktə edib göndərmək (4-cü tab) | v0.3 | 🔵 Hazırlanır | [link](F-011-request-replay.md) |
 
 Status: 💡 İdeya · ⏸️ Təxirə salınıb · 📝 Spec · 🔵 Hazırlanır · 🧪 Test · ✅ Hazır
 

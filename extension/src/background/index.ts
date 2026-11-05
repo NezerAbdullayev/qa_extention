@@ -120,6 +120,18 @@ async function clearRecords(): Promise<void> {
   await db.clear();
 }
 
+/** "Təmizlə": empty the "Qeyd" list like DevTools 🚫 — recording (if on) keeps going. */
+async function resetList(): Promise<void> {
+  records.clear();
+  extraRequestHeaders.clear();
+  extraResponseHeaders.clear();
+  seq = 0;
+  lastError = undefined;
+  await db.clear();
+  await saveSession();
+  scheduleBroadcast();
+}
+
 /** ✕ in the panel header: stop recording and delete the unsaved "Qeyd" list (D15). */
 async function closeAndClear(): Promise<void> {
   if (recording) await stop();
@@ -439,6 +451,9 @@ chrome.runtime.onMessage.addListener((msg: PanelMessage, _sender, sendResponse) 
         return snapshot();
       case 'CLEAR_RECORDING':
         await closeAndClear();
+        return null;
+      case 'RESET_LIST':
+        await resetList();
         return null;
 
       // ---- F-002 HAR export (masked, F-005)

@@ -97,6 +97,8 @@ export type PanelMessage =
   | { type: 'POP_OUT' }
   /** ✕: stop recording and delete the unsaved "Qeyd" list (saved APIs stay). */
   | { type: 'CLEAR_RECORDING' }
+  /** 🚫 Təmizlə: empty the "Qeyd" list only; recording state and saved APIs untouched. */
+  | { type: 'RESET_LIST' }
   /** F-002: HAR of the last recording. */
   | { type: 'EXPORT_HAR' }
   // ---- F-003 saved APIs

@@ -79,6 +79,12 @@
       }
     }
   },
+  "list_reset": {
+    "message": "Təmizlə"
+  },
+  "list_reset_hint": {
+    "message": "Qeyd siyahısını təmizlə (saxlanmışlar qalır)"
+  },
   "detail_loading": {
     "message": "Yüklənir…"
   },

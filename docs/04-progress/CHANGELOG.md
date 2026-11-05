@@ -5,7 +5,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/) · Versiya: [SemVer](htt
 ## [2.4.19] — 2026-11-05
 ### Added
 - F-009 Redux Action Tracker: 3-cü tab **Redux** — qeyd zamanı Redux action-ları (type, payload) və istifadəçinin əlavə etdiyi scope-ların state-i
-- Scope-lar (məs. ) yadda saxlanılır; Redux DevTools ilə birlikdə işləyir; yeni icazə yoxdur (CDP)
+- Scope-lar (məs. `taxpayerSlice`) yadda saxlanılır; Redux DevTools ilə birlikdə işləyir; yeni icazə yoxdur (CDP)
 
 ## [2.4.18] — 2026-11-05
 ### Changed

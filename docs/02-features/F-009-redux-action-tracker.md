@@ -1,6 +1,6 @@
 # F-009 — Redux Action Tracker
 
-**Status:** 🔵 Hazırlanır · **Mərhələ:** v0.2 · **Tələblər:** —
+**Status:** ❌ Əvəz olundu → [F-010 State Watcher](F-010-state-watcher.md) (2026-11-05, kod silindi) · **Mərhələ:** v0.2 · **Tələblər:** —
 
 ## Niyə
 API request-ləri görürük, amma **tətbiqin daxilində nə baş verdiyini** (hansı Redux action işlədi, state necə dəyişdi) görmürük. Redux DevTools bunu edir, amma ayrıca extension-dur və QA-nın API qeydi ilə əlaqələndirilmir.

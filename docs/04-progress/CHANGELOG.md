@@ -2,6 +2,10 @@
 
 Format: [Keep a Changelog](https://keepachangelog.com/) · Versiya: [SemVer](https://semver.org/)
 
+## [2.5.2] — 2026-11-05
+### Fixed
+- Local yoxlaması genişləndi: bütün `127.x.x.x`, `*.localhost`, `[::1]`, `0.0.0.0` (əvvəl yalnız `localhost` / `127.0.0.1`); LAN IP-ləri local sayılmır
+
 ## [2.5.1] — 2026-11-05
 ### Fixed
 - State tab yalnız local səhifədə (`localhost` / `127.0.0.1`) görünür və watcher yalnız orada inject olunur; digər saytlarda tab gizlidir (xəta verirdi)

@@ -123,9 +123,10 @@ export function App() {
     return () => window.removeEventListener('keydown', onKey);
   }, [split, selectedId, state.requests, tab, comparing]);
 
-  // Toolbar above the "Qeyd" list: clear the list, compare two checked requests.
+  // Toolbar above the "Qeyd" list: Start/Stop, clear the list, compare two checked requests.
   const compareBar = (
     <div className="flex items-center gap-2 border-b border-slate-200 px-3 py-1.5 text-xs">
+      <RecButton recording={state.recording} onStart={start} onStop={stop} />
       <button
         onClick={resetList}
         disabled={count === 0}
@@ -198,7 +199,6 @@ export function App() {
             >
               ⬇ {t('har_export')}
             </button>
-            <RecButton recording={state.recording} onStart={start} onStop={stop} />
           </div>
         </div>
 
@@ -249,8 +249,9 @@ export function App() {
             <CompareView source="record" ids={comparing} onBack={closeCompare} />
           </main>
         ) : count === 0 ? (
-          <main className="flex-1 overflow-y-auto">
-            <p className="px-3 py-6 text-center text-slate-400">
+          <main className="flex min-h-0 flex-1 flex-col">
+            {compareBar}
+            <p className="overflow-y-auto px-3 py-6 text-center text-slate-400">
               {state.recording ? t('list_empty_recording') : t('list_empty_idle')}
             </p>
           </main>

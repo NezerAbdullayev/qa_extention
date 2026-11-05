@@ -2,6 +2,10 @@
 
 Format: [Keep a Changelog](https://keepachangelog.com/) · Versiya: [SemVer](https://semver.org/)
 
+## [2.4.13] — 2026-11-05
+### Changed
+- "Təmizlə" düyməsi Qeyd siyahısının üstündəki (Müqayisə et olan) sətrin ən soluna köçürüldü
+
 ## [2.4.12] — 2026-11-05
 ### Added
 - Qeyd hissəsində 🚫 "Təmizlə" düyməsi — yalnız Qeyd siyahısını silir (DevTools kimi); qeyd gedirsə davam edir, saxlanmışlar qalır

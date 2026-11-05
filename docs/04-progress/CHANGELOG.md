@@ -2,6 +2,10 @@
 
 Format: [Keep a Changelog](https://keepachangelog.com/) · Versiya: [SemVer](https://semver.org/)
 
+## [2.4.16] — 2026-11-05
+### Changed
+- "Start" düyməsi "Record" adlandırıldı və rəngi mavi oldu
+
 ## [2.4.15] — 2026-11-05
 ### Changed
 - Saxlanmışlarda tək sətri 🗑 ilə silmək artıq təsdiq soruşmur; təsdiq yalnız "Hamısını sil"də qalır

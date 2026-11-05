@@ -383,7 +383,7 @@ function RecButton(props: { recording: boolean; onStart: () => void; onStop: () 
   ) : (
     <button
       onClick={props.onStart}
-      className="rounded bg-red-600 px-3 py-1 text-xs font-medium text-white hover:bg-red-500"
+      className="rounded bg-blue-600 px-3 py-1 text-xs font-medium text-white hover:bg-blue-500"
     >
       {t('rec_start')}
     </button>

@@ -29,7 +29,7 @@
     }
   },
   "rec_start": {
-    "message": "Start"
+    "message": "Record"
   },
   "rec_stop": {
     "message": "Stop"
@@ -57,7 +57,7 @@
     }
   },
   "list_empty_idle": {
-    "message": "Qeydi başlatmaq üçün Start basın."
+    "message": "Qeydi başlatmaq üçün Record basın."
   },
   "list_empty_recording": {
     "message": "Request gözlənilir…"

@@ -51,7 +51,7 @@ fix: fixed the bug that was causing the har export to fail  ← 7 sözdən çox,
 
 ## Versiya — hər dəyişiklikdə +1
 - Versiya `extension/public/manifest.json` və `extension/package.json`-da **eyni** saxlanılır (`chrome://extensions`-da görünən budur).
-- Başlanğıc: **2.4.0** (2026-11-04).
+- Başlanğıc: **2.4.0** (2026-11-04). **2.5.0** (2026-11-05) — F-010 State Watcher; artım buradan davam edir: 2.5.0 → 2.5.1 …
 - Extension-a toxunan hər dəyişiklik commit-i (`feat`, `fix`, `perf`, `refactor`, `style`, `build`) **son rəqəmi +1** artırır: 2.4.0 → 2.4.1 → 2.4.2 …
 - Versiya artımı həmin dəyişikliyin öz commit-inə daxil edilir (ayrıca commit yox).
 - Yalnız sənəd (`docs`) və ya test commit-ləri versiyanı dəyişmir.

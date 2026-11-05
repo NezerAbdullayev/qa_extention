@@ -2,7 +2,7 @@
 
 Format: [Keep a Changelog](https://keepachangelog.com/) · Versiya: [SemVer](https://semver.org/)
 
-## [2.4.20] — 2026-11-05
+## [2.5.0] — 2026-11-05
 ### Changed
 - 3-cü tab **Redux** → **State** (F-010): `data-watch` prop-u olan React komponent / state / react-hook-form dəyərləri canlı göstərilir (state-watcher prototipinin məntiqi)
 - Açıq səhifədə də dərhal işləyir — yeniləmək lazım deyil

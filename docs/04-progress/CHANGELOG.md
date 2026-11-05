@@ -2,6 +2,10 @@
 
 Format: [Keep a Changelog](https://keepachangelog.com/) · Versiya: [SemVer](https://semver.org/)
 
+## [2.5.14] — 2026-11-06
+### Fixed
+- Watch aktiv olan tab local olmayan sayta keçəndə skript orada da işə düşürdü (hər saniyə skan); indi skript host-u özü yoxlayır və local deyilsə heç nə etmir
+
 ## [2.5.13] — 2026-11-06
 ### Changed
 - Unwatch düyməsi boz (Stop kimi); Watch Record rəngində qalır

@@ -4,7 +4,19 @@
 // and sends changes to the extension through the CDP binding `__apiLensEmit`.
 // Logic ported from the state-watcher prototype.
 (() => {
-  // Already running (Record pressed again on the same page) → just send everything again.
+  // Local pages only (same rule as src/shared/isLocalUrl.ts). The script is registered for
+  // every new document of the watched tab, so after navigating that tab to a non-local site
+  // it must do nothing there — no scanning, no $watch, no polling.
+  const host = location.hostname;
+  const isLocal =
+    host === 'localhost' ||
+    host.endsWith('.localhost') ||
+    /^127\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(host) ||
+    host === '[::1]' ||
+    host === '0.0.0.0';
+  if (!isLocal) return;
+
+  // Already running (Watch pressed again on the same page) → just send everything again.
   if (window.__apiLensWatch) {
     window.__apiLensWatch.resync();
     return;

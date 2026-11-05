@@ -38,6 +38,7 @@ window.$watch?.('defaultState', defaultState);   // hook, funksiya, React-dən k
 - Inject **CDP ilə** (F-009 R1 kimi): `Runtime.addBinding('__apiLensEmit')` + `Page.addScriptToEvaluateOnNewDocument` (sonrakı yükləmələr) + `Runtime.evaluate` (açıq səhifə — **yeniləmək lazım deyil**). Yeni icazə yoxdur.
 - **Yalnız local** (2.5.1): qeyd olunan tab `localhost` / `127.0.0.1` deyilsə, watcher inject olunmur və State tab-ı **gizlənir** (başqa saytlarda xəta verirdi).
 - **Yalnız öz düyməsi** (2.5.6): izləmə Record-dan tam ayrıdır — Record lazım deyil, Stop / yeni Record onu söndürmür. Qeyd eyni tabdadırsa debugger sessiyası paylaşılır, deyilsə izləmə debugger-i özü qoşur. **Unwatch**: səhifədə `__apiLensWatch.stop()` (skan, `$watch`, `Object.prototype.$watch` silinir), skript və binding götürülür, qeyd həmin tabda getmirsə debugger ayrılır. Panel bağlananda (✕) və debugger ayrılanda da dayanır.
+- **Host qoruması** (2.5.14): skript işə düşəndə `location.hostname`-i özü yoxlayır — izlənən tab local olmayan sayta keçsə, orada heç nə etmir (skan, `$watch`, polling yoxdur).
 - Skript: `extension/public/watch-inject.js` (prototipin `inject.js`-i; `postMessage` relay əvəzinə binding).
 - React fiber ağacı: React DevTools hook-u varsa `getFiberRoots`, yoxdursa DOM-dakı `__reactContainer$`.
 - Yeniləmə: React DevTools varsa hər commit-də (`onCommitFiberRoot`), RHF subject-lərinə abunə, ehtiyat olaraq hər 1 san skan.

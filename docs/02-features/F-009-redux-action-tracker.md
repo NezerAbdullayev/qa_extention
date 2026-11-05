@@ -1,6 +1,6 @@
 # F-009 — Redux Action Tracker
 
-**Status:** 📝 Spec (müzakirə) · **Mərhələ:** v0.2 · **Tələblər:** —
+**Status:** 🔵 Hazırlanır · **Mərhələ:** v0.2 · **Tələblər:** —
 
 ## Niyə
 API request-ləri görürük, amma **tətbiqin daxilində nə baş verdiyini** (hansı Redux action işlədi, state necə dəyişdi) görmürük. Redux DevTools bunu edir, amma ayrıca extension-dur və QA-nın API qeydi ilə əlaqələndirilmir.
@@ -13,7 +13,7 @@ Redux DevTools sehrli heç nə etmir: səhifə yüklənməzdən **əvvəl** `win
 ## Əhatə — böyük yox, normal funksionallıq
 **Daxildir:**
 - Action siyahısı: `type`, `payload`, vaxt
-- Hər action-dan sonra state (bütöv və ya seçilmiş slice-lar)
+- Hər action-dan sonra **yalnız istifadəçinin seçdiyi scope-ların** state-i
 - Redux DevTools ilə **birlikdə** işləmək (onu sındırmamaq)
 
 **Daxil deyil (indilik):**
@@ -77,13 +77,13 @@ try {
 - [ ] Həssas data masking (F-005) state-ə də tətbiq olunur
 
 ## UI / Axın
-Minimal: request siyahısının yanında **"API | Redux"** tab-ı (və ya filtr). Redux siyahısı F-008 kimi açılan qutular:
+3-cü tab **"Redux"** (Qeyd · Saxlanmışlar · Redux). Yuxarıda scope sahəsi: ad yazılır → **+**, çiplər ✕ ilə silinir. Altda action siyahısı F-008 kimi açılan qutular:
 ```
 ▸ 12:01:03  taxpayerSlice/setCurrentStep     payload: 2
 ▸ 12:01:04  api/executeQuery/pending
 ▸ 12:01:04  api/executeQuery/fulfilled
 ```
-Açanda: payload + state (JsonTree).
+Açanda: payload + seçilmiş scope-ların state-i (JsonTree).
 
 ## Məhdudiyyətlər
 - **Vaxt:** RTK qlobalı store yaradılanda bir dəfə oxuyur. Qeyd səhifə yükləndikdən sonra başlayırsa → **səhifəni yeniləmək lazımdır**. Panel bunu göstərməlidir ("Redux action-ları üçün səhifəni yeniləyin").
@@ -91,9 +91,14 @@ Açanda: payload + state (JsonTree).
 - **Ağır state:** 45 RTK Query keşi kimi böyük state hər action-da göndərilsə yavaş olar.
 - Thunk funksiyaları görünmür, yalnız reducer-ə çatan düz action-lar (Redux DevTools ilə eyni).
 
+## Qərarlar (2026-11-05)
+| # | Sual | Qərar |
+|---|---|---|
+| R1 | Variant A (CDP) / B (content script) | **A** — mövcud debugger sessiyası, yeni icazə yoxdur |
+| R2 | Hansı state göstərilir | **Yalnız istifadəçinin əlavə etdiyi scope-lar** (top-level slice adları, məs. `taxpayerSlice`). Siyahı boşdursa — yalnız action (type + payload), state yox. Scope-lar yadda saxlanılır (`chrome.storage.local`) |
+| R3 | UI | **3-cü tab** — "Qeyd" və "Saxlanmışlar"-ın yanında **"Redux"** |
+| R4 | HAR export / Saxlanmışlara düşsün? | **Yox** |
+| R5 | Səhifəni avtomatik yeniləmək? | **Yox** — yalnız xəbərdarlıq ("Redux üçün səhifəni yeniləyin") |
+
 ## Açıq suallar
-- ❓ **Variant A (CDP) və ya B (content script)?** Tövsiyə: A — yeni icazə yoxdur, mövcud debugger sessiyası istifadə olunur.
-- ❓ **State: bütöv, yoxsa yalnız dəyişən slice-lar?** Tövsiyə: yalnız action-dan sonra dəyişən top-level slice-lar (referans müqayisəsi `prev[k] !== next[k]`) — ucuz və kifayətdir.
-- ❓ **UI: ayrı tab, yoxsa API siyahısı ilə qarışıq vaxt xətti?** Tövsiyə: əvvəl ayrı tab (sadə).
-- ❓ **Redux action-ları HAR export-a / Saxlanmışlara düşsün?** Tövsiyə: indilik yox.
-- ❓ **Qeyd başlayanda səhifəni avtomatik yeniləyək, yoxsa yalnız xəbərdarlıq?**
+- ❓ Yoxdur

@@ -19,7 +19,7 @@ const dateFmt = new Intl.DateTimeFormat('az', {
 
 /**
  * "Saxlanmışlar" tab (F-003): saved APIs, newest first.
- * Click → details · ✏️ rename · 🗑 delete (confirm) · 2 selected → compare (F-004).
+ * Click → details · ✏️ rename · 🗑 delete (no confirm; only "Hamısını sil" asks) · 2 selected → compare (F-004).
  */
 export function SavedList({
   items,
@@ -31,7 +31,6 @@ export function SavedList({
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
   const [renaming, setRenaming] = useState<SavedApiSummary | null>(null);
-  const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
   // F-004: two selected APIs (A = selected first, B = second) → comparison screen.
   const [comparing, setComparing] = useState<[string, string] | null>(null);
   const [confirmDeleteAll, setConfirmDeleteAll] = useState(false);
@@ -85,7 +84,6 @@ export function SavedList({
           mode={split ? 'select' : 'accordion'}
           open={split ? s.id === activeId : expanded.has(s.id)}
           checked={selected.has(s.id)}
-          confirmingDelete={confirmDelete === s.id}
           onToggle={() =>
             split
               ? setActiveId(s.id === activeId ? null : s.id)
@@ -93,11 +91,8 @@ export function SavedList({
           }
           onCheck={() => setSelected((p) => toggle(p, s.id))}
           onRename={() => setRenaming(s)}
-          onAskDelete={() => setConfirmDelete(s.id)}
-          onCancelDelete={() => setConfirmDelete(null)}
           onDelete={async () => {
             await send({ type: 'DELETE_SAVED', id: s.id });
-            setConfirmDelete(null);
             onToast(t('saved_deleted', s.name));
           }}
         />
@@ -229,12 +224,9 @@ function SavedRow(props: {
   mode: 'accordion' | 'select';
   open: boolean;
   checked: boolean;
-  confirmingDelete: boolean;
   onToggle: () => void;
   onCheck: () => void;
   onRename: () => void;
-  onAskDelete: () => void;
-  onCancelDelete: () => void;
   onDelete: () => void;
 }) {
   const { s, mode, open } = props;
@@ -283,54 +275,30 @@ function SavedRow(props: {
         <span className="w-20 shrink-0 text-right text-[11px] text-slate-400">
           {dateFmt.format(s.savedAt)}
         </span>
-        {props.confirmingDelete ? (
-          <span className="flex shrink-0 items-center gap-1 text-xs">
-            <span className="text-red-600 dark:text-red-400">{t('saved_delete_confirm')}</span>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                props.onDelete();
-              }}
-              className="rounded bg-red-600 px-1.5 py-0.5 text-white hover:bg-red-500"
-            >
-              {t('common_yes')}
-            </button>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                props.onCancelDelete();
-              }}
-              className="rounded px-1.5 py-0.5 text-slate-600 hover:bg-slate-200"
-            >
-              {t('common_no')}
-            </button>
-          </span>
-        ) : (
-          <>
-            <button
-              title={t('saved_rename')}
-              aria-label={t('saved_rename')}
-              onClick={(e) => {
-                e.stopPropagation();
-                props.onRename();
-              }}
-              className="shrink-0 rounded px-1 hover:bg-slate-200"
-            >
-              ✏️
-            </button>
-            <button
-              title={t('saved_delete')}
-              aria-label={t('saved_delete')}
-              onClick={(e) => {
-                e.stopPropagation();
-                props.onAskDelete();
-              }}
-              className="shrink-0 rounded px-1 hover:bg-slate-200"
-            >
-              🗑
-            </button>
-          </>
-        )}
+        <>
+          <button
+            title={t('saved_rename')}
+            aria-label={t('saved_rename')}
+            onClick={(e) => {
+              e.stopPropagation();
+              props.onRename();
+            }}
+            className="shrink-0 rounded px-1 hover:bg-slate-200"
+          >
+            ✏️
+          </button>
+          <button
+            title={t('saved_delete')}
+            aria-label={t('saved_delete')}
+            onClick={(e) => {
+              e.stopPropagation();
+              props.onDelete();
+            }}
+            className="shrink-0 rounded px-1 hover:bg-slate-200"
+          >
+            🗑
+          </button>
+        </>
       </div>
       {mode === 'accordion' && open && <SavedDetail id={s.id} />}
     </li>

@@ -55,7 +55,7 @@ Panelin yuxarısında iki tab (Q1):
 ```
 - Sətirə klik → detallar (F-008 ilə eyni: URL, method, status, Payload, Response — JSON ağacı).
 - Geniş ayrı pəncərədə (≥ 900px) **Qeyd tab-ı ilə eyni bölünmüş görünüş**: siyahı solda, seçilmiş API sağda tam hündürlükdə; ✕ / Esc, ↑ / ↓, dartılan ara xətt (D8).
-- ✏️ → adı dəyiş (eyni unikallıq qaydası) · 🗑 → sil (təsdiq ilə).
+- ✏️ → adı dəyiş (eyni unikallıq qaydası) · 🗑 → dərhal sil (təsdiq yoxdur; təsdiq yalnız "Hamısını sil"də).
 - ☐ seçim → 2 API seçiləndə **⇄ Müqayisə et** (F-004) — yalnız saxlanmışlar arasında.
 - **🗑 Hamısını sil** → təsdiq ("Bütün saxlanmışlar (N) silinsin?" Bəli / Xeyr) → hamısı silinir (D13).
 
@@ -70,7 +70,7 @@ Panelin yuxarısında iki tab (Q1):
 - [ ] **Qeyd** / **Saxlanmışlar** tab-ları
 - [ ] Saxlanmışlar siyahısı: ad, method, ad (DevTools Name), status, tarix
 - [ ] Saxlanmış API-ni açıb detallarına baxmaq
-- [ ] Adını dəyişmək, silmək (təsdiq ilə)
+- [ ] Adını dəyişmək, silmək (təsdiqsiz)
 - [ ] Brauzer bağlanandan sonra data qalır; avtomatik silmə yoxdur (Q3)
 - ~~JSON export / import~~ — çıxarılıb (D13)
 - [x] **Hamısını sil** (təsdiq ilə) (D13)

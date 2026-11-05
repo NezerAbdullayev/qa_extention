@@ -211,9 +211,6 @@
   "saved_delete": {
     "message": "Sil"
   },
-  "saved_delete_confirm": {
-    "message": "Silinsin?"
-  },
   "saved_deleted": {
     "message": "Silindi: $NAME$",
     "placeholders": {

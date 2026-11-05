@@ -2,6 +2,10 @@
 
 Format: [Keep a Changelog](https://keepachangelog.com/) · Versiya: [SemVer](https://semver.org/)
 
+## [2.4.15] — 2026-11-05
+### Changed
+- Saxlanmışlarda tək sətri 🗑 ilə silmək artıq təsdiq soruşmur; təsdiq yalnız "Hamısını sil"də qalır
+
 ## [2.4.14] — 2026-11-05
 ### Changed
 - Start / Stop düyməsi Qeyd alt sətrinin ən soluna, "Təmizlə"nin yanına köçürüldü (siyahı boş olanda da görünür)

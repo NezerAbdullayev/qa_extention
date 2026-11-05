@@ -4,6 +4,15 @@
 
 ---
 
+## 2026-11-05
+**Görülən işlər**
+- F-009 Redux Action Tracker: spec + qərarlar (R1–R5), 3-cü Redux tab-ı, scope-lar (2.4.19)
+
+**Növbəti addım**
+- F-009-u real Redux (RTK) saytında yoxlamaq
+
+---
+
 ## 2026-11-04
 **Görülən işlər**
 - ADR-003: React + TypeScript + Vite + Tailwind CSS

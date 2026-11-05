@@ -9,6 +9,7 @@ import { RequestDetail } from './RequestDetail';
 import { useRecorder } from './useRecorder';
 import { NameDialog } from './NameDialog';
 import { SavedList } from './SavedList';
+import { ReduxTab } from './ReduxTab';
 import { useSaved } from './useSaved';
 import { usePanelPresence } from './usePanelPresence';
 import { useTheme } from './useTheme';
@@ -31,7 +32,7 @@ export function App() {
   usePanelPresence(); // panel closed in any way → unsaved recording is cleared (D15)
 
   // F-003: tabs, save dialog, toast notification.
-  const [tab, setTab] = useState<'record' | 'saved'>('record');
+  const [tab, setTab] = useState<'record' | 'saved' | 'redux'>('record');
   const [saving, setSaving] = useState<RequestRow | null>(null);
   const [toast, setToast] = useState<string | null>(null);
   const toastTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
@@ -219,9 +220,9 @@ export function App() {
           </p>
         )}
 
-        {/* Tabs (F-003, Session #3 Q1): current recording | saved APIs */}
+        {/* Tabs (F-003, Session #3 Q1; F-009 R3): current recording | saved APIs | Redux */}
         <nav className="flex border-b border-slate-200 px-2 text-xs" role="tablist">
-          {(['record', 'saved'] as const).map((id) => (
+          {(['record', 'saved', 'redux'] as const).map((id) => (
             <button
               key={id}
               role="tab"
@@ -235,12 +236,22 @@ export function App() {
             >
               {id === 'record'
                 ? t('tab_record', String(count))
-                : t('tab_saved', String(saved.items.length))}
+                : id === 'saved'
+                  ? t('tab_saved', String(saved.items.length))
+                  : t('tab_redux', String(state.reduxActions.length))}
             </button>
           ))}
         </nav>
 
-        {tab === 'saved' ? (
+        {tab === 'redux' ? (
+          <main className="min-h-0 flex-1">
+            <ReduxTab
+              recording={state.recording}
+              ready={state.reduxReady}
+              actions={state.reduxActions}
+            />
+          </main>
+        ) : tab === 'saved' ? (
           <main className="min-h-0 flex-1">
             <SavedList items={saved.items} onToast={showToast} />
           </main>

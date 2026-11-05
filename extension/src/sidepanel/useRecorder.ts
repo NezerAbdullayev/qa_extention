@@ -1,7 +1,13 @@
 import { useCallback, useEffect, useState } from 'react';
 import type { BackgroundMessage, PanelMessage, RecorderState } from '../shared/types';
 
-const INITIAL: RecorderState = { recording: false, tabId: null, requests: [] };
+const INITIAL: RecorderState = {
+  recording: false,
+  tabId: null,
+  requests: [],
+  reduxReady: false,
+  reduxActions: [],
+};
 
 function send(msg: PanelMessage): Promise<RecorderState> {
   return chrome.runtime.sendMessage(msg);
